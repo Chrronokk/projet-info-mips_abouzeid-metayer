@@ -1,0 +1,12 @@
+Exemple:
+J etiq
+ADD $2, $3, $4
+etiq:    .byte  -4
+
+On stocke dans une liste de structures:
+
+       Maillon        ->        Maillon        ->        Maillon
+nom du symbole
+adresse d'arrivée:
+Liste des adresses de départ:
+
