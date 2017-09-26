@@ -39,46 +39,47 @@ case 	COMMENT: /* A COMPLETER */
 		
 case DIR:
 	for(t=1;t<length;t++){
-		
+		if(!isalpha(token[t])){
+			ETAT=ERROR;}	
 	maillon->type="DIR";
 	maillon->lex=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break		
 	
 case REG:
 	maillon->type="REG";
 	maillon->lex=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break		
 	
 case SYM:
 	maillon->type="SYM";
 	maillon->lex=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break	
 	
 case VIR:
 	maillon->type="VIR";
 	maillon->lex=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break
 
 case DP:
 	maillon->type="DP";
 	maillon->lex=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break
 
 case PVIR:
 	maillon->type="PVIR";
 	maillon->token=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break
 
 case PAR:
 	maillon->type="PAR";
 	maillon->token=token;
-	ajout-queue(liste,maillon);
+	ajout-queue(col,maillon);
 	break
 
 case NBR:
@@ -100,5 +101,29 @@ case DEC
 
 
 
-		
-		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
