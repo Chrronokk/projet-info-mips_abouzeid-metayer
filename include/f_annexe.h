@@ -4,19 +4,14 @@
 #include "projet.h"
 
 
-Liste creer_liste(void);
-Liste_proba creer_liste_proba(void);
-int est_vide(Liste l);
-Liste supprimer_tete(Liste l);
-Liste ajout_queue(ARC* p_arc, Liste l);
-Liste ajout_tete (ARC* p_arc, Liste liste);
-Liste supprimen(int n, Liste l);
-Liste copie(Liste l);
-Liste concat(Liste l1, Liste l2);
-File creer_file(void);
-int file_vide(File f);
-File enfiler(ARC* p_arc, File f);
-ARC* defiler(File* f);
+LISTE creer_liste(void);
+int est_vide(LISTE l);
+LISTE supprimer_tete(LISTE l);
+LISTE ajout_queue(LEXEME* p_arc, LISTE l);
+LISTE ajout_tete (LEXEME* p_arc, LISTE Liste);
+LISTE supprimen(int n, LISTE l);
+LISTE copie(LISTE l);
+LISTE concat(LISTE l1, LISTE l2);
 
 
 

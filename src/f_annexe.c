@@ -1,37 +1,38 @@
 #include <stdio.h>
-#include "projet.h"
 #include "f_annexe.h"
 
 
+typedef struct{
+	char* type;
+	char* lex;
+} LEXEME;
 
-Liste creer_liste(void){
-     
-    return NULL;                       
-                                        
-     
-}
+struct maillon{
+	LEXEME* val;
+	struct maillon* suiv;
+};
 
-Liste_proba creer_liste_proba(void){
-     
-    return NULL;                       
-                                        
-     
-}
+typedef struct maillon* LISTE;
 
 
-int est_vide(Liste l){
-                                        
-    return !l;                          
-                                        
+
+LISTE creer_liste(void){
+     return NULL;                       
 }
 
 
-Liste supprimer_tete(Liste l){
+
+int est_vide(LISTE l){                       
+    return !l;                         
+}
+
+
+LISTE supprimer_tete(LISTE l){
      
     if(est_vide(l)) {return NULL;}      
      
     else{                               
-        Liste p;                        
+        LISTE p;                        
         p = l->suiv;                    
         free(l);                        
         return p;                       
@@ -40,9 +41,9 @@ Liste supprimer_tete(Liste l){
 }                    
 
 
-Liste ajout_queue(ARC* p_arc, Liste l){
+LISTE ajout_queue(LEXEME* p_arc, LISTE l){
      
-    Liste p = calloc(1, sizeof(*p));    
+    LISTE p = calloc(1, sizeof(*p));    
     p->val = p_arc;                           
      
     p->suiv = NULL;                     
@@ -50,7 +51,7 @@ Liste ajout_queue(ARC* p_arc, Liste l){
     if(est_vide(l)){ return p;}         
      
     else{                               
-        Liste q = l;                    
+        LISTE q = l;                    
         while(q->suiv != NULL){         
             q = q->suiv;                
         }
@@ -60,32 +61,21 @@ Liste ajout_queue(ARC* p_arc, Liste l){
                                         
 }  
 
-Liste ajout_tete (ARC* p_arc, Liste liste){
-	Liste p;
+LISTE ajout_tete (LEXEME* p_arc, LISTE Liste){
+	LISTE p;
 	p = calloc(1, sizeof(p));
-	p->suiv = liste; 
+	p->suiv = Liste; 
 	p->val = p_arc;
-	liste = p;
-	return liste;
+	Liste = p;
+	return Liste;
 }
 
-Liste_proba ajout_queue_proba(Proba proba,Liste_proba l){
-	Liste_proba p = calloc(1, sizeof(*p));    
-	p->val = proba;                             
-	p->suiv = NULL;                     
-	Liste_proba q = l;                    
-	while(q->suiv != NULL){         
-		q = q->suiv;                
-	}
-	q->suiv = p;                    
-	return l;                       
-}
 
-Liste supprimen(int n, Liste l){
+LISTE supprimen(int n, LISTE l){
      
     int i;
-    Liste p = l;                                
-    Liste temp = NULL;                          
+    LISTE p = l;                                
+    LISTE temp = NULL;                          
      
     if(est_vide(l)){ return l;}                 
      
@@ -108,10 +98,10 @@ Liste supprimen(int n, Liste l){
 }
 
 
-Liste copie(Liste l){                      
+LISTE copie(LISTE l){                      
      
-    Liste p = l;                            
-    Liste copie = NULL;                    
+    LISTE p = l;                            
+    LISTE copie = NULL;                    
      
     if(est_vide(l)){ return NULL;}         
      
@@ -126,42 +116,15 @@ Liste copie(Liste l){
 }
  
  
-Liste concat(Liste l1, Liste l2){  
-    Liste copie1 = copie(l1);               
-    Liste copie2 = copie(l2);               
-    Liste p = copie1;                        
+LISTE concat(LISTE l1, LISTE l2){  
+    LISTE copie1 = copie(l1);               
+    LISTE copie2 = copie(l2);               
+    LISTE p = copie1;                        
     while(p->suiv != NULL){                 
         p = p->suiv;                        
     } 
     p->suiv = copie2;                       
     return copie1;                           
-}
-
-File creer_file(void)
-{	return NULL;}
-
-
-int file_vide(File f)
-{	return !f;}
-
-File enfiler(ARC* p_arc, File f){
-	File q = calloc(1, sizeof(*q));
-	q->val = p_arc;
-	if (file_vide(f)) q->suiv = q;
-	else{
-		q->suiv = f->suiv;
-		f->suiv = q;
-	}
-	return q;
-}
-
-ARC* defiler(File* f){
-	File h = (*f)->suiv;
-	ARC* p_arc = ((*f)->suiv)->val;
-	(*f)-> suiv = ((*f)->suiv)->suiv;
-	free(h);
-	return p_arc;
-
 }
 
 
