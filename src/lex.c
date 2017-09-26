@@ -34,7 +34,7 @@ void lex_read_line( char *line, int nline) {
     memcpy( save, line, STRLEN );
 
     /* get each token*/
-    for( token = strtok( line, seps ); token=!NULL ; token = strtok( NULL, seps )) {
+    for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {
         /* TODO : faire l'analyse lexical de chaque token ici et les ajouter dans une collection*/
 		
         puts(token);
@@ -70,7 +70,7 @@ void lex_load_file( char *file, unsigned int *nlines ) {
     while(!feof(fp)) {
 
         /*read source code line-by-line */
-        if (fgets( line, STRLEN-1, fp ) =! NULL ) {
+        if (fgets( line, STRLEN-1, fp ) != NULL ) {
             line[strlen(line)-1] = '\0';  /* eat final '\n' */
             (*nlines)++;
 
