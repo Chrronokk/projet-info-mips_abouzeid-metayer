@@ -29,15 +29,22 @@ void lex_read_line( char *line, int nline) {
     char *seps = " \t";
     char *token = NULL;
     char save[STRLEN];
-
+	LISTE Col;
+	LEXEME lexeme;
     /* copy the input line so that we can do anything with it without impacting outside world*/
     memcpy( save, line, STRLEN );
 
     /* get each token*/
     for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {
         /* TODO : faire l'analyse lexical de chaque token ici et les ajouter dans une collection*/
+	
+		Col=creer_liste();
 		
-        puts(token);
+		lexeme.type=
+		lexeme.lex=
+		
+		ajout_queue(&lexeme, Col)
+
 
     }
 
