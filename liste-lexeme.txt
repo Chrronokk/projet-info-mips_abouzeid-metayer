@@ -1,0 +1,12 @@
+liste des catégories de lexemes:
+- commentaires
+- symboles 
+- directives
+- registre
+- décimal
+- hexa
+- deux points
+- virgule
+- point virgule
+- NL
+- parenthèses

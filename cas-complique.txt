@@ -1,0 +1,4 @@
+exemples de cas compliqués:
+
+- LW $2, 200 ( $3 ) # $2 = memory[($3) + 200]
+
