@@ -17,6 +17,7 @@
 #include <global.h>
 #include <notify.h>
 #include <lex.h>
+#include <f_annexe.h>
 
 enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
 
