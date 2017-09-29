@@ -29,6 +29,8 @@ void lex_read_line( char *line, int nline) {
     char *seps = " \t";
     char *token = NULL;
     char save[STRLEN];
+	LEXEME lexeme;
+	LISTE Col=creer_liste();
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
     memcpy( save, line, STRLEN );
@@ -36,8 +38,11 @@ void lex_read_line( char *line, int nline) {
     /* get each token*/
     for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {
         /* TODO : faire l'analyse lexical de chaque token ici et les ajouter dans une collection*/
+		lexeme.lex=///////
+		lexeme.type=///////
 		
-        puts(token);
+		ajout_queue(lexeme,Col);
+        
 
     }
 
@@ -103,7 +108,7 @@ void lex_standardise( char* in, char* out ) {
         /*TODO : ajouter les autres transformations*/
         
         /* rajoute des espaces autour des symboles de ponctuation*/
-		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' ){
+		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
 			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';
