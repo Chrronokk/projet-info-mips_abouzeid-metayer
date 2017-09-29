@@ -9,7 +9,6 @@
 #include <unistd.h>
 #include <string.h>
 
-
 #include <global.h>
 #include <notify.h>
 #include <lex.h>
@@ -21,8 +20,7 @@
  *
  */
 void print_usage( char *exec ) {
-    fprintf(stderr, "Usage: %s file.s\n",
-            exec);
+    fprintf(stderr, "Usage: %s file.s\n",exec);
 }
 
 
@@ -70,11 +68,12 @@ int main ( int argc, char *argv[] ) {
 
 
 
-    /* ---------------- do the lexical analysis -------------------*/
+    /* -------------- do the lexical analysis -------------------*/
+
     lex_load_file( file, &nlines );
     DEBUG_MSG("source code got %d lines",nlines);
 
-    /* ---------------- Free memory and terminate -------------------*/
+    /* --------------- Free memory and terminate ----------------*/
 
     /* TODO free everything properly*/
 

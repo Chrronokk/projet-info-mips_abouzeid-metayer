@@ -1,20 +1,4 @@
-#include <stdio.h>
 #include "f_annexe.h"
-
-
-typedef struct{
-	char* type;
-	char* lex;
-} LEXEME;
-
-struct maillon{
-	LEXEME* val;
-	struct maillon* suiv;
-};
-
-typedef struct maillon* LISTE;
-
-
 
 LISTE creer_liste(void){
      return NULL;                       
