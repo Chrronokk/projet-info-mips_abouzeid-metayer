@@ -14,6 +14,7 @@
 #include <ctype.h>
 #include <strings.h>
 
+#include <f_annexe.h>
 #include <global.h>
 #include <notify.h>
 #include <lex.h>
@@ -45,7 +46,7 @@ void lex_read_line( char *line, int nline) {
     
 
 	for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
-		int length= strlength(token)
+		int length= strlength(token);
 		int com =0;
 		int ETAT=INIT;
 		int t;
@@ -55,7 +56,7 @@ void lex_read_line( char *line, int nline) {
 		char commentaire[STRLEN];
 		
 		
-		switch(ETAT);
+		switch(ETAT){
 		
 		case INIT:
 			if (token[0]=='#' || com ){
@@ -72,11 +73,11 @@ void lex_read_line( char *line, int nline) {
 				ETAT=DP;}
 			else if (token[0] == ';'){
 				ETAT=PVIR;}
-			else if (isdigit(token[0]) || token[0]=='-')){
-				ETAT=NBR;}oken
+			else if (isdigit(token[0]) || token[0]=='-'){
+				ETAT=NBR;}
 			else if (token[0]=='(' || token[0]==')' ){
 				ETAT=PAR;}
-			else if (token[0]='\n'){
+			else if (token[0]=='\n'){
 				ETAT=NL;}
 			else{
 				ETAT=ERROR;}
@@ -84,15 +85,15 @@ void lex_read_line( char *line, int nline) {
 			
 		case COMMENT: 
 				if (com==0){
-					c=-1
+					c=-1;
 				}
-				com=1
+				com=1;
 				if(token[0]!='\n'){
 					for(t=0;t<length;t++){
 						if (c>STRLEN-1){
-							ETAT=ERROR
+							ETAT=ERROR;
 						}
-						comentaire[c++]=token[t];
+						commentaire[c++]=token[t];
 						}
 					commentaire[c++]='\t';	
 				}
@@ -100,9 +101,9 @@ void lex_read_line( char *line, int nline) {
 					while(c<STRLEN){
 						commentaire[c++]='\t';
 					}	
-					maillon->type="COMMENT";
-					maillon->lex=commentaire;
-					ajout-queue(col,maillon);
+					maillon.type="COMMENT";
+					maillon.lex=commentaire;
+					ajout_queue(col,maillon);
 				}	
 			break;		
 				
@@ -112,62 +113,62 @@ void lex_read_line( char *line, int nline) {
 					ETAT=ERROR;
 				}
 			}		
-			maillon->type="DIR";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="DIR";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;		
 			
 		case REG:
 			if(length>3) 
-			maillon->type="REG";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="REG";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;		
 			
 		case SYM:
-			maillon->type="SYM";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="SYM";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;	
 			
 		case VIR:
 			if (token[0] != ','){
 				ETAT=ERROR;}
-			maillon->type="VIR";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="VIR";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;
 		
 		case DP:
 			if (token[0] != ':'){
 				ETAT=ERROR;}
-			maillon->type="DP";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="DP";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;
 		
 		case PVIR:
 			if (token[0] != ';'){
 				ETAT=ERROR;}
-			maillon->type="PVIR";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="PVIR";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;
 		
 		case PAR:
 			if (token[0]!='(' || token[0]!=')' ){
 				ETAT=ERROR;}
-			maillon->type="PAR";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="PAR";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;
 		
 		case NL:
 			if (token[0] != '\n'){
 				ETAT=ERROR;}
-			maillon->type="NL";
-			maillon->lex=token;
-			ajout-queue(col,maillon);
+			maillon.type="NL";
+			maillon.lex=token;
+			ajout_queue(col,maillon);
 			break;
 			
 		case NBR:
@@ -190,9 +191,9 @@ void lex_read_line( char *line, int nline) {
 					ETAT=ERROR;
 				}
 			}
-			maillon->type="HEXA";
-			maillon->lex=token;		
-			ajout-queue(col,maillon);
+			maillon.type="HEXA";
+			maillon.lex=token;		
+			ajout_queue(col,maillon);
 			break;
 			
 		case DEC:
@@ -201,16 +202,16 @@ void lex_read_line( char *line, int nline) {
 					ETAT=ERROR;
 				}
 			}
-			maillon->type="DEC";
-			maillon->lex=token;		
-			ajout-queue(col,maillon);
+			maillon.type="DEC";
+			maillon.lex=token;		
+			ajout_queue(col,maillon);
 			break;	
 			
 		case ERROR;
 				printf("Erreur dans la determination du token : %s \n",token)
 			break;
     }
-	
+	}
     return;
 }
 
