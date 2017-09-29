@@ -1,8 +1,17 @@
 #ifndef _annexe
 #define _annexe
-#include <stdio.h>
-#include "projet.h"
 
+typedef struct{
+	char* type;
+	char* lex;
+} LEXEME;
+
+struct maillon{
+	LEXEME* val;
+	struct maillon* suiv;
+};
+
+typedef struct maillon* LISTE;
 
 LISTE creer_liste(void);
 int est_vide(LISTE l);

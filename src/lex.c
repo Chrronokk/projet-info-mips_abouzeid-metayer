@@ -17,6 +17,7 @@
 #include <global.h>
 #include <notify.h>
 #include <lex.h>
+#include <f_annexe.h>
 
 /**
  * @param line String of the line of source code to be analysed.
@@ -29,21 +30,20 @@ void lex_read_line( char *line, int nline) {
     char *seps = " \t";
     char *token = NULL;
     char save[STRLEN];
-	LISTE Col;
+	LISTE Col=creer_liste();
 	LEXEME lexeme;
     /* copy the input line so that we can do anything with it without impacting outside world*/
     memcpy( save, line, STRLEN );
 
     /* get each token*/
     for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {
-        /* TODO : faire l'analyse lexical de chaque token ici et les ajouter dans une collection*/
-	
-		Col=creer_liste();
+        /* TODO : faire l'analyse lexicale de chaque token ici et les ajouter dans une collection*/
+
 		
-		lexeme.type=
-		lexeme.lex=
+		/*lexeme.type=;*/
+		/*lexeme.lex=;*/
 		
-		ajout_queue(&lexeme, Col)
+		ajout_queue(&lexeme, Col);
 
 
     }
@@ -110,15 +110,15 @@ void lex_standardise( char* in, char* out ) {
         /*TODO : ajouter les autres transformations*/
         
         /* rajoute des espaces autour des symboles de ponctuation*/
-		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' ){
-			out[j]=' ';
+		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
+			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';
 		}
 		
 		/* rajoute un espace avant le - */
 		if (in[i]=='-'){
-			out[j]=' ';
+			out[j++]=' ';
 			out[j++]=in[i];
 		}
 		
@@ -128,7 +128,7 @@ void lex_standardise( char* in, char* out ) {
         else out[j++]=in[i];
     
     }
-    out[j]='\0';
+    out[j++]='\0';
 }
 
 
