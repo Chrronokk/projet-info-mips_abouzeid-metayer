@@ -25,21 +25,21 @@ LISTE supprimer_tete(LISTE l){
 }                    
 
 
-LISTE ajout_queue(LEXEME* p_arc, LISTE l){
+LISTE ajout_queue(LEXEME lexeme, LISTE liste){
      
-    LISTE p = calloc(1, sizeof(*p));    
-    p->val = p_arc;                           
-     
+	LISTE p = calloc(1, sizeof(*p));    
+                                
     p->suiv = NULL;                     
-     
-    if(est_vide(l)){ return p;}         
+	p->val=lexeme
+
+    if(est_vide(liste)){ return p;}         
      
     else{                               
-        LISTE q = l;                    
+        LISTE q = liste;                    
         while(q->suiv != NULL){         
             q = q->suiv;                
         }
-        q->suiv = p;                    
+        q->suiv = &lexeme;                    
         return l;                       
     }
                                         
