@@ -104,14 +104,14 @@ void lex_standardise( char* in, char* out ) {
         
         /* rajoute des espaces autour des symboles de ponctuation*/
 		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' ){
-			out[j]=' ';
+			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';
 		}
 		
 		/* rajoute un espace avant le - */
 		if (in[i]=='-'){
-			out[j]=' ';
+			out[j++]=' ';
 			out[j++]=in[i];
 		}
 		
@@ -121,7 +121,7 @@ void lex_standardise( char* in, char* out ) {
         else out[j++]=in[i];
     
     }
-    out[j]='\0';
+    out[j++]='\0';
 }
 
 
