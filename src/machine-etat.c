@@ -1,5 +1,3 @@
-enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
-
 
 
 for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
