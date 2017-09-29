@@ -26,14 +26,14 @@
  *
  */
 void lex_read_line( char *line, int nline) {
-    char *seps = " \t";
-    char *token = NULL;
-    char save[STRLEN];
+	char *seps = " \t";
+	char *token = NULL;
+	char save[STRLEN];
 	LEXEME lexeme;
 	LISTE Col=creer_liste();
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
-    memcpy( save, line, STRLEN );
+	memcpy( save, line, STRLEN );
 
     /* get each token*/
     for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {
