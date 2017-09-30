@@ -37,7 +37,7 @@ all :
 	@echo "make archive => produce an archive for the deliverable"
 
 debug   : $(OBJ_DBG)
-	$(LD) $^ $(LFLAGS) -o -l $(TARGET)
+	$(LD) $^ $(LFLAGS) -o $(TARGET)
 
 release : $(OBJ_RLS)
 	$(LD) $^ $(LFLAGS) -o $(TARGET)

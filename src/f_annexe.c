@@ -1,4 +1,6 @@
 #include "f_annexe.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 LISTE creer_liste(void){
      return NULL;                       
@@ -30,7 +32,7 @@ LISTE ajout_queue(LEXEME lexeme, LISTE liste){
 	LISTE p = calloc(1, sizeof(*p));    
                                 
     p->suiv = NULL;                     
-	p->val=lexeme
+	p->val=&lexeme;
 
     if(est_vide(liste)){ return p;}         
      
@@ -40,7 +42,7 @@ LISTE ajout_queue(LEXEME lexeme, LISTE liste){
             q = q->suiv;                
         }
         q->suiv = &lexeme;                    
-        return l;                       
+        return liste;                       
     }
                                         
 }  
@@ -81,7 +83,7 @@ LISTE supprimen(int n, LISTE l){
     return l;                                   
 }
 
-
+/*
 LISTE copie(LISTE l){                      
      
     LISTE p = l;                            
@@ -98,8 +100,8 @@ LISTE copie(LISTE l){
      
     return copie;                          
 }
- 
- 
+
+
 LISTE concat(LISTE l1, LISTE l2){  
     LISTE copie1 = copie(l1);               
     LISTE copie2 = copie(l2);               
@@ -108,8 +110,9 @@ LISTE concat(LISTE l1, LISTE l2){
         p = p->suiv;                        
     } 
     p->suiv = copie2;                       
-    return copie1;                           
+    return copie1;          
+     
 }
-
+*/
 
 

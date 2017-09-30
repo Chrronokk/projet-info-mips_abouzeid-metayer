@@ -35,8 +35,7 @@ void lex_read_line( char *line, int nline) {
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
-	LEXEME lexeme;
-	LISTE Col=creer_liste();
+	LISTE col=creer_liste();
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
 	memcpy( save, line, STRLEN );
@@ -46,7 +45,7 @@ void lex_read_line( char *line, int nline) {
     
 
 	for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
-		int length= strlength(token);
+		int length= strlen(token);
 		int com =0;
 		int ETAT=INIT;
 		int t;
@@ -103,7 +102,7 @@ void lex_read_line( char *line, int nline) {
 					}	
 					maillon.type="COMMENT";
 					maillon.lex=commentaire;
-					ajout_queue(col,maillon);
+					ajout_queue(maillon,col);
 				}	
 			break;		
 				
@@ -115,20 +114,20 @@ void lex_read_line( char *line, int nline) {
 			}		
 			maillon.type="DIR";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;		
 			
 		case REG:
 			if(length>3) 
 			maillon.type="REG";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;		
 			
 		case SYM:
 			maillon.type="SYM";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;	
 			
 		case VIR:
@@ -136,7 +135,7 @@ void lex_read_line( char *line, int nline) {
 				ETAT=ERROR;}
 			maillon.type="VIR";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 		
 		case DP:
@@ -144,7 +143,7 @@ void lex_read_line( char *line, int nline) {
 				ETAT=ERROR;}
 			maillon.type="DP";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 		
 		case PVIR:
@@ -152,7 +151,7 @@ void lex_read_line( char *line, int nline) {
 				ETAT=ERROR;}
 			maillon.type="PVIR";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 		
 		case PAR:
@@ -160,18 +159,20 @@ void lex_read_line( char *line, int nline) {
 				ETAT=ERROR;}
 			maillon.type="PAR";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 		
 		case NL:
 			if (token[0] != '\n'){
 				ETAT=ERROR;}
+			com=0;
 			maillon.type="NL";
 			maillon.lex=token;
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 			
 		case NBR:
+			;
 			int i=0;
 			if (token[0]=='-'){
 				i=1;
@@ -193,7 +194,7 @@ void lex_read_line( char *line, int nline) {
 			}
 			maillon.type="HEXA";
 			maillon.lex=token;		
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;
 			
 		case DEC:
@@ -204,11 +205,11 @@ void lex_read_line( char *line, int nline) {
 			}
 			maillon.type="DEC";
 			maillon.lex=token;		
-			ajout_queue(col,maillon);
+			ajout_queue(maillon,col);
 			break;	
 			
-		case ERROR;
-				printf("Erreur dans la determination du token : %s \n",token)
+		case ERROR:
+				printf("Erreur dans la determination du token : %s \n",token);
 			break;
     }
 	}
@@ -285,6 +286,7 @@ void lex_standardise( char* in, char* out ) {
 			out[j++]=' ';
 			out[j++]=in[i];
 		}
+		
 		
 			
         /* translate all spaces (i.e., tab) into simple spaces*/
