@@ -83,7 +83,7 @@ LISTE supprimen(int n, LISTE l){
     return l;                                   
 }
 
-/*
+
 LISTE copie(LISTE l){                      
      
     LISTE p = l;                            
@@ -101,8 +101,21 @@ LISTE copie(LISTE l){
     return copie;                          
 }
 
-
-LISTE concat(LISTE l1, LISTE l2){  
+void affiche_liste(LISTE l){
+	LISTE c=copie(l);	
+	if(est_vide(l)){ prntf("Vide \n");} 
+	while(c->suiv != NULL){                
+       printf("%s , %s \n", (c->val).type  (c->val).lex);                      
+		c=c->suiv;
+    }        
+	printf("%s , %s \n", (c->val).type  (c->val).lex);
+	}
+     
+	
+	
+	
+	
+/*LISTE concat(LISTE l1, LISTE l2){  
     LISTE copie1 = copie(l1);               
     LISTE copie2 = copie(l2);               
     LISTE p = copie1;                        

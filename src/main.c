@@ -70,7 +70,7 @@ int main ( int argc, char *argv[] ) {
 
     /* -------------- do the lexical analysis -------------------*/
 
-    lex_load_file( file, &nlines );
+    lex_load_file( file, &nlines);
     DEBUG_MSG("source code got %d lines",nlines);
 
     /* --------------- Free memory and terminate ----------------*/

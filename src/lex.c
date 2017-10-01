@@ -20,6 +20,56 @@
 #include <lex.h>
 #include <f_annexe.h>
 
+
+
+
+/**
+ * @param file Assembly source code file name.
+ * @param nlines Pointer to the number of lines in the file.
+ * @return should return the collection of lexemes
+ * @brief This function loads an assembly code from a file into memory.
+ *
+ */
+void lex_load_file( char *file, unsigned int *nlines) {
+
+    FILE        *fp   = NULL;
+    char         line[STRLEN]; /* original source line */
+    char         res[2*STRLEN]; /* standardised source line, can be longer due to some possible added spaces*/
+	LISTE col=creer_liste();
+
+
+    fp = fopen( file, "r" );
+    if ( NULL == fp ) {
+        /*macro ERROR_MSG : message d'erreur puis fin de programme ! */
+        ERROR_MSG("Error while trying to open %s file --- Aborts",file);
+    }
+
+    *nlines = 0;
+
+    while(!feof(fp)) {
+
+        /*read source code line-by-line */
+        if (fgets( line, STRLEN-1, fp ) != NULL ) {
+            line[strlen(line)-1] = '\0';  /* eat final '\n' */
+            (*nlines)++;
+
+            if ( 0 != strlen(line) ) {
+                lex_standardise( line, res);
+                lex_read_line(res,*nlines,col);
+            }
+        }
+    }
+	affiche_liste(col);
+    fclose(fp);
+    return;
+}
+
+
+
+
+
+
+
 enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
 
 
@@ -31,11 +81,10 @@ enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
  * @brief This function performs lexical analysis of one standardized line.
  *
  */
-void lex_read_line( char *line, int nline) {
+void lex_read_line( char *line, int nline,LISTE col) {
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
-	LISTE col=creer_liste();
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
 	memcpy( save, line, STRLEN );
@@ -50,8 +99,8 @@ void lex_read_line( char *line, int nline) {
 		int ETAT=INIT;
 		int t;
 		int c;
+		int i;
 		LEXEME maillon;
-		LEXEME* pmaillon= &maillon;
 		char commentaire[STRLEN];
 		
 		
@@ -64,7 +113,7 @@ void lex_read_line( char *line, int nline) {
 				ETAT=DIR;}
 			else if (token[0]=='$'){
 				ETAT=REG;}
-			else if (isalpha(token)){
+			else if (isalpha(token[0])){
 				ETAT=SYM;}
 			else if (token[0] == ','){
 				ETAT=VIR;}
@@ -172,8 +221,7 @@ void lex_read_line( char *line, int nline) {
 			break;
 			
 		case NBR:
-			;
-			int i=0;
+			i=0;
 			if (token[0]=='-'){
 				i=1;
 			}
@@ -185,6 +233,7 @@ void lex_read_line( char *line, int nline) {
 					ETAT=DEC;
 				}
 			}
+			break;
 			
 		case HEXA:
 			for(t=i+1;t<length;t++){
@@ -216,46 +265,7 @@ void lex_read_line( char *line, int nline) {
     return;
 }
 
-/**
- * @param file Assembly source code file name.
- * @param nlines Pointer to the number of lines in the file.
- * @return should return the collection of lexemes
- * @brief This function loads an assembly code from a file into memory.
- *
- */
-void lex_load_file( char *file, unsigned int *nlines ) {
 
-    FILE        *fp   = NULL;
-    char         line[STRLEN]; /* original source line */
-    char         res[2*STRLEN]; /* standardised source line, can be longer due to some possible added spaces*/
-
-
-
-    fp = fopen( file, "r" );
-    if ( NULL == fp ) {
-        /*macro ERROR_MSG : message d'erreur puis fin de programme ! */
-        ERROR_MSG("Error while trying to open %s file --- Aborts",file);
-    }
-
-    *nlines = 0;
-
-    while(!feof(fp)) {
-
-        /*read source code line-by-line */
-        if (fgets( line, STRLEN-1, fp ) != NULL ) {
-            line[strlen(line)-1] = '\0';  /* eat final '\n' */
-            (*nlines)++;
-
-            if ( 0 != strlen(line) ) {
-                lex_standardise( line, res );
-                lex_read_line(res,*nlines);
-            }
-        }
-    }
-
-    fclose(fp);
-    return;
-}
 
 
 
