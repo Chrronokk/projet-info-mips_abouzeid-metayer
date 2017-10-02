@@ -29,8 +29,7 @@ LISTE supprimer_tete(LISTE l){
 
 LISTE ajout_queue(LEXEME lexeme, LISTE liste){
      
-	LISTE p = calloc(1, sizeof(*p));    
-                                
+	LISTE p = calloc(1, sizeof(*p));                               
     p->suiv = NULL;                     
 	p->val=&lexeme;
 
@@ -41,17 +40,17 @@ LISTE ajout_queue(LEXEME lexeme, LISTE liste){
         while(q->suiv != NULL){         
             q = q->suiv;                
         }
-        q->suiv = &lexeme;                    
+        q->suiv = p;                    
         return liste;                       
     }
                                         
 }  
 
-LISTE ajout_tete (LEXEME* p_arc, LISTE Liste){
+LISTE ajout_tete (LEXEME lexeme, LISTE Liste){
 	LISTE p;
 	p = calloc(1, sizeof(p));
 	p->suiv = Liste; 
-	p->val = p_arc;
+	p->val = &lexeme;
 	Liste = p;
 	return Liste;
 }
@@ -105,10 +104,10 @@ void affiche_liste(LISTE l){
 	LISTE c=copie(l);	
 	if(est_vide(l)){ printf("Vide \n");} 
 	while(c->suiv != NULL){                
-       printf("%s , %s \n", (*(c->val)).type  (c->val).lex);                      
+    	printf("%s , %s \n", c->val->type,c->val->lex);                      
 		c=c->suiv;
     }        
-	printf("%s , %s \n", (*(c->val)).type  (c->val).lex);
+    printf("%s , %s \n", c->val->type, c->val->lex);                      
 	}
      
 	

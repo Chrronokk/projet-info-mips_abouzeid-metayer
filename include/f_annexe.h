@@ -17,7 +17,7 @@ LISTE creer_liste(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
-LISTE ajout_tete (LEXEME* p_arc, LISTE Liste);
+LISTE ajout_tete (LEXEME, LISTE );
 LISTE supprimen(int n, LISTE l);
 LISTE copie(LISTE l);
 void affiche_liste(LISTE l);
