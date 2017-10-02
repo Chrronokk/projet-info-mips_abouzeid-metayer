@@ -93,22 +93,22 @@ LISTE copie(LISTE l){
      
     while(p->suiv != NULL){                 
         
-        copie = ajout_queue(p->val,copie);    
+        copie = ajout_queue(*(p->val),copie);    
         p = p->suiv;                        
     }
-    copie = ajout_queue(p->val,copie);        
+    copie = ajout_queue(*(p->val),copie);        
      
     return copie;                          
 }
 
 void affiche_liste(LISTE l){
 	LISTE c=copie(l);	
-	if(est_vide(l)){ prntf("Vide \n");} 
+	if(est_vide(l)){ printf("Vide \n");} 
 	while(c->suiv != NULL){                
-       printf("%s , %s \n", (c->val).type  (c->val).lex);                      
+       printf("%s , %s \n", (*(c->val)).type  (c->val).lex);                      
 		c=c->suiv;
     }        
-	printf("%s , %s \n", (c->val).type  (c->val).lex);
+	printf("%s , %s \n", (*(c->val)).type  (c->val).lex);
 	}
      
 	
