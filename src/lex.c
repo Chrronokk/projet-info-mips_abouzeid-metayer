@@ -91,6 +91,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
+	int com=0;
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
 	
@@ -98,10 +99,10 @@ void lex_read_line( char *line, int nline,LISTE col) {
 
     /* get each token*/
     
+    
 	for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
 
 		int length= strlen(token);
-		int com =0;
 		int ETAT;
 		int t;
 		int c;
@@ -109,7 +110,10 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		LEXEME* pmaillon=NULL;
 		char commentaire[STRLEN];
 		
-		if (token[0]=='#' || com ){
+		printf("%s\n", token);
+		printf("%d\n", com);
+	
+		if ((token[0]=='#') || (com==1 )){
 			printf("comment \n");
 			ETAT=COMMENT;}
 		else if (token[0]=='.'){
@@ -134,7 +138,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			ETAT=NBR;}
 		else if (token[0]=='(' || token[0]==')' ){
 			ETAT=PAR;}
-		else if (token[0]=='\0'){
+		else if (token[0]=='\n'){
 			/*printf("nl\n");*/
 			ETAT=NL;}
 
@@ -146,9 +150,10 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					c=0;
 				}
 				com=1;
-				if(token[0]!='\0'){
+				if(token[0]!='\n'){
 					for(t=0;t<length;t++){
 						commentaire[c++]=token[t];
+						puts("test1");
 						}
 					commentaire[c++]='\t';	
 				}
@@ -157,8 +162,10 @@ void lex_read_line( char *line, int nline,LISTE col) {
 						commentaire[c++]='\t';
 					}
 					printf("%s\n", commentaire);
-					com=0;	
+					com=0;
+					puts("test2");	
 					pmaillon->type="COMMENT";
+					puts("test3");	
 					pmaillon->lex=commentaire;
 					printf("%s \n", pmaillon->lex);
 					col=ajout_queue(pmaillon,col);
@@ -291,7 +298,7 @@ void lex_standardise( char* in, char* out ) {
    
     }
     out[j++]=' ';
-    out[j++]='\0';
+    out[j++]='\n';
 }
 
 
