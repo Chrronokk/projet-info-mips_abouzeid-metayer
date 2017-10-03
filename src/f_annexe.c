@@ -31,7 +31,7 @@ LISTE supprimer_tete(LISTE l){
 LISTE ajout_queue(LEXEME lexeme, LISTE liste){
 	puts("Entrée dans ajout_queue");
 	LISTE p = calloc(1, sizeof(*p));                               
-    p->suiv = NULL;                     
+    	p->suiv = NULL;                     
 	p->val=&lexeme;
 
     if(est_vide(liste)){ return p;}         
@@ -41,12 +41,25 @@ LISTE ajout_queue(LEXEME lexeme, LISTE liste){
         while(q->suiv != NULL){         
             q = q->suiv;                
         }
-        q->suiv = p;                    
+        q->suiv = p;
+		puts("Sortie de ajout_queue")                    
         return liste;                       
     }
-	puts("Sortie de ajout_queue");
                                         
-}  
+}   
+/*
+LISTE ajout(void* p_e,LISTE l){
+	LISTE p=calloc(1,sizeof(*p));
+	p->pval=p_e;
+	
+	LISTE q=l;
+	while (q->suiv != NULL) q=q->suiv;
+	
+	
+	p->suiv=l;
+	return l;
+*/
+}
 
 LISTE ajout_tete (LEXEME lexeme, LISTE Liste){
 	LISTE p;
