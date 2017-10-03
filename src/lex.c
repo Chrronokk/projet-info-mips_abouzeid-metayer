@@ -31,6 +31,7 @@
  *
  */
 void lex_load_file( char *file, unsigned int *nlines) {
+	puts("Entrée dans lex_load_file");
 
     FILE        *fp   = NULL;
     char         line[STRLEN]; /* original source line */
@@ -55,12 +56,14 @@ void lex_load_file( char *file, unsigned int *nlines) {
             if ( 0 != strlen(line) ) {
             	/*printf("%s",line);*/
                 lex_standardise( line, res);
-                printf("%s",res);
-                /*lex_read_line(res,*nlines,col);*/
+                /*printf("%s",res);*/
+                lex_read_line(res,*nlines,col);
             }
         }
     }
+	puts("Affichage de la liste des tokens:");
 	affiche_liste(col);
+	puts("Fin de la liste des tokens");
     fclose(fp);
     return;
 }
@@ -83,7 +86,8 @@ enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
  *
  */
 void lex_read_line( char *line, int nline,LISTE col) {
-	
+
+
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
@@ -102,9 +106,9 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		int t;
 		int c;
 		int i;
-		LEXEME maillon;
+		LEXEME* pmaillon;
 		char commentaire[STRLEN];
-
+		
 		if (token[0]=='#' || com ){
 			/*printf("comment \n");*/
 			ETAT=COMMENT;}
@@ -133,7 +137,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		else if (token[0]=='\0'){
 			/*printf("nl\n");*/
 			ETAT=NL;}
-	
+
 		switch(ETAT){	
 
 		case COMMENT: 
@@ -152,10 +156,11 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					while(c<STRLEN){
 						commentaire[c++]='\t';
 					}
+					printf("%s\n", commentaire);
 					com=0;	
-					maillon.type="COMMENT";
-					maillon.lex=commentaire;
-					printf("%s \n", maillon.lex);
+					pmaillon->type="COMMENT";
+					pmaillon->lex=commentaire;
+					printf("%s \n", pmaillon->lex);
 					col=ajout_queue(maillon,col);
 					printf("passage2\n");
 					printf("%s , %s \n", col->val->type, col->val->lex);
@@ -163,52 +168,53 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			break;		
 				
 		case DIR:
-			maillon.type="DIR";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="DIR";
+			pmaillon->lex=token;
+			puts("dir");
+			col=ajout_queue(pmaillon,col);
 			break;		
 			
 		case REG: 
-			maillon.type="REG";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="REG";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;		
 			
 		case SYM:
-			maillon.type="SYM";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="SYM";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;	
 			
 		case VIR:
-			maillon.type="VIR";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="VIR";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;
 		
 		case DP:
-			maillon.type="DP";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="DP";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;
 		
 		case PVIR:
-			maillon.type="PVIR";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="PVIR";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;
 		
 		case PAR:
-			maillon.type="PAR";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="PAR";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;
 		
 		case NL:
 			com=0;
-			maillon.type="NL";
-			maillon.lex=token;
-			col=ajout_queue(maillon,col);
+			pmaillon->type="NL";
+			pmaillon->lex=token;
+			col=ajout_queue(pmaillon,col);
 			break;
 			
 		case NBR:
@@ -218,25 +224,27 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			}
 			if(token[i]=='0'){
 				if (token[i+1]=='x'){
-					maillon.type="HEXA";
-					maillon.lex=token;		
-					col=ajout_queue(maillon,col);
+					pmaillon->type="HEXA";
+					pmaillon->lex=token;		
+					col=ajout_queue(pmaillon,col);
 				}
 				else{	
-					maillon.type="DEC";
-					maillon.lex=token;		
-					col=ajout_queue(maillon,col);
+					pmaillon->type="DEC";
+					pmaillon->lex=token;		
+					col=ajout_queue(pmaillon,col);
 				}
 			}
 			else{
-				maillon.type="DEC";
-				maillon.lex=token;		
-				col=ajout_queue(maillon,col);
+				pmaillon->type="DEC";
+				pmaillon->lex=token;		
+				col=ajout_queue(pmaillon,col);
 				}
 			
 			break;
-		}		
-    }
+    		}
+	}
+			
+    
     return;
 }
 
@@ -253,7 +261,6 @@ void lex_read_line( char *line, int nline,LISTE col) {
 
 /* note that MIPS assembly supports distinctions between lower and upper case*/
 void lex_standardise( char* in, char* out ) {
-
     unsigned int i, j;
 
     for ( i= 0, j= 0; i< strlen(in); i++ ) {
