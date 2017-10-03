@@ -31,6 +31,7 @@
  *
  */
 void lex_load_file( char *file, unsigned int *nlines) {
+	puts("Entrée dans lex_load_file");
 
     FILE        *fp   = NULL;
     char         line[STRLEN]; /* original source line */
@@ -59,8 +60,11 @@ void lex_load_file( char *file, unsigned int *nlines) {
             }
         }
     }
+	puts("Affichage de la liste des tokens:");
 	affiche_liste(col);
+	puts("Fin de la liste des tokens");
     fclose(fp);
+	puts("Sortie de lex_load_file");
     return;
 }
 
@@ -82,6 +86,7 @@ enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
  *
  */
 void lex_read_line( char *line, int nline,LISTE col) {
+	puts("Entrée dans lex_read_line");
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
@@ -260,8 +265,9 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		case ERROR:
 				printf("Erreur dans la determination du token : %s \n",token);
 			break;
-    }
+    	}
 	}
+	puts("Sortie de lex_read_line");
     return;
 }
 
@@ -278,7 +284,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 
 /* note that MIPS assembly supports distinctions between lower and upper case*/
 void lex_standardise( char* in, char* out ) {
-
+	puts("Entrée dans lex_standardise");
     unsigned int i, j;
 
     for ( i= 0, j= 0; i< strlen(in); i++ ) {
@@ -305,6 +311,7 @@ void lex_standardise( char* in, char* out ) {
     
     }
     out[j++]='\0';
+	puts("Sortie de lex_standardise");
 }
 
 
