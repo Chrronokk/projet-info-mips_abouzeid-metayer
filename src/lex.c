@@ -52,10 +52,11 @@ void lex_load_file( char *file, unsigned int *nlines) {
         if (fgets( line, STRLEN-1, fp ) != NULL ) {
             line[strlen(line)-1] = '\0';  /* eat final '\n' */
             (*nlines)++;
-
             if ( 0 != strlen(line) ) {
+            	/*printf("%s",line);*/
                 lex_standardise( line, res);
-                lex_read_line(res,*nlines,col);
+                printf("%s",res);
+                /*lex_read_line(res,*nlines,col);*/
             }
         }
     }
@@ -70,7 +71,7 @@ void lex_load_file( char *file, unsigned int *nlines) {
 
 
 
-enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
+enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
 
 
 
@@ -82,65 +83,67 @@ enum {INIT,COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
  *
  */
 void lex_read_line( char *line, int nline,LISTE col) {
+	
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
+	
 	memcpy( save, line, STRLEN );
 
     /* get each token*/
     
-    
-
 	for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
+
 		int length= strlen(token);
 		int com =0;
-		int ETAT=INIT;
+		int ETAT;
 		int t;
 		int c;
 		int i;
 		LEXEME maillon;
 		char commentaire[STRLEN];
-		
-		
-		switch(ETAT){
-		
-		case INIT:
-			if (token[0]=='#' || com ){
-				ETAT=COMMENT;}
-			else if (token[0]=='.'){
-				ETAT=DIR;}
-			else if (token[0]=='$'){
-				ETAT=REG;}
-			else if (isalpha(token[0])){
-				ETAT=SYM;}
-			else if (token[0] == ','){
-				ETAT=VIR;}
-			else if (token[0] == ':'){
-				ETAT=DP;}
-			else if (token[0] == ';'){
-				ETAT=PVIR;}
-			else if (isdigit(token[0]) || token[0]=='-'){
-				ETAT=NBR;}
-			else if (token[0]=='(' || token[0]==')' ){
-				ETAT=PAR;}
-			else if (token[0]=='\n'){
-				ETAT=NL;}
-			else{
-				ETAT=ERROR;}
-			break;
-			
+
+		if (token[0]=='#' || com ){
+			/*printf("comment \n");*/
+			ETAT=COMMENT;}
+		else if (token[0]=='.'){
+			/*printf("dir\n");*/
+			ETAT=DIR;}
+		else if (token[0]=='$'){
+			/*printf("reg\n");*/
+			ETAT=REG;}
+		else if (isalpha(token[0])){
+			/*printf("sym\n");*/
+			ETAT=SYM;}
+		else if (token[0] == ','){
+			/*printf("vir\n");*/
+			ETAT=VIR;}
+		else if (token[0] == ':'){
+			/*printf("dp\n");*/
+			ETAT=DP;}
+		else if (token[0] == ';'){
+			/*printf("pvir\n");*/
+			ETAT=PVIR;}
+		else if (isdigit(token[0]) || token[0]=='-'){
+			ETAT=NBR;}
+		else if (token[0]=='(' || token[0]==')' ){
+			ETAT=PAR;}
+		else if (token[0]=='\0'){
+			/*printf("nl\n");*/
+			ETAT=NL;}
+	
+		switch(ETAT){	
+
 		case COMMENT: 
+				/*printf("passage\n");*/
 				if (com==0){
 					c=-1;
 				}
 				com=1;
-				if(token[0]!='\n'){
+				if(token[0]!='\0'){
 					for(t=0;t<length;t++){
-						if (c>STRLEN-1){
-							ETAT=ERROR;
-						}
 						commentaire[c++]=token[t];
 						}
 					commentaire[c++]='\t';	
@@ -148,26 +151,24 @@ void lex_read_line( char *line, int nline,LISTE col) {
 				else{
 					while(c<STRLEN){
 						commentaire[c++]='\t';
-					}	
+					}
+					com=0;	
 					maillon.type="COMMENT";
 					maillon.lex=commentaire;
+					printf("%s \n", maillon.lex);
 					ajout_queue(maillon,col);
+					printf("passage2\n");
+					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	
 			break;		
 				
 		case DIR:
-			for(t=1;t<length;t++){
-				if(!isalpha(token[t])){
-					ETAT=ERROR;
-				}
-			}		
 			maillon.type="DIR";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
 			break;		
 			
-		case REG:
-			if(length>3) 
+		case REG: 
 			maillon.type="REG";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
@@ -180,40 +181,30 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			break;	
 			
 		case VIR:
-			if (token[0] != ','){
-				ETAT=ERROR;}
 			maillon.type="VIR";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
 			break;
 		
 		case DP:
-			if (token[0] != ':'){
-				ETAT=ERROR;}
 			maillon.type="DP";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
 			break;
 		
 		case PVIR:
-			if (token[0] != ';'){
-				ETAT=ERROR;}
 			maillon.type="PVIR";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
 			break;
 		
 		case PAR:
-			if (token[0]!='(' || token[0]!=')' ){
-				ETAT=ERROR;}
 			maillon.type="PAR";
 			maillon.lex=token;
 			ajout_queue(maillon,col);
 			break;
 		
 		case NL:
-			if (token[0] != '\n'){
-				ETAT=ERROR;}
 			com=0;
 			maillon.type="NL";
 			maillon.lex=token;
@@ -227,41 +218,25 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			}
 			if(token[i]=='0'){
 				if (token[i+1]=='x'){
-					ETAT=HEXA;
+					maillon.type="HEXA";
+					maillon.lex=token;		
+					ajout_queue(maillon,col);
 				}
-				else{
-					ETAT=DEC;
-				}
-			}
-			break;
-			
-		case HEXA:
-			for(t=i+1;t<length;t++){
-				if(!isxdigit(token[t])){
-					ETAT=ERROR;
+				else{	
+					maillon.type="DEC";
+					maillon.lex=token;		
+					ajout_queue(maillon,col);
 				}
 			}
-			maillon.type="HEXA";
-			maillon.lex=token;		
-			ajout_queue(maillon,col);
-			break;
-			
-		case DEC:
-			for(t=i;t<length;t++){
-				if(!isdigit(token[t])){
-					ETAT=ERROR;
+			else{
+				maillon.type="DEC";
+				maillon.lex=token;		
+				ajout_queue(maillon,col);
 				}
-			}
-			maillon.type="DEC";
-			maillon.lex=token;		
-			ajout_queue(maillon,col);
-			break;	
 			
-		case ERROR:
-				printf("Erreur dans la determination du token : %s \n",token);
 			break;
+		}		
     }
-	}
     return;
 }
 
@@ -285,6 +260,7 @@ void lex_standardise( char* in, char* out ) {
         /*TODO : ajouter les autres transformations*/
         
         /* rajoute des espaces autour des symboles de ponctuation*/
+		
 		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
 			out[j++]=' ';
 			out[j++]=in[i];
@@ -297,13 +273,17 @@ void lex_standardise( char* in, char* out ) {
 			out[j++]=in[i];
 		}
 		
-		
+
 			
         /* translate all spaces (i.e., tab) into simple spaces*/
         if (isblank((int) in[i])) out[j++]=' ';
+        
+
         else out[j++]=in[i];
-    
+        
+   
     }
+    out[j++]=' ';
     out[j++]='\0';
 }
 
