@@ -28,11 +28,11 @@ LISTE supprimer_tete(LISTE l){
 }                    
 
 
-LISTE ajout_queue(LEXEME lexeme, LISTE liste){
+LISTE ajout_queue(LEXEME* plexeme, LISTE liste){
 	puts("Entrée dans ajout_queue");
 	LISTE p = calloc(1, sizeof(*p));                               
     p->suiv = NULL;                     
-	p->val=&lexeme;
+	p->val=plexeme;
 
     if(liste == NULL){ return p;}         
      
@@ -133,7 +133,7 @@ void affiche_liste(LISTE l){
 	puts("BBBB");        
     printf("%s , %s \n", c->val->type, c->val->lex);                  
 	puts("Sortie de affiche_liste");
-	}
+}
      
 	
 	
