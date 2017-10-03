@@ -107,14 +107,15 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		int t;
 		int c;
 		int i;
-		LEXEME* pmaillon=NULL;
+		LEXEME maillon;
+		LEXEME* pmaillon=&maillon;
 		char commentaire[STRLEN];
 		
 		printf("%s\n", token);
-		printf("%d\n", com);
+		/*printf("%d\n", com);*/
 	
 		if ((token[0]=='#') || (com==1 )){
-			printf("comment \n");
+			/*printf("comment \n");*/
 			ETAT=COMMENT;}
 		else if (token[0]=='.'){
 			/*printf("dir\n");*/
@@ -145,7 +146,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		switch(ETAT){	
 
 		case COMMENT: 
-				printf("passage\n");
+				/*printf("passage\n");*/
 				if (com==0){
 					c=0;
 				}
@@ -153,7 +154,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 				if(token[0]!='\n'){
 					for(t=0;t<length;t++){
 						commentaire[c++]=token[t];
-						puts("test1");
+						/*puts("test1");*/
 						}
 					commentaire[c++]='\t';	
 				}
@@ -163,13 +164,13 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					}
 					printf("%s\n", commentaire);
 					com=0;
-					puts("test2");	
+					/*puts("test2");*/	
 					pmaillon->type="COMMENT";
-					puts("test3");	
+					/*puts("test3");*/	
 					pmaillon->lex=commentaire;
 					printf("%s \n", pmaillon->lex);
 					col=ajout_queue(pmaillon,col);
-					printf("passage2\n");
+					/*printf("passage2\n");*/
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	
 			break;		
@@ -251,7 +252,9 @@ void lex_read_line( char *line, int nline,LISTE col) {
     		}
 	}
 			
-    
+    puts("Affichage de la liste des tokens:");
+	affiche_liste(col);
+	puts("Fin de la liste des tokens");
     return;
 }
 

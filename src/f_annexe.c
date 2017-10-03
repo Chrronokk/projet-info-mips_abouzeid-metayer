@@ -116,12 +116,12 @@ LISTE copie(LISTE l){
 
 void affiche_liste(LISTE l){
 	puts("Entrée dans affiche_liste");
-	LISTE c=copie(l);	
+	LISTE c = l	;
 	
-	if(est_vide(l)==1){ 
+	/*if(est_vide(l)==1){ 
 		printf("Vide \n");
 		return;
-		} 
+		} */
 	
 	puts("AAAA");
 	while(c->suiv != NULL){ 
