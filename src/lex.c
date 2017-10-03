@@ -106,11 +106,11 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		int t;
 		int c;
 		int i;
-		LEXEME* pmaillon;
+		LEXEME* pmaillon=NULL;
 		char commentaire[STRLEN];
 		
 		if (token[0]=='#' || com ){
-			/*printf("comment \n");*/
+			printf("comment \n");
 			ETAT=COMMENT;}
 		else if (token[0]=='.'){
 			/*printf("dir\n");*/
@@ -141,9 +141,9 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		switch(ETAT){	
 
 		case COMMENT: 
-				/*printf("passage\n");*/
+				printf("passage\n");
 				if (com==0){
-					c=-1;
+					c=0;
 				}
 				com=1;
 				if(token[0]!='\0'){
@@ -161,7 +161,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					pmaillon->type="COMMENT";
 					pmaillon->lex=commentaire;
 					printf("%s \n", pmaillon->lex);
-					col=ajout_queue(maillon,col);
+					col=ajout_queue(pmaillon,col);
 					printf("passage2\n");
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	

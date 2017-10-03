@@ -106,10 +106,10 @@ LISTE copie(LISTE l){
      
     while(p->suiv != NULL){                 
         
-        copie = ajout_queue(*(p->val),copie);    
+        copie = ajout_queue(p->val,copie);    
         p = p->suiv;                        
     }
-    copie = ajout_queue(*(p->val),copie);        
+    copie = ajout_queue(p->val,copie);        
     puts("Sortie de copie"); 
     return copie;                          
 }
