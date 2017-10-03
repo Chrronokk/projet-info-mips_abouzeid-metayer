@@ -156,7 +156,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					maillon.type="COMMENT";
 					maillon.lex=commentaire;
 					printf("%s \n", maillon.lex);
-					ajout_queue(maillon,col);
+					col=ajout_queue(maillon,col);
 					printf("passage2\n");
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	
@@ -165,50 +165,50 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		case DIR:
 			maillon.type="DIR";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;		
 			
 		case REG: 
 			maillon.type="REG";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;		
 			
 		case SYM:
 			maillon.type="SYM";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;	
 			
 		case VIR:
 			maillon.type="VIR";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;
 		
 		case DP:
 			maillon.type="DP";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;
 		
 		case PVIR:
 			maillon.type="PVIR";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;
 		
 		case PAR:
 			maillon.type="PAR";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;
 		
 		case NL:
 			com=0;
 			maillon.type="NL";
 			maillon.lex=token;
-			ajout_queue(maillon,col);
+			col=ajout_queue(maillon,col);
 			break;
 			
 		case NBR:
@@ -220,18 +220,18 @@ void lex_read_line( char *line, int nline,LISTE col) {
 				if (token[i+1]=='x'){
 					maillon.type="HEXA";
 					maillon.lex=token;		
-					ajout_queue(maillon,col);
+					col=ajout_queue(maillon,col);
 				}
 				else{	
 					maillon.type="DEC";
 					maillon.lex=token;		
-					ajout_queue(maillon,col);
+					col=ajout_queue(maillon,col);
 				}
 			}
 			else{
 				maillon.type="DEC";
 				maillon.lex=token;		
-				ajout_queue(maillon,col);
+				col=ajout_queue(maillon,col);
 				}
 			
 			break;
@@ -268,7 +268,7 @@ void lex_standardise( char* in, char* out ) {
 		}
 		
 		/* rajoute un espace avant le - */
-		if (in[i]=='-'){
+		else if (in[i]=='-'){
 			out[j++]=' ';
 			out[j++]=in[i];
 		}
@@ -276,7 +276,7 @@ void lex_standardise( char* in, char* out ) {
 
 			
         /* translate all spaces (i.e., tab) into simple spaces*/
-        if (isblank((int) in[i])) out[j++]=' ';
+        else if (isblank((int) in[i])) out[j++]=' ';
         
 
         else out[j++]=in[i];
