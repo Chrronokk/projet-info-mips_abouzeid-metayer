@@ -29,7 +29,7 @@ LISTE supprimer_tete(LISTE l){
 
 
 LISTE ajout_queue(LEXEME* plexeme, LISTE liste){
-	puts("Entrée dans ajout_queue");
+	/*puts("Entrée dans ajout_queue");*/
 	LISTE p = calloc(1, sizeof(*p));                               
     p->suiv = NULL;                     
 	p->val=plexeme;
@@ -98,7 +98,7 @@ LISTE supprimen(int n, LISTE l){
 
 
 LISTE copie(LISTE l){                      
-    puts("Entrée dans copie"); 
+    /*puts("Entrée dans copie"); */
     LISTE p = l;                            
     LISTE copie = NULL;                    
      
@@ -110,29 +110,30 @@ LISTE copie(LISTE l){
         p = p->suiv;                        
     }
     copie = ajout_queue(p->val,copie);        
-    puts("Sortie de copie"); 
+    /*puts("Sortie de copie"); */
     return copie;                          
 }
 
+
 void affiche_liste(LISTE l){
-	puts("Entrée dans affiche_liste");
+	/*puts("Entrée dans affiche_liste");*/
 	LISTE c = l	;
 	
-	/*if(est_vide(l)==1){ 
+	if(est_vide(l)==1){ 
 		printf("Vide \n");
 		return;
-		} */
+		} 
 	
-	puts("AAAA");
+	/*puts("AAAA");*/
 	while(c->suiv != NULL){ 
-		puts("Bouclage");               
+		/*puts("Bouclage");*/               
     	printf("%s , %s \n", c->val->type,c->val->lex);                      
 		c=c->suiv;
     }
 	
-	puts("BBBB");        
+	/*puts("BBBB"); */       
     printf("%s , %s \n", c->val->type, c->val->lex);                  
-	puts("Sortie de affiche_liste");
+	/*puts("Sortie de affiche_liste");*/
 }
      
 	

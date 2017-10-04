@@ -61,10 +61,10 @@ void lex_load_file( char *file, unsigned int *nlines) {
             }
         }
     }
-	puts("Affichage de la liste des tokens:");
+	/*puts("Affichage de la liste des tokens:");
 	affiche_liste(col);
 	puts("Fin de la liste des tokens");
-    fclose(fp);
+    fclose(fp);*/
     return;
 }
 
@@ -111,11 +111,11 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		LEXEME* pmaillon=&maillon;
 		char commentaire[STRLEN];
 		
-		printf("%s\n", token);
+		/*printf("%s\n", token);*/
 		/*printf("%d\n", com);*/
 	
 		if ((token[0]=='#') || (com==1 )){
-			/*printf("comment \n");*/
+			/*puts("comment");*/
 			ETAT=COMMENT;}
 		else if (token[0]=='.'){
 			/*printf("dir\n");*/
@@ -162,67 +162,76 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					while(c<STRLEN){
 						commentaire[c++]='\t';
 					}
-					printf("%s\n", commentaire);
+					/*printf("%s\n", commentaire);*/
 					com=0;
 					/*puts("test2");*/	
 					pmaillon->type="COMMENT";
 					/*puts("test3");*/	
 					pmaillon->lex=commentaire;
-					printf("%s \n", pmaillon->lex);
+					/*printf("%s \n", pmaillon->lex);*/
 					col=ajout_queue(pmaillon,col);
 					/*printf("passage2\n");*/
-					printf("%s , %s \n", col->val->type, col->val->lex);
+					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 				}	
 			break;		
 				
 		case DIR:
 			pmaillon->type="DIR";
 			pmaillon->lex=token;
-			puts("dir");
+			/*puts("dir");*/
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;		
 			
 		case REG: 
 			pmaillon->type="REG";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;		
 			
 		case SYM:
 			pmaillon->type="SYM";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;	
 			
 		case VIR:
 			pmaillon->type="VIR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;
 		
 		case DP:
 			pmaillon->type="DP";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;
 		
 		case PVIR:
 			pmaillon->type="PVIR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;
 		
 		case PAR:
 			pmaillon->type="PAR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;
 		
 		case NL:
 			com=0;
 			pmaillon->type="NL";
-			pmaillon->lex=token;
+			pmaillon->lex="\n";
+			printf("%s \n", pmaillon->lex);
 			col=ajout_queue(pmaillon,col);
+			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 			break;
 			
 		case NBR:
@@ -235,17 +244,20 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					pmaillon->type="HEXA";
 					pmaillon->lex=token;		
 					col=ajout_queue(pmaillon,col);
+					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 				}
 				else{	
 					pmaillon->type="DEC";
 					pmaillon->lex=token;		
 					col=ajout_queue(pmaillon,col);
+					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 				}
 			}
 			else{
 				pmaillon->type="DEC";
 				pmaillon->lex=token;		
 				col=ajout_queue(pmaillon,col);
+				/*printf("%s , %s \n", col->val->type, col->val->lex);*/
 				}
 			
 			break;
