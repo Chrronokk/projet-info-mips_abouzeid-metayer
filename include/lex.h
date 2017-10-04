@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 
-void	lex_read_line( char *, int, LISTE);
+LISTE	lex_read_line( char *, int);
 void	lex_load_file( char *, unsigned int * );
 void	lex_standardise( char*, char*  );
 

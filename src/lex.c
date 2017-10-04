@@ -36,7 +36,8 @@ void lex_load_file( char *file, unsigned int *nlines) {
     FILE        *fp   = NULL;
     char         line[STRLEN]; /* original source line */
     char         res[2*STRLEN]; /* standardised source line, can be longer due to some possible added spaces*/
-	LISTE col=creer_liste();
+	LISTE col_general=creer_liste();
+	LISTE col_line=creer_liste();
 
 
     fp = fopen( file, "r" );
@@ -51,20 +52,25 @@ void lex_load_file( char *file, unsigned int *nlines) {
 
         /*read source code line-by-line */
         if (fgets( line, STRLEN-1, fp ) != NULL ) {
-            line[strlen(line)-1] = '\0';  /* eat final '\n' */
             (*nlines)++;
             if ( 0 != strlen(line) ) {
             	/*printf("%s",line);*/
                 lex_standardise( line, res);
                 /*printf("%s",res);*/
-                lex_read_line(res,*nlines,col);
+                col_line=lex_read_line(res,*nlines);
+                if(col_general==NULL){
+                	col_general=col_line;
+                }
+                else{
+                	col_general=concat(col_general,col_line);
+            	}
             }
         }
     }
-	/*puts("Affichage de la liste des tokens:");
-	affiche_liste(col);
+	puts("Affichage de la liste des tokens:");
+	affiche_liste(col_general);
 	puts("Fin de la liste des tokens");
-    fclose(fp);*/
+    fclose(fp);
     return;
 }
 
@@ -85,13 +91,16 @@ enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
  * @brief This function performs lexical analysis of one standardized line.
  *
  */
-void lex_read_line( char *line, int nline,LISTE col) {
-
-
+LISTE lex_read_line( char *line, int nline) {
+	
+	puts("entrée dans lex_read_line");
+	LISTE col=creer_liste();
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
 	int com=0;
+
+	nbmaillon(col);
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
 	
@@ -101,7 +110,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
     
     
 	for( token = strtok( line, seps ); token!=NULL ; token = strtok( NULL, seps )) {	
-
+		
 		int length= strlen(token);
 		int ETAT;
 		int t;
@@ -110,6 +119,9 @@ void lex_read_line( char *line, int nline,LISTE col) {
 		LEXEME maillon;
 		LEXEME* pmaillon=&maillon;
 		char commentaire[STRLEN];
+		
+ 
+		
 		
 		/*printf("%s\n", token);*/
 		/*printf("%d\n", com);*/
@@ -171,7 +183,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					/*printf("%s \n", pmaillon->lex);*/
 					col=ajout_queue(pmaillon,col);
 					/*printf("passage2\n");*/
-					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	
 			break;		
 				
@@ -180,49 +192,49 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			pmaillon->lex=token;
 			/*puts("dir");*/
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;		
 			
 		case REG: 
 			pmaillon->type="REG";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;		
 			
 		case SYM:
 			pmaillon->type="SYM";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;	
 			
 		case VIR:
 			pmaillon->type="VIR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case DP:
 			pmaillon->type="DP";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case PVIR:
 			pmaillon->type="PVIR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case PAR:
 			pmaillon->type="PAR";
 			pmaillon->lex=token;
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case NL:
@@ -231,7 +243,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
 			pmaillon->lex="\n";
 			printf("%s \n", pmaillon->lex);
 			col=ajout_queue(pmaillon,col);
-			/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 			
 		case NBR:
@@ -244,20 +256,20 @@ void lex_read_line( char *line, int nline,LISTE col) {
 					pmaillon->type="HEXA";
 					pmaillon->lex=token;		
 					col=ajout_queue(pmaillon,col);
-					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+					printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 				else{	
 					pmaillon->type="DEC";
 					pmaillon->lex=token;		
 					col=ajout_queue(pmaillon,col);
-					/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+					printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 			}
 			else{
 				pmaillon->type="DEC";
 				pmaillon->lex=token;		
 				col=ajout_queue(pmaillon,col);
-				/*printf("%s , %s \n", col->val->type, col->val->lex);*/
+				printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 			
 			break;
@@ -267,7 +279,7 @@ void lex_read_line( char *line, int nline,LISTE col) {
     puts("Affichage de la liste des tokens:");
 	affiche_liste(col);
 	puts("Fin de la liste des tokens");
-    return;
+    return(col);
 }
 
 

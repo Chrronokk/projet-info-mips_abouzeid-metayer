@@ -1,4 +1,3 @@
-
 # allons au ru
 .set                  noreorder
 .text
@@ -15,3 +14,4 @@ byebye:
     JAL viteviteauru
 .data
 lunchtime : .word 12
+

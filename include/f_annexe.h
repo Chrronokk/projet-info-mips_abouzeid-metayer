@@ -21,7 +21,8 @@ LISTE ajout_tete (LEXEME, LISTE );
 LISTE supprimen(int n, LISTE l);
 LISTE copie(LISTE l);
 void affiche_liste(LISTE l);
-/*LISTE concat(LISTE l1, LISTE l2);*/
+void nbmaillon(LISTE l);
+LISTE concat(LISTE l1, LISTE l2);
 
 
 

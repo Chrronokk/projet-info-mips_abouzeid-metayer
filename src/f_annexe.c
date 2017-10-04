@@ -136,11 +136,25 @@ void affiche_liste(LISTE l){
 	/*puts("Sortie de affiche_liste");*/
 }
      
+void nbmaillon(LISTE l){
+	int c=0;
+	if(est_vide(l)){ puts("Vide");}
+	else{
+		LISTE q=l;
+		while(q->suiv != NULL){
+				c++;         
+    	        q = q->suiv;                
+    	    }
+		c++;
+		printf("il y a %d d'éléments\n", c);
+	}
+	return;
+}
 	
 	
 	
 	
-/*LISTE concat(LISTE l1, LISTE l2){  
+LISTE concat(LISTE l1, LISTE l2){  
     LISTE copie1 = copie(l1);               
     LISTE copie2 = copie(l2);               
     LISTE p = copie1;                        
@@ -151,6 +165,5 @@ void affiche_liste(LISTE l){
     return copie1;          
      
 }
-*/
 
 
