@@ -117,7 +117,7 @@ LISTE lex_read_line( char *line, int nline) {
 		int c;
 		int i;
 		LEXEME maillon;
-		LEXEME* pmaillon=&maillon;
+		/*LEXEME* pmaillon=&maillon;*/
 		char commentaire[STRLEN];
 		
  
@@ -177,72 +177,81 @@ LISTE lex_read_line( char *line, int nline) {
 					/*printf("%s\n", commentaire);*/
 					com=0;
 					/*puts("test2");*/	
-					pmaillon->type="COMMENT";
+					maillon.type="COMMENT";
 					/*puts("test3");*/	
-					pmaillon->lex=commentaire;
-					/*printf("%s \n", pmaillon->lex);*/
-					col=ajout_queue(pmaillon,col);
+					maillon.lex=commentaire;
+					/*printf("%s \n", maillon.lex);*/
+					maillon.line=nline;
+					col=ajout_queue(maillon,col);
 					/*printf("passage2\n");*/
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}	
 			break;		
 				
 		case DIR:
-			pmaillon->type="DIR";
-			pmaillon->lex=token;
+			maillon.type="DIR";
+			maillon.lex=token;
+			maillon.line=nline;
 			/*puts("dir");*/
-			col=ajout_queue(pmaillon,col);
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;		
 			
 		case REG: 
-			pmaillon->type="REG";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="REG";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;		
 			
 		case SYM:
-			pmaillon->type="SYM";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="SYM";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;	
 			
 		case VIR:
-			pmaillon->type="VIR";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="VIR";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case DP:
-			pmaillon->type="DP";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="DP";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case PVIR:
-			pmaillon->type="PVIR";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="PVIR";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case PAR:
-			pmaillon->type="PAR";
-			pmaillon->lex=token;
-			col=ajout_queue(pmaillon,col);
+			maillon.type="PAR";
+			maillon.lex=token;
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 		
 		case NL:
 			com=0;
-			pmaillon->type="NL";
-			pmaillon->lex="\n";
-			printf("%s \n", pmaillon->lex);
-			col=ajout_queue(pmaillon,col);
+			maillon.type="NL";
+			maillon.lex="\n";
+			printf("%s \n", maillon.lex);
+			col=ajout_queue(maillon,col);
+			maillon.line=nline;
 			printf("%s , %s \n", col->val->type, col->val->lex);
 			break;
 			
@@ -253,32 +262,37 @@ LISTE lex_read_line( char *line, int nline) {
 			}
 			if(token[i]=='0'){
 				if (token[i+1]=='x'){
-					pmaillon->type="HEXA";
-					pmaillon->lex=token;		
-					col=ajout_queue(pmaillon,col);
+					maillon.type="HEXA";
+					maillon.lex=token;		
+					maillon.line=nline;
+					col=ajout_queue(maillon,col);
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 				else{	
-					pmaillon->type="DEC";
-					pmaillon->lex=token;		
-					col=ajout_queue(pmaillon,col);
+					maillon.type="DEC";
+					maillon.lex=token;	
+					maillon.line=nline;	
+					col=ajout_queue(maillon,col);
 					printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 			}
 			else{
-				pmaillon->type="DEC";
-				pmaillon->lex=token;		
-				col=ajout_queue(pmaillon,col);
+				maillon.type="DEC";
+				maillon.lex=token;	
+				maillon.line=nline;	
+				col=ajout_queue(maillon,col);
 				printf("%s , %s \n", col->val->type, col->val->lex);
 				}
 			
 			break;
     		}
-	}
+	
 			
     puts("Affichage de la liste des tokens:");
 	affiche_liste(col);
 	puts("Fin de la liste des tokens");
+	
+	}
     return(col);
 }
 

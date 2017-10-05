@@ -28,11 +28,11 @@ LISTE supprimer_tete(LISTE l){
 }                    
 
 
-LISTE ajout_queue(LEXEME* plexeme, LISTE liste){
+LISTE ajout_queue(LEXEME lexeme, LISTE liste){
 	/*puts("Entrée dans ajout_queue");*/
 	LISTE p = calloc(1, sizeof(*p));                               
     p->suiv = NULL;                     
-	p->val=plexeme;
+	p->val=&lexeme;
 
     if(liste == NULL){ return p;}         
      
@@ -106,10 +106,10 @@ LISTE copie(LISTE l){
      
     while(p->suiv != NULL){                 
         
-        copie = ajout_queue(p->val,copie);    
+        copie = ajout_queue(*(p->val),copie);    
         p = p->suiv;                        
     }
-    copie = ajout_queue(p->val,copie);        
+    copie = ajout_queue(*(p->val),copie);        
     /*puts("Sortie de copie"); */
     return copie;                          
 }
@@ -165,5 +165,6 @@ LISTE concat(LISTE l1, LISTE l2){
     return copie1;          
      
 }
+
 
 
