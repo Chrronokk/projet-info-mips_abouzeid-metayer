@@ -80,7 +80,7 @@ void lex_load_file( char *file, unsigned int *nlines) {
 
 
 
-enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
+
 
 
 
@@ -117,7 +117,6 @@ LISTE lex_read_line( char *line, int nline) {
 		int c;
 		int i;
 		LEXEME maillon;
-		/*LEXEME* pmaillon=&maillon;*/
 		char commentaire[STRLEN];
 		
  
@@ -179,80 +178,89 @@ LISTE lex_read_line( char *line, int nline) {
 					/*puts("test2");*/	
 					maillon.type="COMMENT";
 					/*puts("test3");*/	
-					maillon.lex=commentaire;
+					maillon.lex=calloc(length,sizeof(*commentaire));
+					strcpy(maillon.lex,commentaire);					
 					/*printf("%s \n", maillon.lex);*/
 					maillon.line=nline;
 					col=ajout_queue(maillon,col);
 					/*printf("passage2\n");*/
-					printf("%s , %s \n", col->val->type, col->val->lex);
+					printf("%s , %s \n", col->val.type, col->val.lex);
 				}	
 			break;		
 				
 		case DIR:
 			maillon.type="DIR";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			/*puts("dir");*/
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;		
 			
 		case REG: 
 			maillon.type="REG";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;		
 			
 		case SYM:
 			maillon.type="SYM";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;	
 			
 		case VIR:
 			maillon.type="VIR";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
-			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*col=ajout_queue(maillon,col);*/
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 		
 		case DP:
 			maillon.type="DP";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 		
 		case PVIR:
 			maillon.type="PVIR";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 		
 		case PAR:
 			maillon.type="PAR";
-			maillon.lex=token;
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 		
 		case NL:
 			com=0;
 			maillon.type="NL";
-			maillon.lex="\n";
-			printf("%s \n", maillon.lex);
+			maillon.lex=calloc(length,sizeof(char*));
+			strcpy(maillon.lex,"\n");
+			/*printf("%s \n", maillon.lex);*/
 			col=ajout_queue(maillon,col);
 			maillon.line=nline;
-			printf("%s , %s \n", col->val->type, col->val->lex);
+			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 			
 		case NBR:
@@ -263,25 +271,28 @@ LISTE lex_read_line( char *line, int nline) {
 			if(token[i]=='0'){
 				if (token[i+1]=='x'){
 					maillon.type="HEXA";
-					maillon.lex=token;		
+					maillon.lex=calloc(length,sizeof(*token));
+					strcpy(maillon.lex,token);		
 					maillon.line=nline;
 					col=ajout_queue(maillon,col);
-					printf("%s , %s \n", col->val->type, col->val->lex);
+					/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}
 				else{	
 					maillon.type="DEC";
-					maillon.lex=token;	
+					maillon.lex=calloc(length,sizeof(*token));
+					strcpy(maillon.lex,token);	
 					maillon.line=nline;	
 					col=ajout_queue(maillon,col);
-					printf("%s , %s \n", col->val->type, col->val->lex);
+					/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}
 			}
 			else{
 				maillon.type="DEC";
-				maillon.lex=token;	
+				maillon.lex=calloc(length,sizeof(*token));
+				strcpy(maillon.lex,token);
 				maillon.line=nline;	
 				col=ajout_queue(maillon,col);
-				printf("%s , %s \n", col->val->type, col->val->lex);
+				/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}
 			
 			break;

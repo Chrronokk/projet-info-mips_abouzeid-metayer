@@ -8,11 +8,15 @@ typedef struct{
 } LEXEME;
 
 struct maillon{
-	LEXEME* val;
+	LEXEME val;
 	struct maillon* suiv;
 };
 
 typedef struct maillon* LISTE;
+
+
+enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
+
 
 LISTE creer_liste(void);
 int est_vide(LISTE l);
