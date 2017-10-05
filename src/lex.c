@@ -67,9 +67,9 @@ void lex_load_file( char *file, unsigned int *nlines) {
             }
         }
     }
-	puts("Affichage de la liste des tokens:");
+	/*puts("Affichage de la liste des tokens:");*/
 	affiche_liste(col_general);
-	puts("Fin de la liste des tokens");
+	/*puts("Fin de la liste des tokens");*/
     fclose(fp);
     return;
 }
@@ -93,14 +93,14 @@ void lex_load_file( char *file, unsigned int *nlines) {
  */
 LISTE lex_read_line( char *line, int nline) {
 	
-	puts("entrée dans lex_read_line");
+	/*puts("entrée dans lex_read_line");*/
 	LISTE col=creer_liste();
 	char *seps = " \t";
 	char *token = NULL;
 	char save[STRLEN];
 	int com=0;
 
-	nbmaillon(col);
+	/*nbmaillon(col);*/
 
     /* copy the input line so that we can do anything with it without impacting outside world*/
 	
@@ -184,7 +184,7 @@ LISTE lex_read_line( char *line, int nline) {
 					maillon.line=nline;
 					col=ajout_queue(maillon,col);
 					/*printf("passage2\n");*/
-					printf("%s , %s \n", col->val.type, col->val.lex);
+					/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}	
 			break;		
 				
@@ -221,7 +221,7 @@ LISTE lex_read_line( char *line, int nline) {
 			maillon.lex=calloc(length,sizeof(*token));
 			strcpy(maillon.lex,token);
 			maillon.line=nline;
-			/*col=ajout_queue(maillon,col);*/
+			col=ajout_queue(maillon,col);
 			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 		
@@ -299,10 +299,9 @@ LISTE lex_read_line( char *line, int nline) {
     		}
 	
 			
-    puts("Affichage de la liste des tokens:");
+    /*puts("Affichage de la ligne:");
 	affiche_liste(col);
-	puts("Fin de la liste des tokens");
-	
+	*/
 	}
     return(col);
 }

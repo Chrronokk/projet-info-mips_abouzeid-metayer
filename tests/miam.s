@@ -1,5 +1,5 @@
 # allons au ru
-.set                  noreorder
+.set noreorder
 .text
     Lw $t0 , lunchtime
     LW $6, -0x200($7)
@@ -14,4 +14,3 @@ byebye:
     JAL viteviteauru
 .data
 lunchtime : .word 12
-
