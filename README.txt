@@ -1,3 +1,52 @@
+Pour executer le programme:
+-Se placer dans le repertoire /projet-info-mips_abouzeid-metayer grace à la commande cd
+
+Utiliser la commande suivante:
+./as-mips /CHEMIN_DU_FICHIER/FICHIER.s
+
+Par exemple: 
+./as-mips /tests/miam.s
+
+Le code source est fourni dans le dossier /src, et les inclusions dans les dossier /include
+
+Si vous souhaitez apporter des modifications au code source, il est necessaire de recompiler le programme. Pour cela, utilisez la commande:
+make debug
+
+Puis executez le programme à nouveau. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------------------------------
+README fourni dans le sujet:
+-------------------------------------------------------------------------------
 Squelette de code de l'assembleur MIPS du projet info PHELMA.
 Le code fourni permet d'acquérir des chaînes de caractères d'un fichier et de les afficher à l'écran. 
 Votre tâche sera de le compléter.  
