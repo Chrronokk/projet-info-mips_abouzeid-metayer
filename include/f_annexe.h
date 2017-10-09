@@ -15,7 +15,7 @@ struct maillon{
 typedef struct maillon* LISTE;
 
 
-enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR};
+enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
 
 
 LISTE creer_liste(void);

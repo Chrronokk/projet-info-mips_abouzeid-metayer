@@ -153,7 +153,9 @@ LISTE lex_read_line( char *line, int nline) {
 		else if (token[0]=='\n'){
 			/*printf("nl\n");*/
 			ETAT=NL;}
-
+		else{
+			ETAT=ERROR;}
+		
 		switch(ETAT){	
 
 		case COMMENT: 
@@ -170,9 +172,10 @@ LISTE lex_read_line( char *line, int nline) {
 					commentaire[c++]=' ';	
 				}
 				else{
-					while(c<STRLEN){
+					/*while(c<STRLEN){
 						commentaire[c++]=' ';
-					}
+					}*/
+					commentaire[c] = '\0';
 					/*printf("%s\n", commentaire);*/
 					com=0;
 					/*puts("test2");*/	
@@ -297,9 +300,17 @@ LISTE lex_read_line( char *line, int nline) {
 				}
 			
 			break;
-    		}
+    		
 	
+		case ERROR:
+			maillon.type="ERROR";
+			maillon.lex=calloc(length,sizeof(*token));
+			strcpy(maillon.lex,token);		
+			maillon.line=nline;
+			col=ajout_queue(maillon,col);
+			break;
 			
+			}	
     /*puts("Affichage de la ligne:");
 	affiche_liste(col);
 	*/
