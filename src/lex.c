@@ -87,7 +87,7 @@ void lex_load_file( char *file, unsigned int *nlines) {
 /**
  * @param line String of the line of source code to be analysed.
  * @param nline the line number in the source code.
- * @return should return the collection of lexemes that represent the input line of source code.
+ * @return return the collection of lexemes that represent the input line of source code.
  * @brief This function performs lexical analysis of one standardized line.
  *
  */
@@ -167,11 +167,11 @@ LISTE lex_read_line( char *line, int nline) {
 						commentaire[c++]=token[t];
 						/*puts("test1");*/
 						}
-					commentaire[c++]='\t';	
+					commentaire[c++]=' ';	
 				}
 				else{
 					while(c<STRLEN){
-						commentaire[c++]='\t';
+						commentaire[c++]=' ';
 					}
 					/*printf("%s\n", commentaire);*/
 					com=0;
@@ -203,6 +203,7 @@ LISTE lex_read_line( char *line, int nline) {
 			maillon.lex=calloc(length,sizeof(*token));
 			strcpy(maillon.lex,token);
 			maillon.line=nline;
+			/*puts("reg");*/
 			col=ajout_queue(maillon,col);
 			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;		

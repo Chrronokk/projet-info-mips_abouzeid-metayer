@@ -123,16 +123,15 @@ void affiche_liste(LISTE l){
 		return;
 		} 
 	
-	/*puts("AAAA");*/
 	while(c->suiv != NULL){ 
 		/*puts("Bouclage");*/               
     	printf("[%s]  %s \n", c->val.type,c->val.lex);                      
 		c=c->suiv;
     }
 	
-	/*puts("BBBB");*/        
+
     printf("[%s]  %s \n", c->val.type, c->val.lex);                  
-	/*puts("Sortie de affiche_liste");*/
+
 }
      
 void nbmaillon(LISTE l){
