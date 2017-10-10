@@ -1,6 +1,9 @@
 #ifndef _annexe
 #define _annexe
 
+
+/*Liste des lexemes*/
+
 typedef struct{
 	char* type;
 	char* lex;
@@ -15,11 +18,47 @@ struct maillon{
 typedef struct maillon* LISTE;
 
 
+/*Structure de définition d'instruction*/
+
+typedef struct{
+	char* symbole;
+	char type;
+	int nb_op;
+} instr_def;
+
+
+/*Liste des etiquettes de départs*/
+
+struct intMAILLON{
+	int nligne;
+	struct intMAILLON* suiv;
+};
+
+typedef struct intMAILLON* intLISTE;
+
+
+/*Definition de la liste des etiquettes d'arrivée*/
+
+typedef struct{
+	char* nom;
+	int arrivee;
+	intLISTE departs;
+} ETIQUETTE;
+
+
+
+struct etiqMAILLON{
+	ETIQUETTE* pval;
+	struct etiqMAILLON* suiv;
+};
+
+typedef struct etiqMAILLON* etiqLISTE;
 
 
 
 
-enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
+
+
 
 
 LISTE creer_liste(void);

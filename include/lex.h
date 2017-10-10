@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 
+enum {COMMENT,SYM,DIR,REG,NBR,DEC,HEXA,DP,VIR,PVIR,NL,PAR,ERROR};
 
 LISTE	lex_read_line( char *, int);
 LISTE	lex_load_file( char *, unsigned int * );

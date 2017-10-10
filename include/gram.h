@@ -1,39 +1,14 @@
-/*Structure de définition d'instruction*/
-typedef struct{
-	char* symbole;
-	char type;
-	int nb_op;
-} instr_def;
 
-/*Liste des etiquettes de départs*/
-
-struct intMAILLON{
-	int nligne;
-	struct intMAILLON* suiv;
-};
-
-typedef struct intMAILLON* intLISTE;
+#ifndef _LEX_H_
+#define _LEX_H_
 
 
-/*Definition de la liste des etiquettes d'arrivée*/
+#include <stdio.h>
 
-typedef struct{
-	char* nom;
-	int arrivee;
-	intLISTE departs;
-} ETIQUETTE;
-
-
-
-struct etiqMAILLON{
-	ETIQUETTE* pval;
-	struct etiqMAILLON* suiv;
-};
-
-typedef struct etiqMAILLON* etiqLISTE;
-
-
+enum{INIT,INIT_DEBUT,DIR01,DIR02,DIR03,DIR,DIR_TYPE1,DIR_TYPE2,NB_OPERANDE_DIR,TEMPO_DIR,CHARGE_DIR,SYM,SYM_PRESENT,SYM_PAS_PRESENT,SYM_AVANT,SYM_ARRIERE,INSTR,OPE_INSTR,ERROR}
 
 instr_def * lecture_dico(int* p_nb_instr);
 int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
 void analyse_gram(LISTE);
+
+#endif

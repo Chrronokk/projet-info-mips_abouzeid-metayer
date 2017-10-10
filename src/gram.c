@@ -1,22 +1,94 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gram.h"
+#include <gram.h>
+#include <global.h>
+#include <f_annexe.h>
 
-analyse_gram(Col){
+
+
+analyse_gram(LISTE Col){
 	int nb_instr=NULL;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire;
 	
 	dictionnaire=lecture_dico(p_nb_instr);
+	
+	LISTE p=Col;
+	int debut=0;
+	
+	while (p->val!=NULL){
+		ETAT=INIT;
+		int continu = TRUE:
+		while (continu == TRUE){
+			switch(ETAT){
+				case INIT:
+					if(debut==0){
+						ETAT=INIT_DEBUT}
+					else{
+						if(strcmp(p->val.type,"DIR"){
+							ETAT=DIR;}
+						else if{strcmp(p->val.type,"	
+	
 
-	/*
-	printf("\n\n%s , %s , %s , %s\n", dictionnaire[0].symbole, dictionnaire[1].symbole, dictionnaire[2].symbole, dictionnaire[3].symbole);
-	printf("%c , %c , %c , %c\n", dictionnaire[0].type, dictionnaire[1].type, dictionnaire[2].type, dictionnaire[3].type);
-	printf("%d , %d , %d , %d\n\n\n", dictionnaire[0].nb_op, dictionnaire[1].nb_op, dictionnaire[2].nb_op, dictionnaire[3].nb_op);
-	*/
 
-	is_in_dico("XXX",dictionnaire,*p_nb_instr);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
