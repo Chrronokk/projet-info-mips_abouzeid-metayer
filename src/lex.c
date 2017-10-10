@@ -18,7 +18,7 @@
 #include <global.h>
 #include <notify.h>
 #include <lex.h>
-#include <f_annexe.h>
+
 
 
 
@@ -30,7 +30,7 @@
  * @brief This function loads an assembly code from a file into memory.
  *
  */
-void lex_load_file( char *file, unsigned int *nlines) {
+LISTE lex_load_file( char *file, unsigned int *nlines) {
 	puts("Entrée dans lex_load_file");
 
     FILE        *fp   = NULL;
@@ -71,7 +71,7 @@ void lex_load_file( char *file, unsigned int *nlines) {
 	affiche_liste(col_general);
 	/*puts("Fin de la liste des tokens");*/
     fclose(fp);
-    return;
+    return col_general;
 }
 
 

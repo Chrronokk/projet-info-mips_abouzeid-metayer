@@ -50,6 +50,19 @@ int main ( int argc, char *argv[] ) {
     /* La macro suivante provoquerait l'affichage du message
        puis la sortie du programme avec un code erreur non nul (EXIT_FAILURE) */
     /* ERROR_MSG("Erreur. Arret du programme"); */
+	int nb_instr=NULL;
+	int* p_nb_instr=&nb_instr;
+	instr_def* dictionnaire;
+	
+	dictionnaire=lecture_dico("dictionnaire.txt", p_nb_instr);
+
+	/*
+	printf("\n\n%s , %s , %s , %s\n", dictionnaire[0].symbole, dictionnaire[1].symbole, dictionnaire[2].symbole, dictionnaire[3].symbole);
+	printf("%c , %c , %c , %c\n", dictionnaire[0].type, dictionnaire[1].type, dictionnaire[2].type, dictionnaire[3].type);
+	printf("%d , %d , %d , %d\n\n\n", dictionnaire[0].nb_op, dictionnaire[1].nb_op, dictionnaire[2].nb_op, dictionnaire[3].nb_op);
+	*/
+
+	/*is_in_dico("LW",dictionnaire,*p_nb_instr);*/
 
 
     if ( argc <2 ) {
@@ -69,14 +82,16 @@ int main ( int argc, char *argv[] ) {
 
 
     /* -------------- do the lexical analysis -------------------*/
-	
-    lex_load_file( file, &nlines);
+	LISTE Col;
+    Col=lex_load_file( file, &nlines);
+	/*TODO Utiliser la fonction is_in_dico sur les symboles contenus dans Col*/ 
+
     DEBUG_MSG("source code got %d lines",nlines);
 
     /* --------------- Free memory and terminate ----------------*/
 
     /* TODO free everything properly*/
-
+	free(dictionnaire);
     exit( EXIT_SUCCESS );
 }
 
