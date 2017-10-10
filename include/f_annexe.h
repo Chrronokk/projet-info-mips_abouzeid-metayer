@@ -15,11 +15,7 @@ struct maillon{
 typedef struct maillon* LISTE;
 
 
-typedef struct{
-	char* symbole;
-	char type;
-	int nb_op;
-} instr_def;
+
 
 
 
@@ -36,7 +32,6 @@ LISTE copie(LISTE l);
 void affiche_liste(LISTE l);
 void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
-instr_def * lecture_dico(char* Fichier, int* p_nb_instr);
-int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
+
 
 #endif

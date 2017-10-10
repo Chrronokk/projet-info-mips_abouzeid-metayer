@@ -17,7 +17,7 @@
 #include <f_annexe.h>
 #include <global.h>
 #include <notify.h>
-#include <lex.h>
+#include "lex.h"
 
 
 
@@ -334,31 +334,20 @@ void lex_standardise( char* in, char* out ) {
     unsigned int i, j;
 
     for ( i= 0, j= 0; i< strlen(in); i++ ) {
-        /*TODO : ajouter les autres transformations*/
-        
         /* rajoute des espaces autour des symboles de ponctuation*/
-		
 		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
 			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';
 		}
-		
 		/* rajoute un espace avant le - */
 		else if (in[i]=='-'){
 			out[j++]=' ';
 			out[j++]=in[i];
-		}
-		
-
-			
+		}	
         /* translate all spaces (i.e., tab) into simple spaces*/
         else if (isblank((int) in[i])) out[j++]=' ';
-        
-
         else out[j++]=in[i];
-        
-   
     }
     out[j++]=' ';
     out[j++]='\n';
