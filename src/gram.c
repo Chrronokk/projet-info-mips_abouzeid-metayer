@@ -5,6 +5,33 @@
 #include <global.h>
 #include <f_annexe.h>
 
+/* Fonction qui  */
+int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq){
+
+}
+
+void ajout_etiq(char* etiq, ETIQUETTE* tab_etiq, int isdep){
+
+	int i;
+	LISTE p=Col;
+	
+	
+	while (p->suiv != NULL){
+		if (p->
+	
+
+
+
+
+
+
+
+
+
+
+}
+
+
 
 
 analyse_gram(LISTE Col){

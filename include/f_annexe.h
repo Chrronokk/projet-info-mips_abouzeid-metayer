@@ -58,6 +58,14 @@ typedef struct etiqMAILLON* etiqLISTE;
 
 
 
+typedef struct{
+	char* symbole;
+	int adresse;
+	LEXEME* op1;
+	LEXEME* op2;
+	LEXEME* op3;
+	
+} instruction;
 
 
 
