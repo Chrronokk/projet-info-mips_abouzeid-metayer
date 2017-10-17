@@ -43,6 +43,7 @@ analyse_gram(LISTE Col){
 	
 	LISTE p=Col;
 	int debut=0;
+	char zone[
 	
 	while (p->val!=NULL){
 		ETAT=INIT;
@@ -55,11 +56,49 @@ analyse_gram(LISTE Col){
 					else{
 						if(strcmp(p->val.type,"DIR"){
 							ETAT=DIR;}
-						else if{strcmp(p->val.type,"	
+						else if(strcmp(p->val.type,"SYM"){
+							ETAT=SYM;}
+						else if	(
+						
+						else{
+				break;
 	
-
-
-
+	
+				case INIT_DEBUT:
+					if( (strcmp(p->val.type,"COMMENT") || (strcmp(p->val.type,"NL"){
+						p=p->suiv;
+						continu=FALSE
+						}
+					else if(strcmp(p->val.type,"DIR"){
+						if(strcmp(p->vavl.lex,".set"){
+							p=p->suiv;
+							if(strcmp(p->val.type,"noreorder"){
+								p=p->suiv;
+								continu=FALSE;
+							}
+							else{
+								ETAT=ERROR;}
+						else{
+							ETAT=ERROR;}			
+					else{
+						ETAT=ERROR;}
+				break;		
+				
+				
+				case DIR:
+					if((strcmp(p->val.lex,".text")||(strcmp(p->val.lex,".data")||(strcmp(p->val.lex,".bss"){
+						ETAT=DIR_TYPE1;}
+					else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
+						ETAT=DIR_TYPE2;}
+					else{
+						ETAT=ERROR;}
+				break;
+				
+				
+				case DIR_TYPE1:
+					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
+						if 
+				
 
 
 
