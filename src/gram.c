@@ -8,37 +8,35 @@
 
 
 
-void analyse_gram(LISTE Col){
-	int nb_instr;
+
 
 /* Fonction qui recherche si une etiquette est dans la table des symboles 
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
 
-int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq){
+int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	int i=0;
-	ETIQUETTE* p =tab_etiq;
+	etiqLISTE p =tab_etiq;
 
 	if (p==NULL){
 		puts("Table des symboles vide");
 		return -1;
-	
+	}
 	while(p->suiv!=NULL){
-		if(strcmp(etiq,p->nom)==0){
+		if(strcmp(etiq,p->pval->nom)==0){
 			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
 			return i;			
 		}
 		i++;
 	}
 	return -1;
+
 }
 
-
 /* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
-void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
+void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
 	
-	int i;
-	ETIQUETTE* p=tab_etiq;
-	ETIQUETTE* p_etiq =calloc(1,sizeof(ETIQUETTE));
+	etiqLISTE p=tab_etiq;
+	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	
 	int pos=recherche_etiq(name,tab_etiq);
 	
@@ -49,8 +47,8 @@ void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
 	while(p->suiv != NULL) p=p->suiv;
 
 	p->suiv=p_etiq;
-	p_etiq->nom=strcpy(name);
-	p_etiq->arrivee=adresse;
+	strcpy(p_etiq->pval->nom,name);
+	p_etiq->pval->arrivee=adresse;
 	return;	
 }
 
@@ -58,8 +56,8 @@ void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
 
 
 
-analyse_gram(LISTE Col){
-	int nb_instr=NULL;
+void analyse_gram(LISTE Col){
+	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 	
@@ -68,7 +66,7 @@ analyse_gram(LISTE Col){
 	int debut=0;
 	
 	
-	while (p->val!=NULL){
+	while (p->val.lex!=NULL){
 		int ETAT=INIT;
 		int continu = TRUE;
 		while (continu == TRUE){
@@ -79,37 +77,41 @@ analyse_gram(LISTE Col){
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
-						if(strcmp(p->val.type,"DIR"){
+						if(strcmp(p->val.type,"DIR")){
 							ETAT=DIR;}
-						else if(strcmp(p->val.type,"SYM"){
+						else if(strcmp(p->val.type,"SYM")){
 							ETAT=SYM;}
 						else{
 							ETAT=ERROR;}
+					}
 						
 						
 				break;
 	
 	
 				case ERROR:
-					printf("Erreur sur le mot %s à la ligne %d \n" p->val.lex,p->val.line);
+					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
+					return;
 				break;
 	
 				case INIT_DEBUT:
-					if( (strcmp(p->val.type,"COMMENT") || (strcmp(p->val.type,"NL"){
+					if( (strcmp(p->val.type,"COMMENT")) || (strcmp(p->val.type,"NL"))){
 						p=p->suiv;
-						continu=FALSE
+						continu=FALSE;
 						}
-					else if(strcmp(p->val.type,"DIR"){
-						if(strcmp(p->vavl.lex,".set"){
+					else if(strcmp(p->val.type,"DIR")){
+						if(strcmp(p->val.lex,".set")){
 							p=p->suiv;
-							if(strcmp(p->val.type,"noreorder"){
+							if(strcmp(p->val.type,"noreorder")){
 								p=p->suiv;
 								continu=FALSE;
 							}
 							else{
 								ETAT=ERROR;}
+						}
 						else{
-							ETAT=ERROR;}			
+							ETAT=ERROR;}
+					}			
 					else{
 						ETAT=ERROR;}
 				break;		
@@ -213,10 +215,10 @@ analyse_gram(LISTE Col){
 
 
 
-
-
-
-
+				
+			}
+		}
+	}
 }
 
 
@@ -262,10 +264,6 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 
 
-/*int check_operande(LISTE p,int nb_op)
-	Liste q=p;
-	int line=q->val.line;
-	if (strcmp(q->suiv*/
 		
 
 
