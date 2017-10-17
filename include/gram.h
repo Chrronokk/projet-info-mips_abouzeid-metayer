@@ -13,5 +13,7 @@ enum{INIT,INIT_DEBUT,DIR,DIR_TYPE1,DIR_TYPE2,NB_OPERANDE_DIR,TEMPO_DIR,CHARGE_DI
 instr_def* lecture_dico(int* p_nb_instr);
 int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
 void analyse_gram(LISTE);
+void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq);
+int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq);
 
 #endif

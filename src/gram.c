@@ -5,10 +5,62 @@
 #include <global.h>
 #include <f_annexe.h>
 
+<<<<<<< HEAD
 
 
 void analyse_gram(LISTE Col){
 	int nb_instr;
+=======
+/* Fonction qui recherche si une etiquette est dans la table des symboles 
+   Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
+
+int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq){
+	int i=0;
+	ETIQUETTE* p =tab_etiq;
+
+	if (p==NULL){
+		puts("Table des symboles vide");
+		return -1;
+	
+	while(p->suiv!=NULL){
+		if(strcmp(etiq,p->nom)==0){
+			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
+			return i;			
+		}
+		i++;
+	}
+	return -1;
+}
+
+
+/* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
+void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
+	
+	int i;
+	ETIQUETTE* p=tab_etiq;
+	ETIQUETTE* p_etiq =calloc(1,sizeof(ETIQUETTE));
+	
+	int pos=recherche_etiq(name,tab_etiq);
+	
+	if (pos!=-1){
+		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
+		return;
+	}
+	while(p->suiv != NULL) p=p->suiv;
+
+	p->suiv=p_etiq;
+	p_etiq->nom=strcpy(name);
+	p_etiq->arrivee=adresse;
+	return;	
+}
+
+
+
+
+
+analyse_gram(LISTE Col){
+	int nb_instr=NULL;
+>>>>>>> 44d02ed12e32c79008fa062df879be90f4518a44
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 	
