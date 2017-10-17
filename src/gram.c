@@ -5,12 +5,12 @@
 #include <global.h>
 #include <f_annexe.h>
 
-<<<<<<< HEAD
+
 
 
 void analyse_gram(LISTE Col){
 	int nb_instr;
-=======
+
 /* Fonction qui recherche si une etiquette est dans la table des symboles 
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
 
@@ -60,7 +60,6 @@ void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
 
 analyse_gram(LISTE Col){
 	int nb_instr=NULL;
->>>>>>> 44d02ed12e32c79008fa062df879be90f4518a44
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 	
@@ -156,7 +155,7 @@ analyse_gram(LISTE Col){
 				
 				
 				case INSTR:
-					*/instr_def instr_th=dictionnaire[position]
+					/*instr_def instr_th=dictionnaire[position]
 					nb_op=instr_th.nb_op*/
 				break;
 					
