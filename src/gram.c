@@ -5,64 +5,43 @@
 #include <global.h>
 #include <f_annexe.h>
 
-/* Fonction qui  */
-int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq){
-
-}
-
-void ajout_etiq(char* etiq, ETIQUETTE* tab_etiq, int isdep){
-
-	int i;
-	LISTE p=Col;
-	
-	
-	while (p->suiv != NULL){
-		if (p->
-	
 
 
-
-
-
-
-
-
-
-
-}
-
-
-
-
-analyse_gram(LISTE Col){
-	int nb_instr=NULL;
+void analyse_gram(LISTE Col){
+	int nb_instr;
 	int* p_nb_instr=&nb_instr;
-	instr_def* dictionnaire;
+	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 	
-	dictionnaire=lecture_dico(p_nb_instr);
-	
+
 	LISTE p=Col;
 	int debut=0;
-	char zone[
+	
 	
 	while (p->val!=NULL){
-		ETAT=INIT;
-		int continu = TRUE:
+		int ETAT=INIT;
+		int continu = TRUE;
 		while (continu == TRUE){
 			switch(ETAT){
+				
+				
 				case INIT:
 					if(debut==0){
-						ETAT=INIT_DEBUT}
+						ETAT=INIT_DEBUT;}
 					else{
 						if(strcmp(p->val.type,"DIR"){
 							ETAT=DIR;}
 						else if(strcmp(p->val.type,"SYM"){
 							ETAT=SYM;}
-						else if	(
-						
 						else{
+							ETAT=ERROR;}
+						
+						
 				break;
 	
+	
+				case ERROR:
+					printf("Erreur sur le mot %s à la ligne %d \n" p->val.lex,p->val.line);
+				break;
 	
 				case INIT_DEBUT:
 					if( (strcmp(p->val.type,"COMMENT") || (strcmp(p->val.type,"NL"){
@@ -86,20 +65,52 @@ analyse_gram(LISTE Col){
 				
 				
 				case DIR:
-					if((strcmp(p->val.lex,".text")||(strcmp(p->val.lex,".data")||(strcmp(p->val.lex,".bss"){
+					/*if((strcmp(p->val.lex,".text")||(strcmp(p->val.lex,".data")||(strcmp(p->val.lex,".bss"){
 						ETAT=DIR_TYPE1;}
 					else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
 						ETAT=DIR_TYPE2;}
 					else{
-						ETAT=ERROR;}
+						ETAT=ERROR;}*/
 				break;
 				
 				
 				case DIR_TYPE1:
-					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						if 
+					/*if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){*/
+						
+						/* A COMPLETER*/
+						
+						/*p=p->suiv->suiv;
+						continu=FALSE;
+					else{
+						ETAT=ERROR;}*/
+				break;
 				
-
+				
+				case DIR_TYPE2:
+					
+					/* A COMPLETER */
+					
+				break;
+				
+				
+				case SYM:
+					/*int position;
+					position=is_in_dico(p->val,dictionnaire,nb_instr)
+					if(position>=0){
+						ETAT=INSTR;}
+					else{
+						ETAT=SYM;}*/
+				break;
+				
+				
+				case INSTR:
+					*/instr_def instr_th=dictionnaire[position]
+					nb_op=instr_th.nb_op*/
+				break;
+					
+					
+					
+					
 
 
 
@@ -181,9 +192,10 @@ instr_def * lecture_dico(int* p_nb_instr){
 }
 
 /*Retourne la position de l'instuction, ou -1 si l'instruction n'existe pas*/
+
 int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	int i=0;
-	for(i=0;i<nb_instr;i++){
+	for(i=0;i<nb_instr;i++){ 
 		printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);
 		if(strcmp(symbole,dictionnaire[i].symbole)==0){
 			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
@@ -194,3 +206,31 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 	return -1;
 }
+
+
+
+
+
+/*int check_operande(LISTE p,int nb_op)
+	Liste q=p;
+	int line=q->val.line;
+	if (strcmp(q->suiv*/
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,12 +4,13 @@
 
 
 #include <stdio.h>
+#include <f_annexe.h>
 
-enum{INIT,INIT_DEBUT,DIR,DIR_TYPE1,DIR_TYPE2,NB_OPERANDE_DIR,TEMPO_DIR,CHARGE_DIR,SYM,SYM_PRESENT,SYM_PAS_PRESENT,SYM_AVANT,SYM_ARRIERE,INSTR,OPE_INSTR,ERROR}
+enum{INIT,INIT_DEBUT,DIR,DIR_TYPE1,DIR_TYPE2,NB_OPERANDE_DIR,TEMPO_DIR,CHARGE_DIR,SYM,SYM_PRESENT,SYM_PAS_PRESENT,SYM_AVANT,SYM_ARRIERE,INSTR,OPE_INSTR,ERROR};
 
 
 
-instr_def * lecture_dico(int* p_nb_instr);
+instr_def* lecture_dico(int* p_nb_instr);
 int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
 void analyse_gram(LISTE);
 
