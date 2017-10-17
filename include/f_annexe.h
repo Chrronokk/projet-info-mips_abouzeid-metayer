@@ -26,23 +26,11 @@ typedef struct{
 	int nb_op;
 } instr_def;
 
-
-/*Liste des etiquettes de départs*/
-
-struct intMAILLON{
-	int nligne;
-	struct intMAILLON* suiv;
-};
-
-typedef struct intMAILLON* intLISTE;
-
-
 /*Definition de la liste des etiquettes d'arrivée*/
 
 typedef struct{
 	char* nom;
 	int arrivee;
-	intLISTE departs;
 } ETIQUETTE;
 
 

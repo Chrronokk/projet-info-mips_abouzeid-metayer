@@ -5,31 +5,49 @@
 #include <global.h>
 #include <f_annexe.h>
 
-/* Fonction qui  */
+/* Fonction qui recherche si une etiquette est dans la table des symboles 
+   Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
+
 int recherche_etiq(char* etiq, ETIQUETTE* tab_etiq){
+	int i=0;
+	ETIQUETTE* p =tab_etiq;
 
+	if (p==NULL){
+		puts("Table des symboles vide");
+		return -1;
+	
+	while(p->suiv!=NULL){
+		if(strcmp(etiq,p->nom)==0){
+			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
+			return i;			
+		}
+		i++;
+	}
+	return -1;
 }
 
-void ajout_etiq(char* etiq, ETIQUETTE* tab_etiq, int isdep){
 
+/* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
+void ajout_etiq(char* name, int adresse, ETIQUETTE* tab_etiq){
+	
 	int i;
-	LISTE p=Col;
+	ETIQUETTE* p=tab_etiq;
+	ETIQUETTE* p_etiq =calloc(1,sizeof(ETIQUETTE));
 	
+	int pos=recherche_etiq(name,tab_etiq);
 	
-	while (p->suiv != NULL){
-		if (p->
-	
+	if (pos!=-1){
+		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
+		return;
+	}
+	while(p->suiv != NULL) p=p->suiv;
 
-
-
-
-
-
-
-
-
-
+	p->suiv=p_etiq;
+	p_etiq->nom=strcpy(name);
+	p_etiq->arrivee=adresse;
+	return;	
 }
+
 
 
 

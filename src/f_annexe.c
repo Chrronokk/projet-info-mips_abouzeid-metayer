@@ -46,7 +46,7 @@ LISTE ajout_queue(LEXEME lexeme, LISTE liste){
         return liste;                       
     }
                                         
-}   
+}
 /*
 LISTE ajout(void* p_e,LISTE l){
 	LISTE p=calloc(1,sizeof(*p));
