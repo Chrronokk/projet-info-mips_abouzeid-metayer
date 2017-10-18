@@ -111,10 +111,13 @@ void analyse_gram(LISTE Col){
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
-						if(strcmp(p->val.type,"DIR")){
+						if(strcmp(p->val.type,"DIR")==0){
 							ETAT=DIR;}
-						else if(strcmp(p->val.type,"SYM")){
-							ETAT=SYM;}
+						/*else if(strcmp(p->val.type,"SYM")==0){
+							ETAT=SYM;}*/
+						else if(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")==0){
+							p=p->suiv;
+							continu=FALSE;}
 						else{
 							ETAT=ERROR;}
 					}
@@ -144,6 +147,7 @@ void analyse_gram(LISTE Col){
 								puts("Succes");
 								p=p->suiv;
 								continu=FALSE;
+								debut=1;
 							}
 							else{
 								ETAT=ERROR;}
@@ -156,8 +160,8 @@ void analyse_gram(LISTE Col){
 				break;		
 				
 				
-				case DIR:
-					if((strcmp(p->val.lex,".text"))||(strcmp(p->val.lex,".data"))||(strcmp(p->val.lex,".bss"))){
+				case DIR: 
+					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
 					/*else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
 						ETAT=DIR_TYPE2;}*/
@@ -166,9 +170,10 @@ void analyse_gram(LISTE Col){
 				break;
 				
 				
-				case DIR_TYPE1:
+				case DIR_TYPE1:/* ça marche
+					puts("essai");
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						
+						puts("essai'");
 						/* A COMPLETER*/
 						
 						p=p->suiv->suiv;
@@ -187,18 +192,25 @@ void analyse_gram(LISTE Col){
 				
 				
 				case SYM:
-					/*int position;
+					int position;
 					position=is_in_dico(p->val,dictionnaire,nb_instr)
 					if(position>=0){
 						ETAT=INSTR;}
 					else{
-						ETAT=SYM;}*/
+						ETAT=ERROR;}
 				break;
 				
 				
 				case INSTR:
-					/*instr_def instr_th=dictionnaire[position]
-					nb_op=instr_th.nb_op*/
+					instr_def instr_th=dictionnaire[position]
+					nb_op=instr_th.nb_op
+					if (test_nb_op(p,nb_op)){
+						int i;
+						for(i=0;i<nb_op+1;i++){
+							p=p->suiv;}
+						continu=FALSE;
+					else{
+						ETAT=ERROR;}
 				break;
 					
 					

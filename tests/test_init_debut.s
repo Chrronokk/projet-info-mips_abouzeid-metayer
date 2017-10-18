@@ -1,5 +1,5 @@
 # allons au mandela
 # allons au ru
 .set noreorder 
-dir
+erreur #permet de finir la boucle 
 

@@ -333,7 +333,7 @@ LISTE lex_read_line( char *line, int nline) {
 void lex_standardise( char* in, char* out ) {
     unsigned int i, j;
 
-    for ( i= 0, j= 0; i< strlen(in) && in[i]!='#'; i++ ) {
+    for ( i= 0, j= 0; i< strlen(in); i++ ) {
         /* rajoute des espaces autour des symboles de ponctuation*/
 		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
 			out[j++]=' ';
@@ -345,12 +345,18 @@ void lex_standardise( char* in, char* out ) {
 			out[j++]=' ';
 			out[j++]=in[i];
 		}	
+        
+        else if(in[i]=='\n'){
+        	out[j++]=' ';
+        	out[j++]='\n';
+			out[j++]='\0';
+		}
+        
+        
         /* translate all spaces (i.e., tab) into simple spaces*/
         else if (isblank((int) in[i])) out[j++]=' ';
         else out[j++]=in[i];
     }
-    out[j++]=' ';
-    out[j++]='\n';
 }
 
 
