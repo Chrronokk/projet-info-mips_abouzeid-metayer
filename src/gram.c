@@ -7,7 +7,7 @@
 
 /* Verifie que l'instruction pointée par p a bien nb_op opérandes */
 
-int test_nb_op(LISTE p, int nb_op){
+int test_nb_op_inst(LISTE p, int nb_op){
 	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);	
 	int i=0;
 	p=p->suiv;

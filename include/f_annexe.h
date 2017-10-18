@@ -31,6 +31,7 @@ typedef struct{
 typedef struct{
 	char* nom;
 	int arrivee;
+	char* zone;
 } ETIQUETTE;
 
 
@@ -43,15 +44,17 @@ struct etiqMAILLON{
 typedef struct etiqMAILLON* etiqLISTE;
 
 
-
+typedef struct{
+	char* nom;
+	char* type;
+	char* offset;
+} OPERANDE
 
 
 typedef struct{
 	char* symbole;
 	int adresse;
-	LEXEME* op1;
-	LEXEME* op2;
-	LEXEME* op3;
+	OPERANDE* op[3];
 	
 } instruction;
 
