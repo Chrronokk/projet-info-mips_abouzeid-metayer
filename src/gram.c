@@ -23,7 +23,7 @@ int test_nb_op(LISTE p, int nb_op){
 			
 			if (strcmp(op,"DEC")*strcmp(op,"HEX")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
 				puts("ERREUR OPERANDE");
-				return;
+				return FALSE;
 			}
 			if(strcmp(op,"HEX")*strcmp(op,"DEC")==0){
 				i++;
@@ -35,7 +35,7 @@ int test_nb_op(LISTE p, int nb_op){
 		}
 		
 		else{ /* att_vir==1 */
-			att_vir == 0;
+			att_vir = 0;
 			if (strcmp(op,"VIR") != 0) {
 				puts("ERREUR OPERANDE");
 			}
@@ -101,6 +101,8 @@ void analyse_gram(LISTE Col){
 	LISTE p=Col;
 	int debut=0;
 	
+	int position;
+	int nb_op;
 	
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
@@ -119,8 +121,8 @@ void analyse_gram(LISTE Col){
 					else{
 						if(strcmp(p->val.type,"DIR")==0){
 							ETAT=DIR;}
-						/*else if(strcmp(p->val.type,"SYM")==0){
-							ETAT=SYM;}*/
+						else if(strcmp(p->val.type,"SYM")==0){
+							ETAT=SYM;}
 						else if(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")==0){
 							p=p->suiv;
 							continu=FALSE;}
@@ -176,7 +178,7 @@ void analyse_gram(LISTE Col){
 				break;
 				
 				
-				case DIR_TYPE1:/* ça marche
+				case DIR_TYPE1:/* ça marche*/
 					puts("essai");
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
 						puts("essai'");
@@ -198,8 +200,7 @@ void analyse_gram(LISTE Col){
 				
 				
 				case SYM:
-					int position;
-					position=is_in_dico(p->val,dictionnaire,nb_instr)
+					position=is_in_dico(p->val.lex,dictionnaire,nb_instr);
 					if(position>=0){
 						ETAT=INSTR;}
 					else{
@@ -208,13 +209,13 @@ void analyse_gram(LISTE Col){
 				
 				
 				case INSTR:
-					instr_def instr_th=dictionnaire[position]
-					nb_op=instr_th.nb_op
+					nb_op=dictionnaire[position+1].nb_op;
 					if (test_nb_op(p,nb_op)){
 						int i;
 						for(i=0;i<nb_op+1;i++){
 							p=p->suiv;}
 						continu=FALSE;
+					}
 					else{
 						ETAT=ERROR;}
 				break;
