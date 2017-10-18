@@ -171,17 +171,15 @@ void analyse_gram(LISTE Col){
 				case DIR: 
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
-					/*else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
-						ETAT=DIR_TYPE2;}*/
+					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
+						ETAT=DIR_TYPE2;}
 					else{
 						ETAT=ERROR;}
 				break;
 				
 				
 				case DIR_TYPE1:/* ça marche*/
-					puts("essai");
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						puts("essai'");
 						/* A COMPLETER*/
 						
 						p=p->suiv->suiv;
@@ -221,7 +219,10 @@ void analyse_gram(LISTE Col){
 				break;
 					
 				case ETIQ:
-					if 
+					
+					
+						
+						
 					
 					
 					
