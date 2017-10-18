@@ -10,7 +10,7 @@
 int test_nb_op(LISTE p, int nb_op){
 	int i=0;
 
-	att_vir=0
+	int att_vir=0;
 
 
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
@@ -21,7 +21,7 @@ int test_nb_op(LISTE p, int nb_op){
 				
 		if(att_vir==0){
 			
-			if strcmp((op,"DEC")*strcmp(op,"HEX")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
+			if (strcmp(op,"DEC")*strcmp(op,"HEX")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
 				puts("ERREUR OPERANDE");
 				return;
 			}
@@ -30,7 +30,7 @@ int test_nb_op(LISTE p, int nb_op){
 				if (strcmp(p->suiv->val.lex,"(") && strcmp(p->suiv->suiv->val.type,"REG") && strcmp(p->suiv->suiv->suiv->val.lex,")")){
 					p=p->suiv->suiv->suiv;
 				}
-				att_vir=1
+				att_vir=1;
 			}	
 		}
 		
