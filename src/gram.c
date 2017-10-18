@@ -204,7 +204,7 @@ void analyse_gram(LISTE Col){
 					if(position>=0){
 						ETAT=INSTR;}
 					else{
-						ETAT=ERROR;}
+						ETAT=ETIQ;}
 				break;
 				
 				
@@ -220,6 +220,8 @@ void analyse_gram(LISTE Col){
 						ETAT=ERROR;}
 				break;
 					
+				case ETIQ:
+					if 
 					
 					
 					
