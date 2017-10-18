@@ -67,9 +67,9 @@ LISTE lex_load_file( char *file, unsigned int *nlines) {
             }
         }
     }
-	/*puts("Affichage de la liste des tokens:");
+	puts("Affichage de la liste des tokens:");
 	affiche_liste(col_general);
-	puts("Fin de la liste des tokens");*/
+	puts("Fin de la liste des tokens");
     fclose(fp);
     return col_general;
 }

@@ -78,6 +78,7 @@ void analyse_gram(LISTE Col){
 				
 				
 				case INIT:
+					printf("%s %s \n", p->val.lex, p->val.type);
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -98,17 +99,19 @@ void analyse_gram(LISTE Col){
 					return;
 				break;
 	
-				case INIT_DEBUT:
-					if( (strcmp(p->val.type,"COMMENT")) || (strcmp(p->val.type,"NL"))){
+				case INIT_DEBUT: /*ça marche*/
+					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
+						puts("allez");
 						p=p->suiv;
 						continu=FALSE;
 						}
-					else if(strcmp(p->val.type,"DIR")){
+					else if(strcmp(p->val.type,"DIR")==0){
 						puts("come on");
-						if(strcmp(p->val.lex,".set")){
+						if(strcmp(p->val.lex,".set")==0){
 							puts("quasi success");
 							p=p->suiv;
-							if(strcmp(p->val.type,"noreorder")){
+							printf("%s %s \n", p->val.lex, p->val.type);
+							if(strcmp(p->val.lex,"noreorder")==0){
 								puts("Succes");
 								p=p->suiv;
 								continu=FALSE;
@@ -125,24 +128,25 @@ void analyse_gram(LISTE Col){
 				
 				
 				case DIR:
-					/*if((strcmp(p->val.lex,".text")||(strcmp(p->val.lex,".data")||(strcmp(p->val.lex,".bss"){
+					if((strcmp(p->val.lex,".text"))||(strcmp(p->val.lex,".data"))||(strcmp(p->val.lex,".bss"))){
 						ETAT=DIR_TYPE1;}
-					else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
-						ETAT=DIR_TYPE2;}
+					/*else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
+						ETAT=DIR_TYPE2;}*/
 					else{
-						ETAT=ERROR;}*/
+						ETAT=ERROR;}
 				break;
 				
 				
 				case DIR_TYPE1:
-					/*if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){*/
+					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
 						
 						/* A COMPLETER*/
 						
-						/*p=p->suiv->suiv;
+						p=p->suiv->suiv;
 						continu=FALSE;
+					}
 					else{
-						ETAT=ERROR;}*/
+						ETAT=ERROR;}
 				break;
 				
 				
