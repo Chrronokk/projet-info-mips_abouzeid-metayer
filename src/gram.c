@@ -5,11 +5,40 @@
 #include <global.h>
 #include <f_annexe.h>
 
+/* Verifie que l'instruction pointée par p a bien nb_op opérandes */
+/*
+int test_nb_op(LISTE p, int nb_op){
+	int i=0;
+
+	att_vir=0
 
 
+	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+		
+		p=p->suiv;
+		char op[256];
+		strcpy(op,p->val.type);
+				
+		if(att_vir==0){
+			
+			if strcmp((op,"DEC")*strcmp(op,"HEX")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
+				puts("ERREUR OPERANDE");
+				return;
+			}
+			if(strcmp(p->suiv->val.lex,"(")==0){
+				if strcmp(p->suiv->suiv->val.type,"REG")
+
+			}
+		}
+		
+		if(att_vir==1){
+		
+		
+		}
 
 
-
+}
+*/
 /* Fonction qui recherche si une etiquette est dans la table des symboles 
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
 
