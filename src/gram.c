@@ -86,6 +86,7 @@ void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
 
 
 void analyse_gram(LISTE Col){
+	puts("Entrée dans analyse_gram");
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
@@ -95,10 +96,13 @@ void analyse_gram(LISTE Col){
 	int debut=0;
 	
 	
-	while (p->val.lex!=NULL){
+	while (p->suiv!=NULL){
+		/*puts("test1");*/
 		int ETAT=INIT;
 		int continu = TRUE;
 		while (continu == TRUE){
+			/*puts("test2");*/
+			/*printf("ETAT=%d \n",ETAT);*/
 			switch(ETAT){
 				
 				
@@ -129,9 +133,12 @@ void analyse_gram(LISTE Col){
 						continu=FALSE;
 						}
 					else if(strcmp(p->val.type,"DIR")){
+						puts("come on");
 						if(strcmp(p->val.lex,".set")){
+							puts("quasi success");
 							p=p->suiv;
 							if(strcmp(p->val.type,"noreorder")){
+								puts("Succes");
 								p=p->suiv;
 								continu=FALSE;
 							}
@@ -252,7 +259,7 @@ void analyse_gram(LISTE Col){
 
 
 instr_def * lecture_dico(int* p_nb_instr){
-	puts("Lecture du dictionnaire");
+	/*puts("Lecture du dictionnaire");*/
 	FILE* f1= fopen("dictionnaire.txt","r");
 	int i;
 	char s1[512];
@@ -260,14 +267,14 @@ instr_def * lecture_dico(int* p_nb_instr){
 
 	if (f1==NULL) return NULL;
 	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
-	printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);
+	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
 	tab=calloc(*p_nb_instr,sizeof(instr_def));
 	
 	for(i=0;i<*p_nb_instr;i++){
 		fscanf(f1,"%s %c %d",s1,&(tab[i].type),&(tab[i].nb_op));
 		tab[i].symbole=calloc(1,strlen(s1));
 		strcpy(tab[i].symbole,s1);
-		printf("%s %c %d\n",tab[i].symbole,tab[i].type,tab[i].nb_op);
+		/*printf("%s %c %d\n",tab[i].symbole,tab[i].type,tab[i].nb_op);*/
 	}
 	fclose(f1);
 	return tab;
