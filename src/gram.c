@@ -8,40 +8,55 @@
 /* Verifie que l'instruction pointée par p a bien nb_op opérandes */
 
 int test_nb_op(LISTE p, int nb_op){
+	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);	
 	int i=0;
-
+	p=p->suiv;
 	int att_vir=0;
-
+	
 
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
-		
-		p=p->suiv;
 		char op[256];
 		strcpy(op,p->val.type);
-				
+		/*printf("Analyse du lexème %s de type %s\n", p->val.lex, p->val.type);*/
 		if(att_vir==0){
-			
-			if (strcmp(op,"DEC")*strcmp(op,"HEX")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
-				puts("ERREUR OPERANDE");
+			att_vir=1;
+			/*puts("Recherche d'une operande");
+			printf("opération: %s\n",op); */
+			if (strcmp(op,"DEC")*strcmp(op,"HEXA")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
+				
+			}
+			else if(strcmp(op,"HEXA")*strcmp(op,"DEC")==0){
+				i++;
+				/*puts("Opérande trouvée");
+				printf("Lexemes suivants:    %s   %s   %s\n",p->suiv->val.lex, p->suiv->suiv->val.type, p->suiv->suiv->suiv->val.lex);*/
+				if (strcmp(p->suiv->val.lex,"(")==0 && strcmp(p->suiv->suiv->val.type,"REG")==0 && strcmp(p->suiv->suiv->suiv->val.lex,")")==0){
+					p=p->suiv->suiv->suiv;
+					/*puts("Adressage par offset détecté");*/
+				}
+			}
+			else if(strcmp(op,"REG")*strcmp(op,"SYM")==0){
+				i++;
+			}
+			else {
+				puts("ERREUR: PAS UNE OPERANDE");
 				return FALSE;
 			}
-			if(strcmp(op,"HEX")*strcmp(op,"DEC")==0){
-				i++;
-				if (strcmp(p->suiv->val.lex,"(") && strcmp(p->suiv->suiv->val.type,"REG") && strcmp(p->suiv->suiv->suiv->val.lex,")")){
-					p=p->suiv->suiv->suiv;
-				}
-				att_vir=1;
-			}	
 		}
-		
 		else{ /* att_vir==1 */
 			att_vir = 0;
 			if (strcmp(op,"VIR") != 0) {
-				puts("ERREUR OPERANDE");
+				puts("ERREUR: PAS UNE VIRGULE");
+				return FALSE;
 			}
 		}
+		p=p->suiv;
 	}
-	if (i==nb_op) return TRUE;
+	printf(" %d Opérandes trouvées\n", i);
+	if (i==nb_op){
+		/*puts("Bon nombre d'opérandes\n\n");*/
+		return TRUE;
+		}
+	puts("Mauvais nombre d'opérandes\n\n");
 	return FALSE;
 }
 
@@ -209,7 +224,7 @@ void analyse_gram(LISTE Col){
 				
 				
 				case INSTR:
-					nb_op=dictionnaire[position+1].nb_op;
+					nb_op=dictionnaire[position].nb_op;
 					if (test_nb_op(p,nb_op)){
 						int i;
 						for(i=0;i<nb_op+1;i++){
