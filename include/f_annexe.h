@@ -31,6 +31,7 @@ typedef struct{
 typedef struct{
 	char* nom;
 	int arrivee;
+	char* zone;
 } ETIQUETTE;
 
 

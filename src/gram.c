@@ -83,7 +83,7 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 }
 
 /* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
-void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
+etiqLISTE ajout_etiq(char* name, char* zone, int adresse, etiqLISTE tab_etiq){
 	
 	etiqLISTE p=tab_etiq;
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
@@ -92,14 +92,19 @@ void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
 	
 	if (pos!=-1){
 		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
-		return;
+		return NULL;
 	}
-	while(p->suiv != NULL) p=p->suiv;
-
-	p->suiv=p_etiq;
-	strcpy(p_etiq->pval->nom,name);
-	p_etiq->pval->arrivee=adresse;
-	return;	
+	if(p==NULL){ return p_etiq;}
+	else{
+		while(p->suiv != NULL) p=p->suiv;
+		p_etiq->pval->nom=calloc(strlen(name),sizeof(*name));
+		strcpy(p_etiq->pval->nom,name);
+		p_etiq->pval->zone=calloc(strlen(zone),sizeof(*zone));
+		strcpy(p_etiq->pval->zone,zone);
+		p_etiq->pval->arrivee=adresse;
+		p->suiv=p_etiq;
+	}
+	return tab_etiq;	
 }
 
 
@@ -118,6 +123,9 @@ void analyse_gram(LISTE Col){
 	
 	int position;
 	int nb_op;
+	char zone[5]=".text";
+	int decalage=0;
+	etiqLISTE tab_etiq= NULL;
 	
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
@@ -186,8 +194,8 @@ void analyse_gram(LISTE Col){
 				case DIR: 
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
-					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
-						ETAT=DIR_TYPE2;}
+					/*else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
+						ETAT=DIR_TYPE2;}*/
 					else{
 						ETAT=ERROR;}
 				break;
@@ -234,6 +242,19 @@ void analyse_gram(LISTE Col){
 				break;
 					
 				case ETIQ:
+					if(strcmp(p->suiv->val.type,"DP")==0){
+						if(recherche_etiq(p->val.lex,tab_etiq)<0){
+							puts("test");
+							tab_etiq=ajout_etiq(p->val.lex,zone,decalage,tab_etiq);
+							p=p->suiv->suiv;
+							continu=FALSE;
+						}	
+						else{
+							ETAT=ERROR;}
+					}		
+					else{
+						ETAT=ERROR;}
+				break;				
 					
 					
 						
