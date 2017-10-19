@@ -48,7 +48,7 @@ typedef struct{
 	char* nom;
 	char* type;
 	char* offset;
-} OPERANDE
+} OPERANDE;
 
 
 typedef struct{
