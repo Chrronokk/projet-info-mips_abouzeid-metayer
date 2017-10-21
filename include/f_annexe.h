@@ -55,8 +55,14 @@ typedef struct{
 	char* symbole;
 	int adresse;
 	OPERANDE* op[3];
-	
 } instruction;
+
+struct instMAILLON{
+	instruction* pval
+	instMAILLON* suiv
+};
+
+typedef struct instMAILLON* instLISTE;
 
 
 

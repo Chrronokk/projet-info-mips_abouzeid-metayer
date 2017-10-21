@@ -5,14 +5,39 @@
 #include <global.h>
 #include <f_annexe.h>
 
-/* Verifie que l'instruction pointée par p a bien nb_op opérandes */
+/* Ajoute l'instruction à la liste des instructions et renvoie un pointeur vers le lexème suivant*/
 
+LEXEME* add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;){
+
+	instruction* p_inst==calloc(1,sizeof(instruction));
+
+	strcpy(p_inst->symbole,p_lex->val.lex);
+	p_inst->adresse=adresse;
+
+	int i=0;
+
+	while (i<nb_op){
+		p_lex=p_lex->suiv;
+
+		if (strcmp(p_lex->lex, "VIR")==0) continue;
+
+		if (strcmp(p_lex->))
+	}
+
+
+}
+
+
+
+
+
+
+/* Verifie que l'instruction pointée par p a bien nb_op opérandes */
 int test_nb_op_inst(LISTE p, int nb_op){
-	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);	
+	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);
 	int i=0;
 	p=p->suiv;
 	int att_vir=0;
-	
 
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
 		char op[256];
@@ -23,7 +48,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 			/*puts("Recherche d'une operande");
 			printf("opération: %s\n",op); */
 			if (strcmp(op,"DEC")*strcmp(op,"HEXA")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
-				
+
 			}
 			else if(strcmp(op,"HEXA")*strcmp(op,"DEC")==0){
 				i++;
@@ -60,7 +85,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 	return FALSE;
 }
 
-/* Fonction qui recherche si une etiquette est dans la table des symboles 
+/* Fonction qui recherche si une etiquette est dans la table des symboles
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
 
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
@@ -74,7 +99,7 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	while(p->suiv!=NULL){
 		if(strcmp(etiq,p->pval->nom)==0){
 			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
-			return i;			
+			return i;
 		}
 		i++;
 	}
@@ -84,12 +109,12 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 
 /* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
 void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
-	
+
 	etiqLISTE p=tab_etiq;
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
-	
+
 	int pos=recherche_etiq(name,tab_etiq);
-	
+
 	if (pos!=-1){
 		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
 		return;
@@ -99,7 +124,7 @@ void ajout_etiq(char* name, int adresse, etiqLISTE tab_etiq){
 	p->suiv=p_etiq;
 	strcpy(p_etiq->pval->nom,name);
 	p_etiq->pval->arrivee=adresse;
-	return;	
+	return;
 }
 
 
@@ -111,14 +136,14 @@ void analyse_gram(LISTE Col){
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
-	
+
 
 	LISTE p=Col;
 	int debut=0;
-	
+
 	int position;
 	int nb_op;
-	
+
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
 		int ETAT=INIT;
@@ -127,8 +152,8 @@ void analyse_gram(LISTE Col){
 			/*puts("test2");*/
 			/*printf("ETAT=%d \n",ETAT);*/
 			switch(ETAT){
-				
-				
+
+
 				case INIT:
 					printf("%s %s \n", p->val.lex, p->val.type);
 					if(debut==0){
@@ -144,16 +169,16 @@ void analyse_gram(LISTE Col){
 						else{
 							ETAT=ERROR;}
 					}
-						
-						
+
+
 				break;
-	
-	
+
+
 				case ERROR:
 					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
 					return;
 				break;
-	
+
 				case INIT_DEBUT: /*ça marche*/
 					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
 						puts("allez");
@@ -177,13 +202,13 @@ void analyse_gram(LISTE Col){
 						}
 						else{
 							ETAT=ERROR;}
-					}			
+					}
 					else{
 						ETAT=ERROR;}
-				break;		
-				
-				
-				case DIR: 
+				break;
+
+
+				case DIR:
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
 					/*else if((strcmp(p->val.lex,".word"))||(strcmp(p->val.lex,".byte"))||(strcmp(p->val.lex,".asciiz"))){
@@ -191,29 +216,29 @@ void analyse_gram(LISTE Col){
 					else{
 						ETAT=ERROR;}
 				break;
-				
-				
+
+
 				case DIR_TYPE1:/* ça marche*/
 					puts("essai");
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
 						puts("essai'");
 						/* A COMPLETER*/
-						
+
 						p=p->suiv->suiv;
 						continu=FALSE;
 					}
 					else{
 						ETAT=ERROR;}
 				break;
-				
-				
+
+
 				case DIR_TYPE2:
-					
+
 					/* A COMPLETER */
-					
+
 				break;
-				
-				
+
+
 				case SYM:
 					position=is_in_dico(p->val.lex,dictionnaire,nb_instr);
 					if(position>=0){
@@ -221,11 +246,11 @@ void analyse_gram(LISTE Col){
 					else{
 						ETAT=ETIQ;}
 				break;
-				
-				
+
+
 				case INSTR:
 					nb_op=dictionnaire[position].nb_op;
-					if (test_nb_op(p,nb_op)){
+					if (test_nb_op_inst(p,nb_op)){
 						int i;
 						for(i=0;i<nb_op+1;i++){
 							p=p->suiv;}
@@ -234,12 +259,9 @@ void analyse_gram(LISTE Col){
 					else{
 						ETAT=ERROR;}
 				break;
-					
+
 				case ETIQ:
-					if 
-					
-					
-					
+					if
 
 
 
@@ -291,7 +313,10 @@ void analyse_gram(LISTE Col){
 
 
 
-				
+
+
+
+
 			}
 		}
 	}
@@ -309,7 +334,7 @@ instr_def * lecture_dico(int* p_nb_instr){
 	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
 	tab=calloc(*p_nb_instr,sizeof(instr_def));
-	
+
 	for(i=0;i<*p_nb_instr;i++){
 		fscanf(f1,"%s %c %d",s1,&(tab[i].type),&(tab[i].nb_op));
 		tab[i].symbole=calloc(1,strlen(s1));
@@ -324,7 +349,7 @@ instr_def * lecture_dico(int* p_nb_instr){
 
 int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	int i=0;
-	for(i=0;i<nb_instr;i++){ 
+	for(i=0;i<nb_instr;i++){
 		printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);
 		if(strcmp(symbole,dictionnaire[i].symbole)==0){
 			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
@@ -335,27 +360,3 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 	return -1;
 }
-
-
-
-
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
