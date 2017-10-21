@@ -6,7 +6,7 @@
 #include <f_annexe.h>
 
 /*cree et renvoie une structure operande contenant les 3 string données*/
-OPERANDE* creer_op(char* name, char* ty, char* off){
+OPERANDE creer_op(char* name, char* ty, char* off){
 
 	OPERANDE op;
 	op.nom=calloc(strlen(name),sizeof(char));
@@ -17,7 +17,7 @@ OPERANDE* creer_op(char* name, char* ty, char* off){
 	strcpy(op.type,ty);
 	strcpy(op.offset,off);
 
-	return &op;
+	return op;
 }
 
 /* Ajoute l'instruction pointée, ainsi que ses opérandes à la liste des instructions */
