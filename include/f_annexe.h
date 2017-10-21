@@ -37,7 +37,7 @@ typedef struct{
 
 
 struct etiqMAILLON{
-	ETIQUETTE* pval;
+	ETIQUETTE val;
 	struct etiqMAILLON* suiv;
 };
 
@@ -55,12 +55,19 @@ typedef struct{
 	char* symbole;
 	int adresse;
 	OPERANDE* op[3];
-	
 } instruction;
+
+struct instMAILLON{
+	instruction val;
+	struct instMAILLON* suiv;
+};
+
+typedef struct instMAILLON* instLISTE;
 
 
 
 LISTE creer_liste(void);
+instLISTE creer_liste_inst(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
@@ -70,6 +77,8 @@ LISTE copie(LISTE l);
 void affiche_liste(LISTE l);
 void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
+instLISTE ajout_queue_inst(instruction inst, instLISTE liste);
+
 
 
 #endif
