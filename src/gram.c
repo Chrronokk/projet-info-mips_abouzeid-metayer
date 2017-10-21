@@ -5,30 +5,62 @@
 #include <global.h>
 #include <f_annexe.h>
 
-/* Ajoute l'instruction à la liste des instructions et renvoie un pointeur vers le lexème suivant*/
+/*cree et renvoie une structure operande contenant les 3 string données*/
+OPERANDE* creer_op(char* name, char* ty, char* off){
 
-LEXEME* add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;){
+	OPERANDE op;
+	op.nom=calloc(strlen(name),sizeof(char));
+	op.type=calloc(strlen(ty),sizeof(char));
+	op.offset=calloc(strlen(off),sizeof(char));
 
-	instruction* p_inst==calloc(1,sizeof(instruction));
+	strcpy(op.nom,name);
+	strcpy(op.type,ty);
+	strcpy(op.offset,off);
+
+	return &op;
+}
+
+/* Ajoute l'instruction pointée, ainsi que ses opérandes à la liste des instructions */
+instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;){
+
+	instruction* p_inst=calloc(1,sizeof(instruction));
 
 	strcpy(p_inst->symbole,p_lex->val.lex);
 	p_inst->adresse=adresse;
 
 	int i=0;
 
+	p_lex=p_lex->suiv;
+
 	while (i<nb_op){
 		p_lex=p_lex->suiv;
 
-		if (strcmp(p_lex->lex, "VIR")==0) continue;
+		OPERANDE op;
 
-		if (strcmp(p_lex->))
+		if (strcmp(p_lex->val.lex, "VIR")==0){
+			continue;
+		}
+		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
+			if (strcmp(p_lex->suiv->val.lex,"(")==0){
+				op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex)
+				p_lex=p_lex->suiv->suiv->suiv;
+			}
+			else{
+				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+			}
+		}
+
+		else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
+			op=creer_op(p_lex->val.type,p_lex->val.lex,"0");
+		}
+
+		p_inst->op[i] = &op;
+
+		i++;
 	}
-
-
+	/*Ajout de l'instruction à la liste des instructions:*/
+	return ajout_queue_inst(*p_inst; insts);
 }
-
-
-
 
 
 
@@ -47,10 +79,8 @@ int test_nb_op_inst(LISTE p, int nb_op){
 			att_vir=1;
 			/*puts("Recherche d'une operande");
 			printf("opération: %s\n",op); */
-			if (strcmp(op,"DEC")*strcmp(op,"HEXA")*strcmp(op,"SYM")*strcmp(op,"REG")!=0){
 
-			}
-			else if(strcmp(op,"HEXA")*strcmp(op,"DEC")==0){
+			if(strcmp(op,"HEXA")*strcmp(op,"DEC")==0){
 				i++;
 				/*puts("Opérande trouvée");
 				printf("Lexemes suivants:    %s   %s   %s\n",p->suiv->val.lex, p->suiv->suiv->val.type, p->suiv->suiv->suiv->val.lex);*/

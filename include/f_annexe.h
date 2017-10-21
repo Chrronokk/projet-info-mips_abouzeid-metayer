@@ -58,8 +58,8 @@ typedef struct{
 } instruction;
 
 struct instMAILLON{
-	instruction* pval
-	instMAILLON* suiv
+	instruction* pval;
+	instMAILLON* suiv;
 };
 
 typedef struct instMAILLON* instLISTE;
