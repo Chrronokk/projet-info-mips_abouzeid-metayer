@@ -151,9 +151,25 @@ void affiche_liste(LISTE l){
     	printf("[%s]  %s \n", c->val.type,c->val.lex);
 		c=c->suiv;
     }
+   }
 
+void affiche_liste_etiq(etiqLISTE l){
+	/*puts("Entrée dans affiche_liste");*/
+	etiqLISTE c = l	;
 
-    printf("[%s]  %s \n", c->val.type, c->val.lex);
+	if(l==NULL){
+		printf("Vide \n");
+		return;
+		}
+
+	while(c->suiv != NULL){
+		/*puts("Bouclage");*/
+    	printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+		c=c->suiv;
+    }
+    printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+    return;
+    
 
 }
 
@@ -169,11 +185,26 @@ void nbmaillon(LISTE l){
 		c++;
 		printf("il y a %d d'éléments\n", c);
 	}
-	return;
 }
 
 
+void affiche_liste_inst(instLISTE l){
+	/*puts("Entrée dans affiche_liste");*/
+	instLISTE c = l	;
 
+	if(l==NULL){
+		printf("Vide \n");
+		return;
+		}
+
+	while(c->suiv != NULL){
+		/*puts("Bouclage");*/
+    	printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
+		c=c->suiv;
+    }
+}
+   
+   
 
 LISTE concat(LISTE l1, LISTE l2){
     LISTE copie1 = copie(l1);
@@ -186,3 +217,8 @@ LISTE concat(LISTE l1, LISTE l2){
     return copie1;
 
 }
+
+
+
+
+

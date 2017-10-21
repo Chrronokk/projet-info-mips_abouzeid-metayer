@@ -23,9 +23,10 @@ OPERANDE creer_op(char* name, char* ty, char* off){
 
 
 /* Ajoute l'instruction pointée, ainsi que ses opérandes à la liste des instructions */
-instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;){
 
-	instruction* p_inst=calloc(1,sizeof(instruction));
+instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
+	instruction* p_inst=calloc(1,sizeof(p_inst));
+	p_inst->symbole=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(p_inst->symbole,p_lex->val.lex);
 	p_inst->adresse=adresse;
 	instLISTE liste=creer_liste_inst();
@@ -195,7 +196,8 @@ void analyse_gram(LISTE Col){
 	int decalage=decalage_complet[text];
 	etiqLISTE tab_etiq= NULL;
 	ETIQUETTE etiq;
-
+	
+	instLISTE col_inst=creer_liste_inst();
 
 
 	while (p->suiv!=NULL){
@@ -275,9 +277,21 @@ void analyse_gram(LISTE Col){
 				case DIR_TYPE1:/* ça marche*/
 
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						puts("essai'");
-						/* A COMPLETER*/
-
+						if (strcmp(p->val.lex,".text")==0){
+							strcpy(zone,".text");
+							decalage=decalage_complet[text];
+						}
+						else if(strcmp(p->val.lex,".data")==0){
+							strcpy(zone,".data");
+							decalage=decalage_complet[data];
+						}
+						else if(strcmp(p->val.lex,".bss")==0){
+							strcpy(zone,".bss ");
+							decalage=decalage_complet[bss];
+						}
+						else{
+							ETAT=ERROR;
+						}
 						p=p->suiv->suiv;
 						continu=FALSE;
 					}
@@ -306,6 +320,8 @@ void analyse_gram(LISTE Col){
 					nb_op=dictionnaire[position].nb_op;
 
 					if (test_nb_op_inst(p,nb_op)==TRUE){
+						col_inst=add_inst(col_inst,p,nb_op,decalage);
+						decalage+=4;
 						while(p->val.line==p->suiv->val.line){
 							p=p->suiv;}
 						continu=FALSE;
@@ -320,6 +336,7 @@ void analyse_gram(LISTE Col){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
 							puts("test");
 							etiq=creer_etiquette(p->val.lex,decalage,zone);
+							printf("%s\n",etiq.nom);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
@@ -398,6 +415,8 @@ void analyse_gram(LISTE Col){
 			}
 		}
 	}
+	affiche_liste_etiq(tab_etiq);
+	affiche_liste_inst(col_inst);
 }
 
 
