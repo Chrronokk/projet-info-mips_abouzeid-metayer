@@ -8,6 +8,8 @@
 
 enum{INIT,INIT_DEBUT,DIR,DIR_TYPE1,DIR_TYPE2,SYM,INSTR,ETIQ,ERROR};
 
+enum{text,data,bss};
+
 
 
 instr_def* lecture_dico(int* p_nb_instr);

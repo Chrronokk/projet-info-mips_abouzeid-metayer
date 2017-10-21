@@ -123,8 +123,9 @@ void analyse_gram(LISTE Col){
 	
 	int position;
 	int nb_op;
-	char zone[5]=".text";
-	int decalage=0;
+	char zone[3]=".text";
+	int decalage_complet[3];
+	int decalage=decalage_complet[text]
 	etiqLISTE tab_etiq= NULL;
 	
 	while (p->suiv!=NULL){
@@ -202,8 +203,10 @@ void analyse_gram(LISTE Col){
 				
 				
 				case DIR_TYPE1:/* ça marche*/
-					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						/* A COMPLETER*/
+					if(strcmp(p->suiv->val.type,"COMMENT")*strcmp(p->suiv->val.type,"NL")==0){
+						if(strcmp(p->val.lex,".text"){
+							zone=".text"
+							
 						
 						p=p->suiv->suiv;
 						continu=FALSE;
@@ -231,9 +234,9 @@ void analyse_gram(LISTE Col){
 				
 				case INSTR:
 					nb_op=dictionnaire[position].nb_op;
-					if (test_nb_op(p,nb_op)){
+					if (test_nb_op_inst(p,nb_op)==TRUE){
 						int i;
-						for(i=0;i<nb_op+1;i++){
+						while(p->val.line==p->suiv->val.line){
 							p=p->suiv;}
 						continu=FALSE;
 					}
