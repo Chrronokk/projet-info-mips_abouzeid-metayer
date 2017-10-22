@@ -27,6 +27,7 @@ void analyse_gram(LISTE Col){
 	
 	instLISTE col_text=creer_liste_inst();
 	dirLISTE col_data=creer_liste_dir();
+	dirLISTE col_bss=creer_liste_dir();
 	
 
 	while (p->suiv!=NULL){
@@ -129,7 +130,7 @@ void analyse_gram(LISTE Col){
 
 
 				case DIR_TYPE2:
-						if((strcmp(p->val.lex,".data"))==0){
+						if((strcmp(zone,".data"))==0){
 							if((strcmp(p->val.lex,".word"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
@@ -149,8 +150,16 @@ void analyse_gram(LISTE Col){
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
+								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+								decalage+=atoi(p->suiv->val.lex);
 							}
 						}
+						else if((strcmp(zone,".bss "))==0){
+							col_bss=add_dir(p,decalage,col_bss);
+							if(col_bss==NULL) ETAT=ERROR;
+							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+							decalage+=atoi(p->suiv->val.lex);
+						}							
 						else ETAT=ERROR;
 				break;
 
@@ -431,6 +440,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	p_dir->dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(p_dir->dir,p_lex->val.lex);
 	p_dir->decalage=decalage;
+	p_dir->ligne=p_lex->val.ligne;
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 		p_lex=p_lex->suiv;
 		if (strcmp(p_lex->val.lex, "VIR")==0){
@@ -462,7 +472,6 @@ int decalage_asciiz(LISTE p){
 	}
 	return c;
 }
-			
 
 
 
