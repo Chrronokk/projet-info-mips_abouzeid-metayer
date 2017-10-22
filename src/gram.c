@@ -132,13 +132,21 @@ void analyse_gram(LISTE Col){
 						if((strcmp(p->val.lex,".data"))==0){
 							if((strcmp(p->val.lex,".word"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col==NULL) ETAT=ERROR;
 								decalage+=4;
-							if((strcmp(p->val.lex,".byte"))==0){
+							else if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col==NULL) ETAT=ERROR;
 								decalage+=1;
-								
-								
-					
+							else if((strcmp(p->val.lex,".asciiz"))==0){
+								col_data=add_dir(p,decalage,col_data);
+								if(col==NULL) ETAT=ERROR;								
+								decalage+=decalage_asciiz(p);
+								if(decalage_asciiz(p)==0) ETAT=ERROR;
+							else if((strcmp(p->val.lex,".space"))==0){
+								col_data=add_dir(p,decalage,col_data);
+								if(col==NULL) ETAT=ERROR;
+							
 
 				break;
 
@@ -421,7 +429,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	strcpy(p_dir->dir,p_lex->val.lex);
 	p_dir->decalage=decalage;
 	dirLISTE liste=creer_liste_dir();
-	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 		p=p->suiv
 		if (strcmp(p_lex->val.lex, "VIR")==0){
 			continue;
@@ -433,11 +441,26 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 			strcpy(p_dir->type_op,p_lex->val.type);
 			col=ajout_queue_dir(*p_dir,col);
 		}
+		else return NULL;
 	}
 	return col;
 }
 
-
+int decalage_asciiz(LISTE p){
+	int c=0;
+	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+		p=p->suiv
+		if (strcmp(p->val.lex, "VIR")==0){
+			continue;
+		}
+		else if (strcmp(p->val.lex[0],'"')==0){
+			c+=strlen(p->val.lex)-1;
+		}
+		else return 0;
+	}
+	return c;
+}
+			
 
 
 
