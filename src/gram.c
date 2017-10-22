@@ -287,10 +287,12 @@ OPERANDE creer_op(char* name, char* ty, char* off){
 /* Ajoute l'instruction pointée, ainsi que ses opérandes à la liste des instructions */
 
 instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
-	instruction* p_inst=calloc(1,sizeof(p_inst));
-	p_inst->symbole=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
-	strcpy(p_inst->symbole,p_lex->val.lex);
-	p_inst->adresse=adresse;
+	instruction inst;
+	inst.symbole=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+	strcpy(inst.symbole,p_lex->val.lex);
+	inst.adresse=adresse;
+	inst.nb_op=nb_op;
+	inst.ligne=p_lex->val.line;
 	int i=0;
 
 	p_lex=p_lex->suiv;
@@ -317,12 +319,12 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 			op=creer_op(p_lex->val.type,p_lex->val.lex,"0");
 		}
 
-		p_inst->op[i] = &op;
+		inst.op[i] = &op;
 
 		i++;
 	}
 	/*Ajout de l'instruction à la liste des instructions:*/
-	insts=ajout_queue_inst(*p_inst, insts);
+	insts=ajout_queue_inst(inst, insts);
 	return insts;
 }
 
