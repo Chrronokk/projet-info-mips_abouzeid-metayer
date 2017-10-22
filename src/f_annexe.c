@@ -16,6 +16,10 @@ dirLISTE creer_liste_dir(void){
      return NULL;
 }
 
+etiqLISTE creer_liste_etiq(void){
+     return NULL;
+}
+
 int est_vide(LISTE l){
     if (l==NULL) return 1;
 	return 0;

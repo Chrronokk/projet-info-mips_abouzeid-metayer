@@ -6,7 +6,7 @@
 #include <f_annexe.h>
 
 
-void analyse_gram(LISTE Col){
+void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 	puts("Entrée dans analyse_gram");
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
@@ -21,13 +21,9 @@ void analyse_gram(LISTE Col){
 	char zone[5]=".text";
 	int decalage_complet[3];
 	int decalage=decalage_complet[text];
-	etiqLISTE tab_etiq= NULL;
 
 	ETIQUETTE etiq;
 
-	instLISTE col_text=creer_liste_inst();
-	dirLISTE col_data=creer_liste_dir();
-	dirLISTE col_bss=creer_liste_dir();
 	
 
 
@@ -38,6 +34,7 @@ void analyse_gram(LISTE Col){
 		int ETAT=INIT;
 		int continu = TRUE;
 		while (continu == TRUE){
+			/*printf("%s\n", zone);*/
 			/*puts("test2");*/
 			/*printf("ETAT=%d \n",ETAT);*/
 			switch(ETAT){
@@ -97,13 +94,12 @@ void analyse_gram(LISTE Col){
 
 
 				case DIR:
-					puts("fff");
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
-					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))==0){
+					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))*(strcmp(p->val.lex,".space"))==0){
 						ETAT=DIR_TYPE2;}
-					else{
-						ETAT=ERROR;}
+					else ETAT=ERROR;
+					
 				break;
 
 
@@ -137,34 +133,41 @@ void analyse_gram(LISTE Col){
 						if((strcmp(zone,".data"))==0){
 							if((strcmp(p->val.lex,".word"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
 								decalage+=4;
 							}
 							else if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
 								decalage+=1;
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;								
 								decalage+=decalage_asciiz(p);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
 								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
 								decalage+=atoi(p->suiv->val.lex);
 							}
+							while(p->val.line==p->suiv->val.line){
+							p=p->suiv;}
+							continu=FALSE;
 						}
 						else if((strcmp(zone,".bss "))==0){
+							puts("aa");
 							col_bss=add_dir(p,decalage,col_bss);
-							if(col_bss==NULL) ETAT=ERROR;
+							puts("bb");
 							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+							puts("cc");
 							decalage+=atoi(p->suiv->val.lex);
+							puts("dd");
+							while(p->val.line==p->suiv->val.line){
+							p=p->suiv;}
+							continu=FALSE;
 						}							
 						else ETAT=ERROR;
+						
+							
 				break;
 
 
@@ -195,9 +198,7 @@ void analyse_gram(LISTE Col){
 
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
-							puts("test");
 							etiq=creer_etiquette(p->val.lex,decalage,zone);
-							printf("%s\n",etiq.nom);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;

@@ -15,9 +15,12 @@ boucle:
 	byebye:
 	JAL viteviteauru
 .data
-	lunchtime : .word 12
+	lunchtime : 
 	.byte  2, 0x4
 	.space 12
-	.acsiiz "blabla","gabuzomeu"
+	.asciiz "blabla","gabuzomeu"
 .bss
 .space 12
+
+
+

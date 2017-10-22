@@ -13,7 +13,6 @@
 #include <notify.h>
 #include <lex.h>
 #include <gram.h>
-
 /**
  * @param exec Name of executable.
  * @return Nothing.
@@ -77,8 +76,12 @@ int main ( int argc, char *argv[] ) {
     DEBUG_MSG("source code got %d lines",nlines);
 	
 	/* --------------- Analyse grammaticale ---------------------*/
-
-	analyse_gram(Col);
+	
+	instLISTE col_text=creer_liste_inst();
+	dirLISTE col_data=creer_liste_dir();
+	dirLISTE col_bss=creer_liste_dir();
+	etiqLISTE tab_etiq=creer_liste_etiq();
+	analyse_gram(Col,col_text,col_data,col_bss,tab_etiq);
 	
     /* --------------- Free memory and terminate ----------------*/
 	

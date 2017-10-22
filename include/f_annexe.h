@@ -87,6 +87,7 @@ typedef struct dirMAILLON* dirLISTE;
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
 dirLISTE creer_liste_dir(void);
+etiqLISTE creer_liste_etiq(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );

@@ -11,7 +11,7 @@ enum{INIT,INIT_DEBUT,DIR,DIR_TYPE1,DIR_TYPE2,SYM,INSTR,ETIQ,ERROR};
 enum{text,data,bss};
 
 
-void analyse_gram(LISTE);
+void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq);
 instr_def* lecture_dico(int* p_nb_instr);
 int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
 OPERANDE creer_op(char* name, char* ty, char* off);
