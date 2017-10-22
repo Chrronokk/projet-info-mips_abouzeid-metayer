@@ -69,18 +69,18 @@ void analyse_gram(LISTE Col){
 
 				case INIT_DEBUT: /*ça marche*/
 					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
-						puts("allez");
+						/*puts("allez");*/
 						p=p->suiv;
 						continu=FALSE;
 						}
 					else if(strcmp(p->val.type,"DIR")==0){
-						puts("come on");
+						/*puts("come on");*/
 						if(strcmp(p->val.lex,".set")==0){
-							puts("quasi success");
+							/*puts("quasi success");*/
 							p=p->suiv;
 							printf("%s %s \n", p->val.lex, p->val.type);
 							if(strcmp(p->val.lex,"noreorder")==0){
-								puts("Succes");
+								/*puts("Succes");*/
 								p=p->suiv;
 								continu=FALSE;
 								debut=1;
@@ -257,7 +257,7 @@ instr_def * lecture_dico(int* p_nb_instr){
 int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	int i=0;
 	for(i=0;i<nb_instr;i++){
-		printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);
+		/*printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);*/
 		if(strcmp(symbole,dictionnaire[i].symbole)==0){
 			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
 			return i;
