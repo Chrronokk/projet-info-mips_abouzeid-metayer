@@ -134,7 +134,7 @@ LISTE lex_read_line( char *line, int nline) {
 		else if (token[0]=='$'){
 			/*printf("reg\n");*/
 			ETAT=REG;}
-		else if (isalpha(token[0])||(strcmp(token[0],'"')==0)){
+		else if (isalpha(token[0])||(token[0]=='"')){
 			/*printf("sym\n");*/
 			ETAT=SYM;}
 		else if (token[0] == ','){

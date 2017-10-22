@@ -71,7 +71,7 @@ instLISTE ajout_queue_inst(instruction inst, instLISTE liste){
     }
 }
 
-instLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste){
+dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste){
   /*puts("Entrée dans ajout_queue");*/
 	dirLISTE p = calloc(1, sizeof(*p));
   	p->suiv = NULL;
