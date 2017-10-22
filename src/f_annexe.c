@@ -189,7 +189,7 @@ void affiche_liste_etiq(etiqLISTE l){
     }
     printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
     return;
-    
+
 
 }
 
@@ -211,20 +211,28 @@ void nbmaillon(LISTE l){
 void affiche_liste_inst(instLISTE l){
 	puts("Entrée dans affiche_liste inst");
 	instLISTE c = l	;
+  int nb_op;
+  int i;
+
 
 	if(l==NULL){
 		printf("Vide \n");
 		}
-	
+
 	while(c->suiv != NULL){
 		puts("Bouclage");
-    	printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
+    	nb_op=c->val.nb_op;
+		printf("%s\n",c->val.symbole);
+    	for(i=0;i<nb_op;i++){
+    	  printf("%s\n", c->val.op[i]->nom);
+    	}
+
 		c=c->suiv;
     }
-    printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
+   
 }
-   
-   
+
+
 
 LISTE concat(LISTE l1, LISTE l2){
     LISTE copie1 = copie(l1);
@@ -237,8 +245,3 @@ LISTE concat(LISTE l1, LISTE l2){
     return copie1;
 
 }
-
-
-
-
-

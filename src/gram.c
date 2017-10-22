@@ -22,13 +22,16 @@ void analyse_gram(LISTE Col){
 	int decalage_complet[3];
 	int decalage=decalage_complet[text];
 	etiqLISTE tab_etiq= NULL;
-	
+
 	ETIQUETTE etiq;
-	
+
 	instLISTE col_text=creer_liste_inst();
 	dirLISTE col_data=creer_liste_dir();
 	dirLISTE col_bss=creer_liste_dir();
 	
+
+
+
 
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
@@ -63,7 +66,7 @@ void analyse_gram(LISTE Col){
 					return;
 				break;
 
-				
+
 				case INIT_DEBUT: /*ça marche*/
 					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
 						puts("allez");
@@ -197,16 +200,16 @@ void analyse_gram(LISTE Col){
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
-						}	
+						}
 						else{
 							ETAT=ERROR;}
-					}		
+					}
 					else{
 						ETAT=ERROR;}
-				break;				
-					
-					
-						
+				break;
+
+
+
 
 
 
@@ -418,7 +421,7 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 		while(p->suiv != NULL) p=p->suiv;
 		p->suiv=p_etiq;
 	}
-	return tab_etiq;	
+	return tab_etiq;
 }
 
 
@@ -440,7 +443,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	p_dir->dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(p_dir->dir,p_lex->val.lex);
 	p_dir->decalage=decalage;
-	p_dir->ligne=p_lex->val.ligne;
+	p_dir->ligne=p_lex->val.line;
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 		p_lex=p_lex->suiv;
 		if (strcmp(p_lex->val.lex, "VIR")==0){
@@ -472,7 +475,6 @@ int decalage_asciiz(LISTE p){
 	}
 	return c;
 }
-
 
 
 
