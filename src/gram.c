@@ -22,12 +22,12 @@ void analyse_gram(LISTE Col){
 	int decalage_complet[3];
 	int decalage=decalage_complet[text];
 	etiqLISTE tab_etiq= NULL;
-	
+
 	ETIQUETTE etiq;
-	
+
 	instLISTE col_text=creer_liste_inst();
 	dirLISTE col_data=creer_liste_dir();
-	
+
 
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
@@ -62,7 +62,7 @@ void analyse_gram(LISTE Col){
 					return;
 				break;
 
-				
+
 				case INIT_DEBUT: /*ça marche*/
 					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
 						puts("allez");
@@ -140,13 +140,13 @@ void analyse_gram(LISTE Col){
 								decalage+=1;
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col==NULL) ETAT=ERROR;								
+								if(col==NULL) ETAT=ERROR;
 								decalage+=decalage_asciiz(p);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col==NULL) ETAT=ERROR;
-							
+
 
 				break;
 
@@ -184,16 +184,16 @@ void analyse_gram(LISTE Col){
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
-						}	
+						}
 						else{
 							ETAT=ERROR;}
-					}		
+					}
 					else{
 						ETAT=ERROR;}
-				break;				
-					
-					
-						
+				break;
+
+
+
 
 
 
@@ -406,7 +406,7 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 		while(p->suiv != NULL) p=p->suiv;
 		p->suiv=p_etiq;
 	}
-	return tab_etiq;	
+	return tab_etiq;
 }
 
 
@@ -460,56 +460,11 @@ int decalage_asciiz(LISTE p){
 	}
 	return c;
 }
-			
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void affiche_col(instLISTE col){
+	puts("Affichage de la ")
+	while (col->suiv != NULL){
+		printf(dir:%s\n %d %d %s %s)
+	}
+}
