@@ -12,6 +12,10 @@ instLISTE creer_liste_inst(void){
      return NULL;
 }
 
+dirLISTE creer_liste_dir(void){
+     return NULL;
+}
+
 int est_vide(LISTE l){
     if (l==NULL) return 1;
 	return 0;
@@ -67,6 +71,22 @@ instLISTE ajout_queue_inst(instruction inst, instLISTE liste){
     }
 }
 
+instLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste){
+  /*puts("Entrée dans ajout_queue");*/
+	dirLISTE p = calloc(1, sizeof(*p));
+  	p->suiv = NULL;
+ 	p->val=dir;
+  	if(liste == NULL){ return p;}
+
+  	else{
+		dirLISTE q = liste;
+    	while(q->suiv != NULL){
+      		q = q->suiv;
+    	}
+    q->suiv = p;
+    return liste;
+    }
+}
 
 /*
 LISTE ajout(void* p_e,LISTE l){
@@ -154,7 +174,7 @@ void affiche_liste(LISTE l){
    }
 
 void affiche_liste_etiq(etiqLISTE l){
-	/*puts("Entrée dans affiche_liste");*/
+	puts("Entrée dans affiche_liste");
 	etiqLISTE c = l	;
 
 	if(l==NULL){
@@ -189,19 +209,19 @@ void nbmaillon(LISTE l){
 
 
 void affiche_liste_inst(instLISTE l){
-	/*puts("Entrée dans affiche_liste");*/
+	puts("Entrée dans affiche_liste inst");
 	instLISTE c = l	;
 
 	if(l==NULL){
 		printf("Vide \n");
-		return;
 		}
-
+	
 	while(c->suiv != NULL){
-		/*puts("Bouclage");*/
+		puts("Bouclage");
     	printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
 		c=c->suiv;
     }
+    printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
 }
    
    

@@ -64,10 +64,27 @@ struct instMAILLON{
 
 typedef struct instMAILLON* instLISTE;
 
+typedef struct{
+	char* dir;
+	int ligne;
+	int decalage;
+	char* symb_op;
+	char* type_op;
+} DIRECTIVE;
+
+
+struct dirMAILLON{
+	DIRECTIVE val;
+	struct dirMAILLON* suiv;
+};
+
+typedef struct dirMAILLON* dirLISTE;
+
 
 
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
+dirLISTE creer_liste_dir(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
@@ -80,6 +97,7 @@ void affiche_liste_inst(instLISTE l);
 void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
 instLISTE ajout_queue_inst(instruction inst, instLISTE liste);
+instLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste);
 
 
 

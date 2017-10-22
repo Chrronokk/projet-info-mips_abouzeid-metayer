@@ -5,13 +5,251 @@
 #include <global.h>
 #include <f_annexe.h>
 
+
+void analyse_gram(LISTE Col){
+	puts("Entrée dans analyse_gram");
+	int nb_instr;
+	int* p_nb_instr=&nb_instr;
+	instr_def* dictionnaire=lecture_dico(p_nb_instr);
+
+
+	LISTE p=Col;
+	int debut=0;
+
+	int position;
+	int nb_op;
+	char zone[5]=".text";
+	int decalage_complet[3];
+	int decalage=decalage_complet[text];
+	etiqLISTE tab_etiq= NULL;
+	
+	ETIQUETTE etiq;
+	
+	instLISTE col_text=creer_liste_inst();
+	dirLISTE col_data=creer_liste_dir();
+	
+
+	while (p->suiv!=NULL){
+		/*puts("test1");*/
+		int ETAT=INIT;
+		int continu = TRUE;
+		while (continu == TRUE){
+			/*puts("test2");*/
+			/*printf("ETAT=%d \n",ETAT);*/
+			switch(ETAT){
+
+
+				case INIT:
+					printf("%s %s \n", p->val.lex, p->val.type);
+					if(debut==0){
+						ETAT=INIT_DEBUT;}
+					else{
+						if(strcmp(p->val.type,"DIR")==0){
+							ETAT=DIR;}
+						else if(strcmp(p->val.type,"SYM")==0){
+							ETAT=SYM;}
+						else if(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")==0){
+							p=p->suiv;
+							continu=FALSE;}
+						else{
+							ETAT=ERROR;}
+					}
+				break;
+
+
+				case ERROR:
+					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
+					return;
+				break;
+
+				
+				case INIT_DEBUT: /*ça marche*/
+					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
+						puts("allez");
+						p=p->suiv;
+						continu=FALSE;
+						}
+					else if(strcmp(p->val.type,"DIR")==0){
+						puts("come on");
+						if(strcmp(p->val.lex,".set")==0){
+							puts("quasi success");
+							p=p->suiv;
+							printf("%s %s \n", p->val.lex, p->val.type);
+							if(strcmp(p->val.lex,"noreorder")==0){
+								puts("Succes");
+								p=p->suiv;
+								continu=FALSE;
+								debut=1;
+							}
+							else{
+								ETAT=ERROR;}
+						}
+						else{
+							ETAT=ERROR;}
+					}
+					else{
+						ETAT=ERROR;}
+				break;
+
+
+				case DIR:
+					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
+						ETAT=DIR_TYPE1;}
+					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
+						ETAT=DIR_TYPE2;}
+					else{
+						ETAT=ERROR;}
+				break;
+
+
+				case DIR_TYPE1:/* ça marche*/
+
+					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
+						if (strcmp(p->val.lex,".text")==0){
+							strcpy(zone,".text");
+							decalage=decalage_complet[text];
+						}
+						else if(strcmp(p->val.lex,".data")==0){
+							strcpy(zone,".data");
+							decalage=decalage_complet[data];
+						}
+						else if(strcmp(p->val.lex,".bss")==0){
+							strcpy(zone,".bss ");
+							decalage=decalage_complet[bss];
+						}
+						else{
+							ETAT=ERROR;
+						}
+						p=p->suiv->suiv;
+						continu=FALSE;
+					}
+					else{
+						ETAT=ERROR;}
+				break;
+
+
+				case DIR_TYPE2:
+						if((strcmp(p->val.lex,".data"))==0){
+							if((strcmp(p->val.lex,".word"))==0){
+								col_data=add_dir(p,decalage,col_data);
+								decalage+=4;
+							if((strcmp(p->val.lex,".byte"))==0){
+								col_data=add_dir(p,decalage,col_data);
+								decalage+=1;
+								
+								
+					
+
+				break;
+
+
+				case SYM:
+					position=is_in_dico(p->val.lex,dictionnaire,nb_instr);
+					if(position>=0){
+						ETAT=INSTR;}
+					else{
+						ETAT=ETIQ;}
+				break;
+
+
+				case INSTR:
+					nb_op=dictionnaire[position].nb_op;
+
+					if (test_nb_op_inst(p,nb_op)==TRUE){
+						col_text=add_inst(col_text,p,nb_op,decalage);
+						decalage+=4;
+						while(p->val.line==p->suiv->val.line){
+							p=p->suiv;}
+						continu=FALSE;
+					}
+					else{
+						ETAT=ERROR;}
+				break;
+
+				case ETIQ:
+
+					if(strcmp(p->suiv->val.type,"DP")==0){
+						if(recherche_etiq(p->val.lex,tab_etiq)<0){
+							puts("test");
+							etiq=creer_etiquette(p->val.lex,decalage,zone);
+							printf("%s\n",etiq.nom);
+							tab_etiq=ajout_etiq(etiq,tab_etiq);
+							p=p->suiv->suiv;
+							continu=FALSE;
+						}	
+						else{
+							ETAT=ERROR;}
+					}		
+					else{
+						ETAT=ERROR;}
+				break;				
+					
+					
+						
+
+
+
+
+
+
+
+
+
+
+			}
+		}
+	}
+	affiche_liste_etiq(tab_etiq);
+	affiche_liste_inst(col_inst);
+}
+
+
+/* Lis le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
+
+instr_def * lecture_dico(int* p_nb_instr){
+	/*puts("Lecture du dictionnaire");*/
+	FILE* f1= fopen("dictionnaire.txt","r");
+	int i;
+	char s1[512];
+	instr_def* tab;
+
+	if (f1==NULL) return NULL;
+	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
+	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
+	tab=calloc(*p_nb_instr,sizeof(instr_def));
+
+	for(i=0;i<*p_nb_instr;i++){
+		fscanf(f1,"%s %c %d",s1,&(tab[i].type),&(tab[i].nb_op));
+		tab[i].symbole=calloc(1,strlen(s1));
+		strcpy(tab[i].symbole,s1);
+		/*printf("%s %c %d\n",tab[i].symbole,tab[i].type,tab[i].nb_op);*/
+	}
+	fclose(f1);
+	return tab;
+}
+
+/*Retourne la position de l'instuction, ou -1 si l'instruction n'existe pas*/
+
+int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
+	int i=0;
+	for(i=0;i<nb_instr;i++){
+		printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);
+		if(strcmp(symbole,dictionnaire[i].symbole)==0){
+			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
+			return i;
+		}
+	}
+	puts("Instruction non trouvée");
+
+	return -1;
+}
 /*cree et renvoie une structure operande contenant les 3 string données*/
 OPERANDE creer_op(char* name, char* ty, char* off){
 
 	OPERANDE op;
-	op.nom=calloc(strlen(name),sizeof(char));
-	op.type=calloc(strlen(ty),sizeof(char));
-	op.offset=calloc(strlen(off),sizeof(char));
+	op.nom=calloc(strlen(name),sizeof(*name));
+	op.type=calloc(strlen(ty),sizeof(*ty));
+	op.offset=calloc(strlen(off),sizeof(*off));
 
 	strcpy(op.nom,name);
 	strcpy(op.type,ty);
@@ -75,7 +313,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 	int att_vir=0;
 
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
-		char op[256];
+		char* op=calloc(strlen(p->val.type),sizeof(*p->val.type));
 		strcpy(op,p->val.type);
 		/*printf("Analyse du lexème %s de type %s\n", p->val.lex, p->val.type);*/
 		if(att_vir==0){
@@ -140,7 +378,7 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 
 }
 
-/* Fonction qui ajoute l'etiquette "name", et son adresse à la table des symboles */
+/* Fonction qui ajoute l'etiquette "etiq" à la table des symboles */
 
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 
@@ -174,286 +412,81 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone){
 	etiq.arrivee=adresse;
 	return etiq;
 }
-	
-	
 
 
 
-void analyse_gram(LISTE Col){
-	puts("Entrée dans analyse_gram");
-	int nb_instr;
-	int* p_nb_instr=&nb_instr;
-	instr_def* dictionnaire=lecture_dico(p_nb_instr);
-
-
-	LISTE p=Col;
-	int debut=0;
-
-	int position;
-	int nb_op;
-	char zone[5]=".text";
-	int decalage_complet[3];
-	int decalage=decalage_complet[text];
-	etiqLISTE tab_etiq= NULL;
-	ETIQUETTE etiq;
-	
-	instLISTE col_inst=creer_liste_inst();
-
-
-	while (p->suiv!=NULL){
-		/*puts("test1");*/
-		int ETAT=INIT;
-		int continu = TRUE;
-		while (continu == TRUE){
-			/*puts("test2");*/
-			/*printf("ETAT=%d \n",ETAT);*/
-			switch(ETAT){
-
-
-				case INIT:
-					printf("%s %s \n", p->val.lex, p->val.type);
-					if(debut==0){
-						ETAT=INIT_DEBUT;}
-					else{
-						if(strcmp(p->val.type,"DIR")==0){
-							ETAT=DIR;}
-						else if(strcmp(p->val.type,"SYM")==0){
-							ETAT=SYM;}
-						else if(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")==0){
-							p=p->suiv;
-							continu=FALSE;}
-						else{
-							ETAT=ERROR;}
-					}
-
-
-				break;
-
-
-				case ERROR:
-					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
-					return;
-				break;
-
-				case INIT_DEBUT: /*ça marche*/
-					if( (strcmp(p->val.type,"COMMENT"))*(strcmp(p->val.type,"NL"))==0){
-						puts("allez");
-						p=p->suiv;
-						continu=FALSE;
-						}
-					else if(strcmp(p->val.type,"DIR")==0){
-						puts("come on");
-						if(strcmp(p->val.lex,".set")==0){
-							puts("quasi success");
-							p=p->suiv;
-							printf("%s %s \n", p->val.lex, p->val.type);
-							if(strcmp(p->val.lex,"noreorder")==0){
-								puts("Succes");
-								p=p->suiv;
-								continu=FALSE;
-								debut=1;
-							}
-							else{
-								ETAT=ERROR;}
-						}
-						else{
-							ETAT=ERROR;}
-					}
-					else{
-						ETAT=ERROR;}
-				break;
-
-
-				case DIR:
-					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
-						ETAT=DIR_TYPE1;}
-					/*else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
-						ETAT=DIR_TYPE2;}*/
-					else{
-						ETAT=ERROR;}
-				break;
-
-
-				case DIR_TYPE1:/* ça marche*/
-
-					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
-						if (strcmp(p->val.lex,".text")==0){
-							strcpy(zone,".text");
-							decalage=decalage_complet[text];
-						}
-						else if(strcmp(p->val.lex,".data")==0){
-							strcpy(zone,".data");
-							decalage=decalage_complet[data];
-						}
-						else if(strcmp(p->val.lex,".bss")==0){
-							strcpy(zone,".bss ");
-							decalage=decalage_complet[bss];
-						}
-						else{
-							ETAT=ERROR;
-						}
-						p=p->suiv->suiv;
-						continu=FALSE;
-					}
-					else{
-						ETAT=ERROR;}
-				break;
-
-
-				case DIR_TYPE2:
-
-					/* A COMPLETER */
-
-				break;
-
-
-				case SYM:
-					position=is_in_dico(p->val.lex,dictionnaire,nb_instr);
-					if(position>=0){
-						ETAT=INSTR;}
-					else{
-						ETAT=ETIQ;}
-				break;
-
-
-				case INSTR:
-					nb_op=dictionnaire[position].nb_op;
-
-					if (test_nb_op_inst(p,nb_op)==TRUE){
-						col_inst=add_inst(col_inst,p,nb_op,decalage);
-						decalage+=4;
-						while(p->val.line==p->suiv->val.line){
-							p=p->suiv;}
-						continu=FALSE;
-					}
-					else{
-						ETAT=ERROR;}
-				break;
-
-				case ETIQ:
-
-					if(strcmp(p->suiv->val.type,"DP")==0){
-						if(recherche_etiq(p->val.lex,tab_etiq)<0){
-							puts("test");
-							etiq=creer_etiquette(p->val.lex,decalage,zone);
-							printf("%s\n",etiq.nom);
-							tab_etiq=ajout_etiq(etiq,tab_etiq);
-							p=p->suiv->suiv;
-							continu=FALSE;
-						}	
-						else{
-							ETAT=ERROR;}
-					}		
-					else{
-						ETAT=ERROR;}
-				break;				
-					
-					
-						
-						
-					
-					
-					
-
-					
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			}
+dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
+	DIRECTIVE* p_dir=calloc(1,sizeof(p_dir));
+	p_dir->dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+	strcpy(p_dir->dir,p_lex->val.lex);
+	p_dir->decalage=decalage;
+	dirLISTE liste=creer_liste_dir();
+	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+		p=p->suiv
+		if (strcmp(p_lex->val.lex, "VIR")==0){
+			continue;
+		}
+		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
+			p_dir->symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+			p_dir->type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
+			strcpy(p_dir->symb_op,p_lex->val.lex);
+			strcpy(p_dir->type_op,p_lex->val.type);
+			col=ajout_queue_dir(*p_dir,col);
 		}
 	}
-	affiche_liste_etiq(tab_etiq);
-	affiche_liste_inst(col_inst);
+	return col;
 }
 
 
-instr_def * lecture_dico(int* p_nb_instr){
-	/*puts("Lecture du dictionnaire");*/
-	FILE* f1= fopen("dictionnaire.txt","r");
-	int i;
-	char s1[512];
-	instr_def* tab;
 
-	if (f1==NULL) return NULL;
-	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
-	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
-	tab=calloc(*p_nb_instr,sizeof(instr_def));
 
-	for(i=0;i<*p_nb_instr;i++){
-		fscanf(f1,"%s %c %d",s1,&(tab[i].type),&(tab[i].nb_op));
-		tab[i].symbole=calloc(1,strlen(s1));
-		strcpy(tab[i].symbole,s1);
-		/*printf("%s %c %d\n",tab[i].symbole,tab[i].type,tab[i].nb_op);*/
-	}
-	fclose(f1);
-	return tab;
-}
 
-/*Retourne la position de l'instuction, ou -1 si l'instruction n'existe pas*/
 
-int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
-	int i=0;
-	for(i=0;i<nb_instr;i++){
-		printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);
-		if(strcmp(symbole,dictionnaire[i].symbole)==0){
-			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
-			return i;
-		}
-	}
-	puts("Instruction non trouvée");
 
-	return -1;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
