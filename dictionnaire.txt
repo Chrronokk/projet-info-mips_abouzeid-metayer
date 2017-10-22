@@ -1,5 +1,9 @@
-4
+8
 ADD R 3
 ADDI I 3
 LW I 2
 NOP P 0
+LW X 2
+BEQ X 3 
+J X 1
+JAL X 1

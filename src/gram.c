@@ -97,9 +97,10 @@ void analyse_gram(LISTE Col){
 
 
 				case DIR:
+					puts("fff");
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
-					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz")==0)){
+					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))==0){
 						ETAT=DIR_TYPE2;}
 					else{
 						ETAT=ERROR;}
@@ -386,17 +387,17 @@ int test_nb_op_inst(LISTE p, int nb_op){
 
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	int i=0;
-	etiqLISTE p =tab_etiq;
 
-	if (p==NULL){
+	if (tab_etiq==NULL){
 		puts("Table des symboles vide");
 		return -1;
 	}
-	while(p->suiv!=NULL){
-		if(strcmp(etiq,p->val.nom)==0){
+	while(tab_etiq->suiv!=NULL){
+		if(strcmp(etiq,tab_etiq->val.nom)==0){
 			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
 			return i;
 		}
+		tab_etiq=tab_etiq->suiv;
 		i++;
 	}
 	return -1;
@@ -407,21 +408,19 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 
-	etiqLISTE p=tab_etiq;
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	p_etiq->suiv=NULL;
 	p_etiq->val=etiq;
 
 	int pos=recherche_etiq(etiq.nom,tab_etiq);
-
 	if (pos!=-1){
 		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
 		return NULL;
 	}
-	if(p==NULL){ return p_etiq;}
+	if(tab_etiq==NULL){ return p_etiq;}
 	else{
-		while(p->suiv != NULL) p=p->suiv;
-		p->suiv=p_etiq;
+		while(tab_etiq->suiv != NULL) tab_etiq=tab_etiq->suiv;
+		tab_etiq->suiv=p_etiq;
 	}
 	return tab_etiq;
 }
