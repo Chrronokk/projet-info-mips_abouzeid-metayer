@@ -211,7 +211,7 @@ void nbmaillon(LISTE l){
 void affiche_liste_inst(instLISTE l){
 	puts("Entrée dans affiche_liste inst");
 	instLISTE c = l	;
-  int nb_op = 
+  int nb_op;
   int i;
 
 
@@ -221,11 +221,18 @@ void affiche_liste_inst(instLISTE l){
 
 	while(c->suiv != NULL){
 		puts("Bouclage");
+    nb_op=c->val->nb_op
 
-    printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
+    printf("%s",c->val.symbole);
+    for(i=0;i<nb_op;i++){
+      printf("%s", c->val.op[i]);
+    }
+
 		c=c->suiv;
     }
-    printf("%s, %s; %s, %s \n", c->val.symbole,c->val.op[1]->nom,c->val.op[2]->nom,c->val.op[3]->nom);
+    printf("%s",c->val.symbole);
+    for(i=0;i<nb_op;i++){
+      printf("%s", c->val.op[i]);
 }
 
 

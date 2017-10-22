@@ -142,26 +142,20 @@ void analyse_gram(LISTE Col){
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
-<<<<<<< HEAD
 								if(col==NULL) ETAT=ERROR;
-=======
 								if(col_data==NULL) ETAT=ERROR;								
->>>>>>> 0df4a58bf9ac921a67dff56870407b1164f73578
 								decalage+=decalage_asciiz(p);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
-<<<<<<< HEAD
 								if(col==NULL) ETAT=ERROR;
 
 
-=======
 								if(col_data==NULL) ETAT=ERROR;
 							}
 						}
 						else ETAT=ERROR;
->>>>>>> 0df4a58bf9ac921a67dff56870407b1164f73578
 				break;
 
 
