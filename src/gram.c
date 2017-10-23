@@ -24,7 +24,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 	ETIQUETTE etiq;
 
-	
+
 
 
 
@@ -99,7 +99,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))*(strcmp(p->val.lex,".space"))==0){
 						ETAT=DIR_TYPE2;}
 					else ETAT=ERROR;
-					
+
 				break;
 
 
@@ -164,10 +164,10 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							while(p->val.line==p->suiv->val.line){
 							p=p->suiv;}
 							continu=FALSE;
-						}							
+						}
 						else ETAT=ERROR;
-						
-							
+
+
 				break;
 
 
@@ -290,7 +290,7 @@ OPERANDE creer_op(char* name, char* ty, char* off){
 
 instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	instruction inst;
-	inst.symbole=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+	inst.symbole=calloc(strlen(p_lex->val.lex),sizeof(char));
 	strcpy(inst.symbole,p_lex->val.lex);
 	inst.adresse=adresse;
 	inst.nb_op=nb_op;
@@ -321,7 +321,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 			op=creer_op(p_lex->val.type,p_lex->val.lex,"0");
 		}
 
-		inst.op[i] = &op;
+		inst.op[i] = op;
 
 		i++;
 	}
@@ -477,54 +477,3 @@ int decalage_asciiz(LISTE p){
 	}
 	return c;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

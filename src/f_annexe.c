@@ -225,15 +225,15 @@ void affiche_liste_inst(instLISTE l){
 
 	while(c->suiv != NULL){
 		puts("Bouclage");
-    	nb_op=c->val.nb_op;
+    nb_op=c->val.nb_op;
 		printf("%s\n",c->val.symbole);
-    	for(i=0;i<nb_op;i++){
-    	  printf("%s\n", c->val.op[i]->nom);
-    	}
+    for(i=0;i<nb_op;i++){
+      printf("%s\n", c->val.op[i].nom);
+    }
 
 		c=c->suiv;
     }
-   
+
 }
 
 

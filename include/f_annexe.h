@@ -55,7 +55,7 @@ typedef struct{
 	char* symbole;
 	int adresse;
 	int nb_op;
-	OPERANDE* op[3];
+	OPERANDE op[3];
 	int ligne;
 } instruction;
 
