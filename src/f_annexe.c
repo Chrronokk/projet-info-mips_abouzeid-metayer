@@ -188,10 +188,10 @@ void affiche_liste_etiq(etiqLISTE l){
 
 	while(c->suiv != NULL){
 		/*puts("Bouclage");*/
-    	printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+    	printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
 		c=c->suiv;
     }
-    printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+    printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
     return;
 
 
@@ -236,7 +236,25 @@ void affiche_liste_inst(instLISTE l){
    
 }
 
+void affiche_liste_dir(dirLISTE l){
+	puts("Entrée dans affiche_liste_dir");
+	dirLISTE c = l	;
 
+	if(l==NULL){
+		printf("Vide \n");
+		return;
+		}
+
+	while(c->suiv != NULL){
+		/*puts("Bouclage");*/
+    	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
+		c=c->suiv;
+    }
+	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
+    return;
+
+
+}
 
 LISTE concat(LISTE l1, LISTE l2){
     LISTE copie1 = copie(l1);

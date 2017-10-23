@@ -19,7 +19,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;);
 int test_nb_op_inst(LISTE p, int nb_op);
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq);
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq);
-ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone);
+ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq);
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col);
 int decalage_asciiz(LISTE p);
 
