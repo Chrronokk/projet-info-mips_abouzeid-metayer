@@ -192,6 +192,7 @@ void affiche_liste_etiq(etiqLISTE l){
 		c=c->suiv;
     }
     printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
+    puts(" ");
     return;
 
 
@@ -215,25 +216,24 @@ void nbmaillon(LISTE l){
 void affiche_liste_inst(instLISTE l){
 	puts("Entrée dans affiche_liste inst");
 	instLISTE c = l	;
-  int nb_op;
-  int i;
+  	/*int nb_op;
+  	int i;*/
 
-
+	
 	if(l==NULL){
 		printf("Vide \n");
 		}
 
 	while(c->suiv != NULL){
-		puts("Bouclage");
-    	nb_op=c->val.nb_op;
-		printf("%s\n",c->val.symbole);
-    	for(i=0;i<nb_op;i++){
+    	/*nb_op=c->val.nb_op;*/
+		printf("%s,%d,%d,%d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
+    	/*for(i=0;i<nb_op;i++){
     	  printf("%s\n", c->val.op[i]->nom);
-    	}
+    	}*/
 
 		c=c->suiv;
     }
-   
+   puts(" ");
 }
 
 void affiche_liste_dir(dirLISTE l){
@@ -251,6 +251,7 @@ void affiche_liste_dir(dirLISTE l){
 		c=c->suiv;
     }
 	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
+   	puts(" ");    
     return;
 
 

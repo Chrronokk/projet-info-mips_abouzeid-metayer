@@ -55,7 +55,7 @@ typedef struct{
 	char* symbole;
 	int adresse;
 	int nb_op;
-	OPERANDE* op[3];
+	/*OPERANDE* op[3];*/
 	int ligne;
 } instruction;
 
@@ -97,6 +97,7 @@ LISTE copie(LISTE l);
 void affiche_liste(LISTE l);
 void affiche_liste_etiq(etiqLISTE l);
 void affiche_liste_inst(instLISTE l);
+void affiche_liste_dir(dirLISTE l);
 void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
 instLISTE ajout_queue_inst(instruction inst, instLISTE liste);

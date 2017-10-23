@@ -14,7 +14,7 @@ enum{text,data,bss};
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq);
 instr_def* lecture_dico(int* p_nb_instr);
 int is_in_dico(char* symbole,instr_def* dictionnaire, int nb_instr);
-OPERANDE creer_op(char* name, char* ty, char* off);
+OPERANDE creer_op(char* name, char* ty, char* off,OPERANDE op);
 instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse;);
 int test_nb_op_inst(LISTE p, int nb_op);
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq);

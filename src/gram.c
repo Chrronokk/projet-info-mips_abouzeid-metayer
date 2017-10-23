@@ -136,28 +136,23 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								decalage+=4;
-								affiche_liste_dir(col_data);
 							}
 							else if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								decalage+=1;
-								affiche_liste_dir(col_data);
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								decalage+=decalage_asciiz(p);
-								printf("%d\n",decalage_asciiz(p));
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
-								affiche_liste_dir(col_data);
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
 								decalage+=atoi(p->suiv->val.lex);
-								affiche_liste_dir(col_data);
 							}
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
@@ -167,7 +162,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							if(col_bss==NULL) ETAT=ERROR;
 							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
 							decalage+=atoi(p->suiv->val.lex);
-							affiche_liste_dir(col_bss);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
 						}							
@@ -205,7 +199,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
 							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq);
-					    	printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
@@ -279,12 +272,11 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	return -1;
 }
 /*cree et renvoie une structure operande contenant les 3 string données*/
-OPERANDE creer_op(char* name, char* ty, char* off){
+OPERANDE creer_op(char* name, char* ty, char* off,OPERANDE op){
 
-	OPERANDE op;
-	op.nom=calloc(strlen(name),sizeof(*name));
-	op.type=calloc(strlen(ty),sizeof(*ty));
-	op.offset=calloc(strlen(off),sizeof(*off));
+	op.nom=calloc(strlen(name),sizeof(char));
+	op.type=calloc(strlen(ty),sizeof(char));
+	op.offset=calloc(strlen(off),sizeof(char));
 
 	strcpy(op.nom,name);
 	strcpy(op.type,ty);
@@ -306,36 +298,39 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	inst.ligne=p_lex->val.line;
 	int i=0;
 
-	p_lex=p_lex->suiv;
+	
 
-	while (i<nb_op){
+	/*while (i<nb_op){
 		p_lex=p_lex->suiv;
+		printf("%s\n",p_lex->val.lex);
 
 		OPERANDE op;
-
-		if (strcmp(p_lex->val.lex, "VIR")==0){
-			continue;
-		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
-			if (strcmp(p_lex->suiv->val.lex,"(")==0){
-				op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
-				p_lex=p_lex->suiv->suiv->suiv;
+		if(strcmp(p_lex->val.type,"VIR")!=0){
+			puts("aa");
+			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
+				if (strcmp(p_lex->suiv->val.lex,"(")==0){
+					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex,op);
+					p_lex=p_lex->suiv->suiv->suiv;
+				}
+				else{
+					op=creer_op(p_lex->val.lex,p_lex->val.type,"0",op);
+				}
 			}
-			else{
-				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+	
+			else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
+				op=creer_op(p_lex->val.type,p_lex->val.lex,"0",op);
+				printf("%s\n", op.nom);
 			}
+			printf("%s\n", op.nom);
+			inst.op[i] = &op;
+	
+			i++;
+			printf("%d\n",i);
 		}
-
-		else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
-			op=creer_op(p_lex->val.type,p_lex->val.lex,"0");
-		}
-
-		inst.op[i] = &op;
-
-		i++;
-	}
+	}*/
 	/*Ajout de l'instruction à la liste des instructions:*/
 	insts=ajout_queue_inst(inst, insts);
+	affiche_liste_inst(insts);
 	return insts;
 }
 
@@ -421,7 +416,6 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	p_etiq->suiv=NULL;
 	p_etiq->val=etiq;
-   	printf("%s,%s,%d\n",p_etiq->val.nom, p_etiq->val.zone, p_etiq->val.arrivee);
 	int pos=recherche_etiq(etiq.nom,tab_etiq);
 	if (pos!=-1){
 		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
@@ -432,9 +426,7 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 		etiqLISTE q=tab_etiq;
 		while(q->suiv != NULL) q=q->suiv;
 		q->suiv=p_etiq;
-	   	printf("%s,%s,%d\n",q->suiv->val.nom, q->suiv->val.zone, q->suiv->val.arrivee);
 	}
-	affiche_liste_etiq(tab_etiq);
 	return tab_etiq;
 }
 
@@ -483,7 +475,6 @@ int decalage_asciiz(LISTE p){
 			p=p->suiv;
 		}
 		else if (p->val.lex[0]=='"'){
-			puts("aa");
 			c+=strlen(p->val.lex)-1;
 			p=p->suiv;
 		}
