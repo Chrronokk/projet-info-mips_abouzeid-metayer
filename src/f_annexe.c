@@ -188,10 +188,11 @@ void affiche_liste_etiq(etiqLISTE l){
 
 	while(c->suiv != NULL){
 		/*puts("Bouclage");*/
-    	printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+    	printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
 		c=c->suiv;
     }
-    printf("%s,%s,%d\n",l->val.nom, l->val.zone, l->val.arrivee);
+    printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
+    puts(" ");
     return;
 
 
@@ -213,7 +214,7 @@ void nbmaillon(LISTE l){
 
 
 void affiche_liste_inst(instLISTE l){
-	puts("Entrée dans affiche_liste inst");
+	puts("Affichage de la liste des instructions");
 	instLISTE c = l	;
   int nb_op;
   int i;
@@ -221,22 +222,39 @@ void affiche_liste_inst(instLISTE l){
 
 	if(l==NULL){
 		printf("Vide \n");
+	}
+
+	while(c->suiv != NULL){
+    nb_op=c->val.nb_op;
+		printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
+    for(i=0;i<nb_op;i++){
+      printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
+    	}
+    puts("\n");
+		c=c->suiv;
+  }
+}
+
+void affiche_liste_dir(dirLISTE l){
+	puts("Affichage de la liste des directives");
+	dirLISTE c = l	;
+
+	if(l==NULL){
+		printf("Vide \n");
+		return;
 		}
 
 	while(c->suiv != NULL){
-		puts("Bouclage");
-    nb_op=c->val.nb_op;
-		printf("%s\n",c->val.symbole);
-    for(i=0;i<nb_op;i++){
-      printf("%s\n", c->val.op[i].nom);
-    }
-
+		/*puts("Bouclage");*/
+    	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
 		c=c->suiv;
     }
+	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
+   	puts(" ");
+    return;
+
 
 }
-
-
 
 LISTE concat(LISTE l1, LISTE l2){
     LISTE copie1 = copie(l1);

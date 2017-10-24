@@ -7,7 +7,8 @@
 
 
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
-	puts("Entrée dans analyse_gram");
+
+	puts("Début de l'analyse grammaticale\n\n");
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
@@ -41,7 +42,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case INIT:
-					printf("%s %s \n", p->val.lex, p->val.type);
+					/*printf("%s %s \n", p->val.lex, p->val.type);*/
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -75,7 +76,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						if(strcmp(p->val.lex,".set")==0){
 							/*puts("quasi success");*/
 							p=p->suiv;
-							printf("%s %s \n", p->val.lex, p->val.type);
+							/*printf("%s %s \n", p->val.lex, p->val.type);*/
 							if(strcmp(p->val.lex,"noreorder")==0){
 								/*puts("Succes");*/
 								p=p->suiv;
@@ -133,37 +134,36 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						if((strcmp(zone,".data"))==0){
 							if((strcmp(p->val.lex,".word"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col_data==NULL) ETAT=ERROR;
 								decalage+=4;
 							}
 							else if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col_data==NULL) ETAT=ERROR;
 								decalage+=1;
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col_data==NULL) ETAT=ERROR;
 								decalage+=decalage_asciiz(p);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_data=add_dir(p,decalage,col_data);
+								if(col_data==NULL) ETAT=ERROR;
 								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
 								decalage+=atoi(p->suiv->val.lex);
 							}
-							while(p->val.line==p->suiv->val.line){
-							p=p->suiv;}
-							continu=FALSE;
+							while(p->val.line==p->suiv->val.line) p=p->suiv;
+							if(ETAT!=ERROR) continu=FALSE;
 						}
 						else if((strcmp(zone,".bss "))==0){
-							puts("aa");
 							col_bss=add_dir(p,decalage,col_bss);
-							puts("bb");
+							if(col_bss==NULL) ETAT=ERROR;
 							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
-							puts("cc");
 							decalage+=atoi(p->suiv->val.lex);
-							puts("dd");
-							while(p->val.line==p->suiv->val.line){
-							p=p->suiv;}
-							continu=FALSE;
+							while(p->val.line==p->suiv->val.line) p=p->suiv;
+							if(ETAT!=ERROR) continu=FALSE;
 						}
 						else ETAT=ERROR;
 
@@ -198,7 +198,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
-							etiq=creer_etiquette(p->val.lex,decalage,zone);
+							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
@@ -227,6 +227,9 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	}
 	affiche_liste_etiq(tab_etiq);
 	affiche_liste_inst(col_text);
+	affiche_liste_dir(col_data);
+	affiche_liste_dir(col_bss);
+
 }
 
 
@@ -261,11 +264,11 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	for(i=0;i<nb_instr;i++){
 		/*printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);*/
 		if(strcmp(symbole,dictionnaire[i].symbole)==0){
-			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
+			/*printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);*/
 			return i;
 		}
 	}
-	puts("Instruction non trouvée");
+	/*puts("Instruction non trouvée");*/
 
 	return -1;
 }
@@ -273,9 +276,10 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 OPERANDE creer_op(char* name, char* ty, char* off){
 
 	OPERANDE op;
-	op.nom=calloc(strlen(name),sizeof(*name));
-	op.type=calloc(strlen(ty),sizeof(*ty));
-	op.offset=calloc(strlen(off),sizeof(*off));
+
+	op.nom=calloc(strlen(name),sizeof(char));
+	op.type=calloc(strlen(ty),sizeof(char));
+	op.offset=calloc(strlen(off),sizeof(char));
 
 	strcpy(op.nom,name);
 	strcpy(op.type,ty);
@@ -297,36 +301,37 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	inst.ligne=p_lex->val.line;
 	int i=0;
 
-	p_lex=p_lex->suiv;
+
 
 	while (i<nb_op){
 		p_lex=p_lex->suiv;
+		/*printf("%s\n",p_lex->val.lex);*/
 
 		OPERANDE op;
-
-		if (strcmp(p_lex->val.lex, "VIR")==0){
-			continue;
-		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
-			if (strcmp(p_lex->suiv->val.lex,"(")==0){
-				op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
-				p_lex=p_lex->suiv->suiv->suiv;
+		if(strcmp(p_lex->val.type,"VIR")!=0){
+			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
+				if (strcmp(p_lex->suiv->val.lex,"(")==0){
+					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
+					p_lex=p_lex->suiv->suiv->suiv;
+				}
+				else{
+					op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+				}
 			}
-			else{
+
+			else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
 				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+				/*printf("%s\n", op.nom);*/
 			}
+			/*printf("%s\n", op.nom);*/
+			inst.op[i] = op;
+
+			i++;
 		}
-
-		else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
-			op=creer_op(p_lex->val.type,p_lex->val.lex,"0");
-		}
-
-		inst.op[i] = op;
-
-		i++;
 	}
 	/*Ajout de l'instruction à la liste des instructions:*/
 	insts=ajout_queue_inst(inst, insts);
+	/*affiche_liste_inst(insts);*/
 	return insts;
 }
 
@@ -334,7 +339,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 
 /* Verifie que l'instruction pointée par p a bien nb_op opérandes */
 int test_nb_op_inst(LISTE p, int nb_op){
-	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);
+	/*printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);*/
 	int i=0;
 	p=p->suiv;
 	int att_vir=0;
@@ -374,7 +379,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 		}
 		p=p->suiv;
 	}
-	printf(" %d Opérandes trouvées\n", i);
+	/*printf(" %d Opérandes trouvées\n", i);*/
 	if (i==nb_op){
 		/*puts("Bon nombre d'opérandes\n\n");*/
 		return TRUE;
@@ -390,12 +395,12 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	int i=0;
 
 	if (tab_etiq==NULL){
-		puts("Table des symboles vide");
+		/*puts("Table des symboles vide");*/
 		return -1;
 	}
 	while(tab_etiq->suiv!=NULL){
 		if(strcmp(etiq,tab_etiq->val.nom)==0){
-			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
+			/*printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);*/
 			return i;
 		}
 		tab_etiq=tab_etiq->suiv;
@@ -408,11 +413,10 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 /* Fonction qui ajoute l'etiquette "etiq" à la table des symboles */
 
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
-
+	printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	p_etiq->suiv=NULL;
 	p_etiq->val=etiq;
-
 	int pos=recherche_etiq(etiq.nom,tab_etiq);
 	if (pos!=-1){
 		printf("ERREUR: DEUX ETIQUETTES ONT LE MEME NOM");
@@ -420,16 +424,16 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 	}
 	if(tab_etiq==NULL){ return p_etiq;}
 	else{
-		while(tab_etiq->suiv != NULL) tab_etiq=tab_etiq->suiv;
-		tab_etiq->suiv=p_etiq;
+		etiqLISTE q=tab_etiq;
+		while(q->suiv != NULL) q=q->suiv;
+		q->suiv=p_etiq;
 	}
 	return tab_etiq;
 }
 
 
 
-ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone){
-	ETIQUETTE etiq;
+ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq){
 	etiq.nom=calloc(strlen(nom),sizeof(*nom));
 	strcpy(etiq.nom,nom);
 	etiq.zone=calloc(strlen(zone),sizeof(*zone));
@@ -441,39 +445,42 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone){
 
 
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
-	DIRECTIVE* p_dir=calloc(1,sizeof(p_dir));
-	p_dir->dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
-	strcpy(p_dir->dir,p_lex->val.lex);
-	p_dir->decalage=decalage;
-	p_dir->ligne=p_lex->val.line;
+
+	DIRECTIVE dir;
+	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+	strcpy(dir.dir,p_lex->val.lex);
+	dir.decalage=decalage;
+	dir.ligne=p_lex->val.line;
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 		p_lex=p_lex->suiv;
 		if (strcmp(p_lex->val.lex, "VIR")==0){
 			continue;
 		}
 		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
-			p_dir->symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
-			p_dir->type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
-			strcpy(p_dir->symb_op,p_lex->val.lex);
-			strcpy(p_dir->type_op,p_lex->val.type);
-			col=ajout_queue_dir(*p_dir,col);
+			dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+			dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
+			strcpy(dir.symb_op,p_lex->val.lex);
+			strcpy(dir.type_op,p_lex->val.type);
+			col=ajout_queue_dir(dir,col);
 		}
-		else return NULL;
 	}
 	return col;
 }
 
 int decalage_asciiz(LISTE p){
 	int c=0;
+	p=p->suiv;
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
-		p=p->suiv;
-		if (strcmp(p->val.lex, "VIR")==0){
-			continue;
+
+		if (strcmp(p->val.type, "VIR")==0){
+			p=p->suiv;
 		}
 		else if (p->val.lex[0]=='"'){
 			c+=strlen(p->val.lex)-1;
+			p=p->suiv;
 		}
-		else return 0;
+		else{
+			return 0;}
 	}
 	return c;
 }

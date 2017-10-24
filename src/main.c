@@ -50,7 +50,6 @@ int main ( int argc, char *argv[] ) {
     /* La macro suivante provoquerait l'affichage du message
        puis la sortie du programme avec un code erreur non nul (EXIT_FAILURE) */
     /* ERROR_MSG("Erreur. Arret du programme"); */
-	
 
 
     if ( argc <2 ) {
@@ -71,23 +70,24 @@ int main ( int argc, char *argv[] ) {
 
     /* -------------- do the lexical analysis -------------------*/
 	LISTE Col;
-    Col=lex_load_file( file, &nlines); 
+    Col=lex_load_file( file, &nlines);
 
     DEBUG_MSG("source code got %d lines",nlines);
-	
+
 	/* --------------- Analyse grammaticale ---------------------*/
-	
+
 	instLISTE col_text=creer_liste_inst();
 	dirLISTE col_data=creer_liste_dir();
 	dirLISTE col_bss=creer_liste_dir();
 	etiqLISTE tab_etiq=creer_liste_etiq();
 	analyse_gram(Col,col_text,col_data,col_bss,tab_etiq);
-	
+
+
+
     /* --------------- Free memory and terminate ----------------*/
-	
+
 
 
     /* TODO free everything properly*/
     exit( EXIT_SUCCESS );
 }
-
