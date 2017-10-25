@@ -18,9 +18,6 @@ boucle:
 	lunchtime : .word 12
 	.byte  2, 0x4
 	.space 12
-	.asciiz "blabla","gabuzomeu"
+	.asciiz "blabla","bli bli"
 .bss
 .space 12
-
-
-

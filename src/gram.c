@@ -9,11 +9,8 @@
 
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 
-<<<<<<< HEAD
 	puts("Entrée dans analyse_gram");
-=======
 	puts("Début de l'analyse grammaticale\n\n");
->>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
@@ -25,7 +22,10 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int position;
 	int nb_op;
 	char zone[5]=".text";
-	int decalage_complet[3]=[0,0,0];
+	int decalage_complet[3];
+	decalage_complet[0]=0;
+	decalage_complet[1]=0;
+	decalage_complet[2]=0;
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
@@ -165,9 +165,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						else if((strcmp(zone,".bss "))==0){
 							col_bss=add_dir(p,decalage,col_bss);
 							if(col_bss==NULL) ETAT=ERROR;
-							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+							if(strcmp(p->suiv->val.type,"DEC")*(strcmp(p->suiv->val.type,"HEXA"))!=0) ETAT=ERROR;
 							char** endptr;
-							decalage+=strtol(p->suiv->val.lex,endptr,);
+							int base;
+							if(strcmp(p->suiv->val.type,"DEC")==0) base=10;
+							else if(strcmp(p->suiv->val.type,"HEXA")==0) base=16;
+							decalage+=strtol(p->suiv->val.lex,endptr,base);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
 						}
@@ -307,11 +310,6 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	inst.ligne=p_lex->val.line;
 	int i=0;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
-
 
 	while (i<nb_op){
 		p_lex=p_lex->suiv;
@@ -333,14 +331,8 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
 				/*printf("%s\n", op.nom);*/
 			}
-<<<<<<< HEAD
 			printf("%s\n", op.nom);
-			inst.op[i] = &op;
-=======
-			/*printf("%s\n", op.nom);*/
 			inst.op[i] = op;
->>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
-
 			i++;
 		}
 	}
