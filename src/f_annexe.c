@@ -214,30 +214,29 @@ void nbmaillon(LISTE l){
 
 
 void affiche_liste_inst(instLISTE l){
-	puts("Entrée dans affiche_liste inst");
+	puts("Affichage de la liste des instructions");
 	instLISTE c = l	;
-  	/*int nb_op;
-  	int i;*/
+  int nb_op;
+  int i;
 
-	
+
 	if(l==NULL){
 		printf("Vide \n");
-		}
+	}
 
 	while(c->suiv != NULL){
-    	/*nb_op=c->val.nb_op;*/
-		printf("%s,%d,%d,%d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
-    	/*for(i=0;i<nb_op;i++){
-    	  printf("%s\n", c->val.op[i]->nom);
-    	}*/
-
+    nb_op=c->val.nb_op;
+		printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
+    for(i=0;i<nb_op;i++){
+      printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
+    	}
+    puts("\n");
 		c=c->suiv;
-    }
-   puts(" ");
+  }
 }
 
 void affiche_liste_dir(dirLISTE l){
-	puts("Entrée dans affiche_liste_dir");
+	puts("Affichage de la liste des directives");
 	dirLISTE c = l	;
 
 	if(l==NULL){
@@ -251,7 +250,7 @@ void affiche_liste_dir(dirLISTE l){
 		c=c->suiv;
     }
 	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
-   	puts(" ");    
+   	puts(" ");
     return;
 
 

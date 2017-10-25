@@ -9,7 +9,11 @@
 
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 
+<<<<<<< HEAD
 	puts("Entrée dans analyse_gram");
+=======
+	puts("Début de l'analyse grammaticale\n\n");
+>>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
@@ -43,7 +47,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case INIT:
-					printf("%s %s \n", p->val.lex, p->val.type);
+					/*printf("%s %s \n", p->val.lex, p->val.type);*/
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -77,7 +81,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						if(strcmp(p->val.lex,".set")==0){
 							/*puts("quasi success");*/
 							p=p->suiv;
-							printf("%s %s \n", p->val.lex, p->val.type);
+							/*printf("%s %s \n", p->val.lex, p->val.type);*/
 							if(strcmp(p->val.lex,"noreorder")==0){
 								/*puts("Succes");*/
 								p=p->suiv;
@@ -231,6 +235,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	affiche_liste_inst(col_text);
 	affiche_liste_dir(col_data);
 	affiche_liste_dir(col_bss);
+
 }
 
 
@@ -265,16 +270,18 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 	for(i=0;i<nb_instr;i++){
 		/*printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);*/
 		if(strcmp(symbole,dictionnaire[i].symbole)==0){
-			printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);
+			/*printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);*/
 			return i;
 		}
 	}
-	puts("Instruction non trouvée");
+	/*puts("Instruction non trouvée");*/
 
 	return -1;
 }
 /*cree et renvoie une structure operande contenant les 3 string données*/
-OPERANDE creer_op(char* name, char* ty, char* off,OPERANDE op){
+OPERANDE creer_op(char* name, char* ty, char* off){
+
+	OPERANDE op;
 
 	op.nom=calloc(strlen(name),sizeof(char));
 	op.type=calloc(strlen(ty),sizeof(char));
@@ -293,46 +300,53 @@ OPERANDE creer_op(char* name, char* ty, char* off,OPERANDE op){
 
 instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	instruction inst;
-	inst.symbole=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+	inst.symbole=calloc(strlen(p_lex->val.lex),sizeof(char));
 	strcpy(inst.symbole,p_lex->val.lex);
 	inst.adresse=adresse;
 	inst.nb_op=nb_op;
 	inst.ligne=p_lex->val.line;
 	int i=0;
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
 
 
-	/*while (i<nb_op){
+	while (i<nb_op){
 		p_lex=p_lex->suiv;
-		printf("%s\n",p_lex->val.lex);
+		/*printf("%s\n",p_lex->val.lex);*/
 
 		OPERANDE op;
 		if(strcmp(p_lex->val.type,"VIR")!=0){
-			puts("aa");
 			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
 				if (strcmp(p_lex->suiv->val.lex,"(")==0){
-					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex,op);
+					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
 					p_lex=p_lex->suiv->suiv->suiv;
 				}
 				else{
-					op=creer_op(p_lex->val.lex,p_lex->val.type,"0",op);
+					op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
 				}
 			}
 
 			else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
-				op=creer_op(p_lex->val.type,p_lex->val.lex,"0",op);
-				printf("%s\n", op.nom);
+				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+				/*printf("%s\n", op.nom);*/
 			}
+<<<<<<< HEAD
 			printf("%s\n", op.nom);
 			inst.op[i] = &op;
+=======
+			/*printf("%s\n", op.nom);*/
+			inst.op[i] = op;
+>>>>>>> 78de52f718bac29245ddd731098daf9ae06e866e
 
 			i++;
-			printf("%d\n",i);
 		}
-	}*/
+	}
 	/*Ajout de l'instruction à la liste des instructions:*/
 	insts=ajout_queue_inst(inst, insts);
-	affiche_liste_inst(insts);
+	/*affiche_liste_inst(insts);*/
 	return insts;
 }
 
@@ -340,7 +354,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 
 /* Verifie que l'instruction pointée par p a bien nb_op opérandes */
 int test_nb_op_inst(LISTE p, int nb_op){
-	printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);
+	/*printf("Instruction %s : %d opérandes souhaitées\n",p->val.lex, nb_op);*/
 	int i=0;
 	p=p->suiv;
 	int att_vir=0;
@@ -380,7 +394,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 		}
 		p=p->suiv;
 	}
-	printf(" %d Opérandes trouvées\n", i);
+	/*printf(" %d Opérandes trouvées\n", i);*/
 	if (i==nb_op){
 		/*puts("Bon nombre d'opérandes\n\n");*/
 		return TRUE;
@@ -396,12 +410,12 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	int i=0;
 
 	if (tab_etiq==NULL){
-		puts("Table des symboles vide");
+		/*puts("Table des symboles vide");*/
 		return -1;
 	}
 	while(tab_etiq->suiv!=NULL){
 		if(strcmp(etiq,tab_etiq->val.nom)==0){
-			printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);
+			/*printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);*/
 			return i;
 		}
 		tab_etiq=tab_etiq->suiv;
