@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 #include <gram.h>
 #include <global.h>
 #include <f_annexe.h>
 
 
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
-	
+
 	puts("Entrée dans analyse_gram");
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
@@ -20,12 +21,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int position;
 	int nb_op;
 	char zone[5]=".text";
-	int decalage_complet[3];
+	int decalage_complet[3]=[0,0,0];
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
 
-		
+
 
 
 
@@ -100,7 +101,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))*(strcmp(p->val.lex,".space"))==0){
 						ETAT=DIR_TYPE2;}
 					else ETAT=ERROR;
-					
+
 				break;
 
 
@@ -161,13 +162,14 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							col_bss=add_dir(p,decalage,col_bss);
 							if(col_bss==NULL) ETAT=ERROR;
 							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
-							decalage+=atoi(p->suiv->val.lex);
+							char** endptr;
+							decalage+=strtol(p->suiv->val.lex,endptr,);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
-						}							
+						}
 						else ETAT=ERROR;
-						
-							
+
+
 				break;
 
 
@@ -298,7 +300,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	inst.ligne=p_lex->val.line;
 	int i=0;
 
-	
+
 
 	/*while (i<nb_op){
 		p_lex=p_lex->suiv;
@@ -316,14 +318,14 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 					op=creer_op(p_lex->val.lex,p_lex->val.type,"0",op);
 				}
 			}
-	
+
 			else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
 				op=creer_op(p_lex->val.type,p_lex->val.lex,"0",op);
 				printf("%s\n", op.nom);
 			}
 			printf("%s\n", op.nom);
 			inst.op[i] = &op;
-	
+
 			i++;
 			printf("%d\n",i);
 		}
@@ -444,7 +446,7 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq){
 
 
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
-	
+
 	DIRECTIVE dir;
 	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(dir.dir,p_lex->val.lex);
@@ -470,7 +472,7 @@ int decalage_asciiz(LISTE p){
 	int c=0;
 	p=p->suiv;
 	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
-		
+
 		if (strcmp(p->val.type, "VIR")==0){
 			p=p->suiv;
 		}
@@ -478,59 +480,8 @@ int decalage_asciiz(LISTE p){
 			c+=strlen(p->val.lex)-1;
 			p=p->suiv;
 		}
-		else{ 
+		else{
 			return 0;}
 	}
 	return c;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
