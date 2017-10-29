@@ -267,3 +267,13 @@ LISTE concat(LISTE l1, LISTE l2){
     return copie1;
 
 }
+
+char* concatener_string(char* dest,char* src){
+    int l=strlen(dest)+strlen(src);
+    char* c;
+    c=calloc(strlen(dest),sizeof(*c));
+    strcpy(c,dest);
+    dest=calloc(l,sizeof(*c));
+    dest=strcat(dest,src);
+    return dest;
+}

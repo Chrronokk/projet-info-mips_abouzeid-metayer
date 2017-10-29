@@ -102,7 +102,7 @@ void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
 instLISTE ajout_queue_inst(instruction inst, instLISTE liste);
 dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste);
-
+char* concatener_string(char* dest,char* src);
 
 
 #endif

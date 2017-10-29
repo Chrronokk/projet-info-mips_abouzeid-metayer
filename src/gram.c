@@ -30,11 +30,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 	ETIQUETTE etiq;
 
-
-
-
-
-
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
 		int ETAT=INIT;
@@ -47,7 +42,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case INIT:
-					/*printf("%s %s \n", p->val.lex, p->val.type);*/
+					printf("%s %s \n", p->val.lex, p->val.type);
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -151,6 +146,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								decalage+=decalage_asciiz(p);
+								printf("%d",decalage);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
@@ -166,11 +162,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							col_bss=add_dir(p,decalage,col_bss);
 							if(col_bss==NULL) ETAT=ERROR;
 							if(strcmp(p->suiv->val.type,"DEC")*(strcmp(p->suiv->val.type,"HEXA"))!=0) ETAT=ERROR;
-							char** endptr;
+							/*char** endptr=NULL;
 							int base;
 							if(strcmp(p->suiv->val.type,"DEC")==0) base=10;
 							else if(strcmp(p->suiv->val.type,"HEXA")==0) base=16;
-							decalage+=strtol(p->suiv->val.lex,endptr,base);
+							decalage+=strtol(p->suiv->val.lex,endptr,base);*/
+							decalage+=atoi(p->suiv->val.lex);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
 						}
@@ -199,8 +196,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							p=p->suiv;}
 						continu=FALSE;
 					}
-					else{
-						ETAT=ERROR;}
+					else ETAT=ERROR;
 				break;
 
 				case ETIQ:
@@ -218,19 +214,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					else{
 						ETAT=ERROR;}
 				break;
-
-
-
-
-
-
-
-
-
-
-
-
-
 			}
 		}
 	}
@@ -281,6 +264,8 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 	return -1;
 }
+
+
 /*cree et renvoie une structure operande contenant les 3 string données*/
 OPERANDE creer_op(char* name, char* ty, char* off){
 
@@ -331,7 +316,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
 				/*printf("%s\n", op.nom);*/
 			}
-			printf("%s\n", op.nom);
+			/*printf("%s\n", op.nom);*/
 			inst.op[i] = op;
 			i++;
 		}
@@ -420,7 +405,7 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 /* Fonction qui ajoute l'etiquette "etiq" à la table des symboles */
 
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
-	printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);
+	/*printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);*/
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	p_etiq->suiv=NULL;
 	p_etiq->val=etiq;
@@ -463,7 +448,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 		if (strcmp(p_lex->val.lex, "VIR")==0){
 			continue;
 		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
+		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
 			dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 			dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
 			strcpy(dir.symb_op,p_lex->val.lex);

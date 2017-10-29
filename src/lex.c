@@ -63,8 +63,14 @@ LISTE lex_load_file( char *file, unsigned int *nlines) {
                 }
                 else{
                 	col_general=concat(col_general,col_line);
-            	}
+									}
             }
+						LEXEME maillon;
+						maillon.type="NL";
+						maillon.lex=calloc(1,sizeof(char*));
+						strcpy(maillon.lex,"\n");
+						maillon.line=*nlines+1;
+						col_general=ajout_queue(maillon,col_general);
         }
     }
 	/*puts("Affichage de la liste des tokens:");*/
@@ -121,7 +127,7 @@ LISTE lex_read_line( char *line, int nline) {
 		int i;
 		LEXEME maillon;
 		char commentaire[STRLEN];
-		char op_asc[STRLEN];
+		char* op_asc=NULL;
 
 
 
@@ -257,9 +263,9 @@ LISTE lex_read_line( char *line, int nline) {
 			maillon.type="NL";
 			maillon.lex=calloc(length,sizeof(char*));
 			strcpy(maillon.lex,"\n");
+			maillon.line=nline;
 			/*printf("%s \n", maillon.lex);*/
 			col=ajout_queue(maillon,col);
-			maillon.line=nline;
 			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 
@@ -302,14 +308,18 @@ LISTE lex_read_line( char *line, int nline) {
 			if (g%2!=0){
 				if (asc==0) c=0;
 				asc=1;
-				for(t=0;t<length;t++){
-					op_asc[c++]=token[t];
-					}
-					op_asc[c++]=' ';
+				if(op_asc==NULL){
+					op_asc=calloc(length,sizeof(*token));
+					strcpy(op_asc,token);
 				}
+				else{
+					op_asc=concatener_string(op_asc,token);
+					op_asc=concatener_string(op_asc," ");
+				}
+			}
 			else{
-				op_asc[c++]=token[t];
-				op_asc[c] = '\0';
+				printf("token:%s\n",token);
+				op_asc=concatener_string(op_asc,token);
 				asc=0;
 				maillon.type="ASC_OP";
 				maillon.lex=calloc(length,sizeof(*op_asc));
