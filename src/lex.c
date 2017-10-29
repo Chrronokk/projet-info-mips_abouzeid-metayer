@@ -127,8 +127,7 @@ LISTE lex_read_line( char *line, int nline) {
 		int i;
 		LEXEME maillon;
 		char commentaire[STRLEN];
-		char* op_asc=NULL;
-
+		char* op_asc;
 
 
 		/*printf("%s\n", token);*/
@@ -306,20 +305,18 @@ LISTE lex_read_line( char *line, int nline) {
 		case ASC_OP:
 			if(token[0]=='"') g+=1;
 			if (g%2!=0){
-				if (asc==0) c=0;
+				if (asc==0){
+				 c=0;
+				 op_asc=calloc(STRLEN,sizeof(*token));
+			 	}
 				asc=1;
-				if(op_asc==NULL){
-					op_asc=calloc(length,sizeof(*token));
-					strcpy(op_asc,token);
-				}
-				else{
-					op_asc=concatener_string(op_asc,token);
-					op_asc=concatener_string(op_asc," ");
-				}
+					op_asc=strcat(op_asc,token);
+					op_asc=strcat(op_asc," ");
+					printf("%s\n",op_asc);
 			}
 			else{
-				printf("token:%s\n",token);
-				op_asc=concatener_string(op_asc,token);
+				op_asc=strcat(op_asc,token);
+				printf("%s\n",op_asc );
 				asc=0;
 				maillon.type="ASC_OP";
 				maillon.lex=calloc(length,sizeof(*op_asc));

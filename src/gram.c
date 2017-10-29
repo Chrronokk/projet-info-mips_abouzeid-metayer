@@ -23,13 +23,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int nb_op;
 	char zone[5]=".text";
 	int decalage_complet[3];
-	decalage_complet[0]=0;
-	decalage_complet[1]=0;
-	decalage_complet[2]=0;
+	decalage_complet[text]=0;
+	decalage_complet[data]=0;
+	decalage_complet[bss]=0;
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
-
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
 		int ETAT=INIT;
@@ -42,7 +41,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case INIT:
-					printf("%s %s \n", p->val.lex, p->val.type);
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -105,6 +103,10 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case DIR_TYPE1:/* ça marche*/
+				if(strcmp(zone,".text")==0) decalage_complet[text]=decalage;
+				if(strcmp(zone,".data")==0) decalage_complet[data]=decalage;
+				if(strcmp(zone,".bss ")==0) decalage_complet[bss]=decalage;
+
 
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
 						if (strcmp(p->val.lex,".text")==0){
@@ -146,7 +148,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
 								decalage+=decalage_asciiz(p);
-								printf("%d",decalage);
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
@@ -162,11 +163,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							col_bss=add_dir(p,decalage,col_bss);
 							if(col_bss==NULL) ETAT=ERROR;
 							if(strcmp(p->suiv->val.type,"DEC")*(strcmp(p->suiv->val.type,"HEXA"))!=0) ETAT=ERROR;
-							/*char** endptr=NULL;
-							int base;
-							if(strcmp(p->suiv->val.type,"DEC")==0) base=10;
-							else if(strcmp(p->suiv->val.type,"HEXA")==0) base=16;
-							decalage+=strtol(p->suiv->val.lex,endptr,base);*/
 							decalage+=atoi(p->suiv->val.lex);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
@@ -193,7 +189,8 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						col_text=add_inst(col_text,p,nb_op,decalage);
 						decalage+=4;
 						while(p->val.line==p->suiv->val.line){
-							p=p->suiv;}
+							p=p->suiv;
+						}
 						continu=FALSE;
 					}
 					else ETAT=ERROR;

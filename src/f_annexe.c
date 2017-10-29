@@ -233,6 +233,10 @@ void affiche_liste_inst(instLISTE l){
     puts("\n");
 		c=c->suiv;
   }
+  printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
+  for(i=0;i<nb_op;i++){
+    printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
+  }
 }
 
 void affiche_liste_dir(dirLISTE l){
@@ -266,14 +270,4 @@ LISTE concat(LISTE l1, LISTE l2){
     p->suiv = copie2;
     return copie1;
 
-}
-
-char* concatener_string(char* dest,char* src){
-    int l=strlen(dest)+strlen(src);
-    char* c;
-    c=calloc(strlen(dest),sizeof(*c));
-    strcpy(c,dest);
-    dest=calloc(l,sizeof(*c));
-    dest=strcat(dest,src);
-    return dest;
 }

@@ -18,6 +18,12 @@ boucle:
 	lunchtime : .word 12
 	.byte  2, 0x4
 	.space 12
-	.asciiz "blabla","bli bli"
+	.asciiz "blabla","gabuzomeu shadoks"
 .bss
 .space 12
+.space 12
+.data
+	lunchtime : .word 12
+.text
+	LW $8, 0xaa0($9)
+	ADDI $t1,$zero,8
