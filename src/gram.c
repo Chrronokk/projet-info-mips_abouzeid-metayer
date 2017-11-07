@@ -479,7 +479,7 @@ int decalage_asciiz(LISTE p){
 int check_reg(char* registre){
 	char* reg;
 	strcpy(reg,registre);
-	int nreg;
+	int nreg,x;
 	printf("%s: ", reg);
 
 	if (reg[0]!='$'){
@@ -490,28 +490,61 @@ int check_reg(char* registre){
 	if (isalpha(reg[1])){
 		puts("lettre");
 
-		if (strcmp(reg,"$zero")==0) return 0;
+		x=atoi(reg+2);
 
-		if (strcmp(reg,"$at")==0) return 1;
+		if (strcmp(reg,"$zero")==0) nreg = 0;
 
-		if (reg[1]=='v') nreg=(2+atoi(reg+1));
+		else if (strlen(reg)==3){
 
-		if (reg[1]=='a') nreg=(4+atoi(reg+1));
+			if(strcmp(reg,"$at")==0) nreg =1;
 
-		if (reg[1]=='t'){
-			if (atoi(reg+1)<8){
-				nreg=(8+atoi(reg+1));
+			else if(strcmp(reg,"$gp")==0) nreg=28;
+
+			else if(strcmp(reg,"$sp")==0) nreg=29;
+
+			else if(strcmp(reg,"$fp")==0) nreg=30;
+
+			else if(strcmp(reg,"$ra")==0) nreg=31;
+
+			else if (reg[1]=='v') nreg=x+2;
+
+			else if (reg[1]=='a') nreg=x+4;
+
+			else if (reg[1]=='t'){
+				if (x<8 && x>-1){
+					nreg=x+8;
+				}
+				else if (atoi(reg+2)==8 || atoi(reg+2)==9){
+					nreg=x+16;
+				}
 			}
-			else if (atoi(reg+1)==8 || atoi(reg+1)==9){
-				nreg=(16+atoi(reg+1));
+
+			else if (reg[1]=='s') nreg=x+16;
+
+			else if(reg[1]=='k'){
+				nreg=x+26;
+			}
+
+			else{
+				puts("ERREUR REGISTRE INVALIDE");
+				return -1;
 			}
 		}
-		if(reg[1]=='k')
+		else{
+			puts("ERREUR REGISTRE INVALIDE");
+			return -1;
+		}
 	}
 	else{ /*if reg[1] is a number*/
+
 		nreg=atoi(reg+1);
+		if(nreg<0 || nreg >31){
+			puts("ERREUR: REGISTRE INVALIDE");
+			return -1;
+		}
 		printf("nombre: %d\n",nreg);
 		return nreg;
 	}
+	printf("%d\n",nreg);
 	return nreg;
 }

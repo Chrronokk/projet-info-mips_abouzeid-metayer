@@ -82,12 +82,7 @@ int main ( int argc, char *argv[] ) {
 	etiqLISTE tab_etiq=creer_liste_etiq();
 	analyse_gram(Col,col_text,col_data,col_bss,tab_etiq);
 
-  puts("");
-  printf(":::%d\n",check_reg("$at"));
-  check_reg("abc");
-  check_reg("$abc");
-  check_reg("$0");
-  check_reg("$3");
+
     /* --------------- Free memory and terminate ----------------*/
 
 
