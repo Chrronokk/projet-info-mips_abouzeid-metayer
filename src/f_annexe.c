@@ -178,7 +178,7 @@ void affiche_liste(LISTE l){
    }
 
 void affiche_liste_etiq(etiqLISTE l){
-	puts("Entrée dans affiche_liste_etiq");
+	puts("Affichage de la table des symboles");
 	etiqLISTE c = l	;
 
 	if(l==NULL){

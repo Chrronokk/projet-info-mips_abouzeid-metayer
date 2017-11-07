@@ -22,6 +22,7 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq);
 ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq);
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col);
 int decalage_asciiz(LISTE p);
+int check_reg(char*);
 
 
 #endif

@@ -209,19 +209,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					else{
 						ETAT=ERROR;}
 				break;
-
-
-
-
-
-
-
-
-
-
-
-
-
 			}
 		}
 	}
@@ -413,7 +400,7 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 /* Fonction qui ajoute l'etiquette "etiq" à la table des symboles */
 
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
-	printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);
+	/*printf("%s,%s,%d\n",etiq.nom, etiq.zone, etiq.arrivee);*/
 	etiqLISTE p_etiq =calloc(1,sizeof(*p_etiq));
 	p_etiq->suiv=NULL;
 	p_etiq->val=etiq;
@@ -483,4 +470,46 @@ int decalage_asciiz(LISTE p){
 			return 0;}
 	}
 	return c;
+}
+
+
+/*Prend le nom du registre en entrée et renvoie son numero, renvoie -1 si le registre n'existe pas*/
+int check_reg(char* registre){
+	char* reg;
+	strcpy(reg,registre);
+	int nreg;
+	printf("%s: ", reg);
+
+	if (reg[0]!='$'){
+		puts("Erreur: pas un registre");
+		return -1;
+	}
+
+	if (isalpha(reg[1])){
+		puts("lettre");
+
+		if (strcmp(reg,"$zero")==0) return 0;
+
+		if (strcmp(reg,"$at")==0) return 1;
+
+		if (reg[1]=='v') nreg=(2+atoi(reg+1));
+
+		if (reg[1]=='a') nreg=(4+atoi(reg+1));
+
+		if (reg[1]=='t'){
+			if (atoi(reg+1)<8){
+				nreg=(8+atoi(reg+1));
+			}
+			else if (atoi(reg+1)==8 || atoi(reg+1)==9){
+				nreg=(16+atoi(reg+1));
+			}
+		}
+		if(reg[1]=='k')
+	}
+	else{ /*if reg[1] is a number*/
+		nreg=atoi(reg+1);
+		printf("nombre: %d\n",nreg);
+		return nreg;
+	}
+	return nreg;
 }
