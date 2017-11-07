@@ -1,0 +1,8 @@
+types d'arguments dans une instruction
+
+Sa unsigned int dans [0,8]
+REG unsigned int dans [0,31]
+IMM int sur 16 bits =>comprise entre SHRT_MIN et SHRT_MAX
+REL unsigned int multiple de 4 val>>2
+ABS multiple de 4 codé sur 28 bit car val>>2
+BAS 1) REG 2) IMM

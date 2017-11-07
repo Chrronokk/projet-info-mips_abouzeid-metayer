@@ -42,7 +42,7 @@
 /*!
   \brief INTERNALS: Maximum length of static strings.
  */
-#define STRLEN          256
+#define STRLEN          512
 
 /*!
   \brief INTERNALS: Value for boolean FALSE.
@@ -66,4 +66,3 @@
 
 
 #endif /* _GLOBAL_H */
-

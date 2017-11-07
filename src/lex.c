@@ -63,8 +63,14 @@ LISTE lex_load_file( char *file, unsigned int *nlines) {
                 }
                 else{
                 	col_general=concat(col_general,col_line);
-            	}
+									}
             }
+						LEXEME maillon;
+						maillon.type="NL";
+						maillon.lex=calloc(1,sizeof(char*));
+						strcpy(maillon.lex,"\n");
+						maillon.line=*nlines+1;
+						col_general=ajout_queue(maillon,col_general);
         }
     }
 	/*puts("Affichage de la liste des tokens:");*/
@@ -99,6 +105,9 @@ LISTE lex_read_line( char *line, int nline) {
 	char *token = NULL;
 	char save[STRLEN];
 	int com=0;
+	int asc=0;
+	int g=0;
+
 
 	/*nbmaillon(col);*/
 
@@ -113,13 +122,10 @@ LISTE lex_read_line( char *line, int nline) {
 
 		int length= strlen(token);
 		int ETAT;
-		int t;
-		int c;
 		int i;
 		LEXEME maillon;
-		char commentaire[STRLEN];
-
-
+		char* commentaire;
+		char* op_asc;
 
 
 		/*printf("%s\n", token);*/
@@ -129,29 +135,24 @@ LISTE lex_read_line( char *line, int nline) {
 			/*puts("comment");*/
 			ETAT=COMMENT;}
 		else if (token[0]=='.'){
-			/*printf("dir\n");*/
 			ETAT=DIR;}
 		else if (token[0]=='$'){
-			/*printf("reg\n");*/
 			ETAT=REG;}
-		else if (isalpha(token[0])||(token[0]=='"')){
-			/*printf("sym\n");*/
+		else if (token[0]=='"'||asc==1){
+			ETAT=ASC_OP;}
+		else if (isalpha(token[0])){
 			ETAT=SYM;}
 		else if (token[0] == ','){
-			/*printf("vir\n");*/
 			ETAT=VIR;}
 		else if (token[0] == ':'){
-			/*printf("dp\n");*/
 			ETAT=DP;}
 		else if (token[0] == ';'){
-			/*printf("pvir\n");*/
 			ETAT=PVIR;}
 		else if (isdigit(token[0]) || token[0]=='-'){
 			ETAT=NBR;}
 		else if (token[0]=='(' || token[0]==')' ){
 			ETAT=PAR;}
 		else if (token[0]=='\n'){
-			/*printf("nl\n");*/
 			ETAT=NL;}
 		else{
 			ETAT=ERROR;}
@@ -161,33 +162,20 @@ LISTE lex_read_line( char *line, int nline) {
 		case COMMENT:
 				/*printf("passage\n");*/
 				if (com==0){
-					c=0;
+					commentaire=calloc(STRLEN,sizeof(*token));
 				}
 				com=1;
 				if(token[0]!='\n'){
-					for(t=0;t<length;t++){
-						commentaire[c++]=token[t];
-						/*puts("test1");*/
-						}
-					commentaire[c++]=' ';
+					commentaire=strcat(commentaire,token);
+					commentaire=strcat(commentaire," ");
 				}
 				else{
-					/*while(c<STRLEN){
-						commentaire[c++]=' ';
-					}*/
-					commentaire[c] = '\0';
-					/*printf("%s\n", commentaire);*/
 					com=0;
-					/*puts("test2");*/
 					maillon.type="COMMENT";
-					/*puts("test3");*/
 					maillon.lex=calloc(length,sizeof(*commentaire));
 					strcpy(maillon.lex,commentaire);
-					/*printf("%s \n", maillon.lex);*/
 					maillon.line=nline;
 					col=ajout_queue(maillon,col);
-					/*printf("passage2\n");*/
-					/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}
 			break;
 
@@ -217,8 +205,7 @@ LISTE lex_read_line( char *line, int nline) {
 			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
-			break;
+		break;
 
 		case VIR:
 			maillon.type="VIR";
@@ -257,13 +244,12 @@ LISTE lex_read_line( char *line, int nline) {
 			break;
 
 		case NL:
-			com=0;
 			maillon.type="NL";
 			maillon.lex=calloc(length,sizeof(char*));
 			strcpy(maillon.lex,"\n");
+			maillon.line=nline;
 			/*printf("%s \n", maillon.lex);*/
 			col=ajout_queue(maillon,col);
-			maillon.line=nline;
 			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 
@@ -301,6 +287,27 @@ LISTE lex_read_line( char *line, int nline) {
 
 			break;
 
+		case ASC_OP:
+			if(token[0]=='"') g+=1;
+			if (g%2!=0){
+				if (asc==0){
+				 op_asc=calloc(STRLEN,sizeof(*token));
+			 	}
+				asc=1;
+					op_asc=strcat(op_asc,token);
+					op_asc=strcat(op_asc," ");
+					printf("%s\n",op_asc);
+			}
+			else{
+				op_asc=strcat(op_asc,token);
+				asc=0;
+				maillon.type="ASC_OP";
+				maillon.lex=calloc(length,sizeof(*op_asc));
+				strcpy(maillon.lex,op_asc);
+				maillon.line=nline;
+				col=ajout_queue(maillon,col);
+			}
+		break;
 
 		case ERROR:
 			maillon.type="ERROR";
@@ -308,7 +315,7 @@ LISTE lex_read_line( char *line, int nline) {
 			strcpy(maillon.lex,token);
 			maillon.line=nline;
 			col=ajout_queue(maillon,col);
-			break;
+		break;
 
 			}
     /*puts("Affichage de la ligne:");
@@ -327,7 +334,7 @@ LISTE lex_read_line( char *line, int nline) {
  * @param out Line of source code in a suitable form for further analysis.
  * @return nothing
  * @brief This function will prepare a line of source code for further analysis.
- */
+*/
 
 /* note that MIPS assembly supports distinctions between lower and upper case*/
 void lex_standardise( char* in, char* out ) {
@@ -335,7 +342,7 @@ void lex_standardise( char* in, char* out ) {
 
     for ( i= 0, j= 0; i< strlen(in); i++ ) {
         /* rajoute des espaces autour des symboles de ponctuation*/
-		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
+		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'||in[i]=='"'){
 			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';

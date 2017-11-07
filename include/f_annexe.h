@@ -104,5 +104,4 @@ instLISTE ajout_queue_inst(instruction inst, instLISTE liste);
 dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste);
 
 
-
 #endif

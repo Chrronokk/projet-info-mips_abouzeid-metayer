@@ -178,7 +178,11 @@ void affiche_liste(LISTE l){
    }
 
 void affiche_liste_etiq(etiqLISTE l){
+<<<<<<< HEAD
 	puts("Affichage de la table des symboles");
+=======
+	puts("Affichage de la liste des étiquettes\n");
+>>>>>>> 0c61cd18959978365548e2d6aa566f63bd359ca2
 	etiqLISTE c = l	;
 
 	if(l==NULL){
@@ -192,7 +196,7 @@ void affiche_liste_etiq(etiqLISTE l){
 		c=c->suiv;
     }
     printf("%s,%s,%d\n",c->val.nom, c->val.zone, c->val.arrivee);
-    puts(" ");
+    puts("\n");
     return;
 
 
@@ -214,7 +218,7 @@ void nbmaillon(LISTE l){
 
 
 void affiche_liste_inst(instLISTE l){
-	puts("Affichage de la liste des instructions");
+	puts("Affichage de la liste des instructions\n");
 	instLISTE c = l	;
   int nb_op;
   int i;
@@ -233,10 +237,15 @@ void affiche_liste_inst(instLISTE l){
     puts("\n");
 		c=c->suiv;
   }
+  printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
+  for(i=0;i<nb_op;i++){
+    printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
+  }
+  puts("\n");
 }
 
 void affiche_liste_dir(dirLISTE l){
-	puts("Affichage de la liste des directives");
+	puts("Affichage de la liste des directives\n");
 	dirLISTE c = l	;
 
 	if(l==NULL){

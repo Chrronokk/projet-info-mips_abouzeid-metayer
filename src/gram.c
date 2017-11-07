@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <inttypes.h>
 #include <gram.h>
 #include <global.h>
 #include <f_annexe.h>
@@ -8,6 +9,7 @@
 
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 
+	puts("Entrée dans analyse_gram");
 	puts("Début de l'analyse grammaticale\n\n");
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
@@ -21,15 +23,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int nb_op;
 	char zone[5]=".text";
 	int decalage_complet[3];
+	decalage_complet[text]=0;
+	decalage_complet[data]=0;
+	decalage_complet[bss]=0;
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
-
-
-
-
-
-
 	while (p->suiv!=NULL){
 		/*puts("test1");*/
 		int ETAT=INIT;
@@ -42,7 +41,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case INIT:
-					/*printf("%s %s \n", p->val.lex, p->val.type);*/
 					if(debut==0){
 						ETAT=INIT_DEBUT;}
 					else{
@@ -105,6 +103,10 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case DIR_TYPE1:/* ça marche*/
+				if(strcmp(zone,".text")==0) decalage_complet[text]=decalage;
+				if(strcmp(zone,".data")==0) decalage_complet[data]=decalage;
+				if(strcmp(zone,".bss ")==0) decalage_complet[bss]=decalage;
+
 
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
 						if (strcmp(p->val.lex,".text")==0){
@@ -160,7 +162,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						else if((strcmp(zone,".bss "))==0){
 							col_bss=add_dir(p,decalage,col_bss);
 							if(col_bss==NULL) ETAT=ERROR;
-							if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+							if(strcmp(p->suiv->val.type,"DEC")*(strcmp(p->suiv->val.type,"HEXA"))!=0) ETAT=ERROR;
 							decalage+=atoi(p->suiv->val.lex);
 							while(p->val.line==p->suiv->val.line) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
@@ -187,11 +189,11 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						col_text=add_inst(col_text,p,nb_op,decalage);
 						decalage+=4;
 						while(p->val.line==p->suiv->val.line){
-							p=p->suiv;}
+							p=p->suiv;
+						}
 						continu=FALSE;
 					}
-					else{
-						ETAT=ERROR;}
+					else ETAT=ERROR;
 				break;
 
 				case ETIQ:
@@ -259,6 +261,8 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 	return -1;
 }
+
+
 /*cree et renvoie une structure operande contenant les 3 string données*/
 OPERANDE creer_op(char* name, char* ty, char* off){
 
@@ -289,7 +293,6 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 	int i=0;
 
 
-
 	while (i<nb_op){
 		p_lex=p_lex->suiv;
 		/*printf("%s\n",p_lex->val.lex);*/
@@ -312,7 +315,6 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 			}
 			/*printf("%s\n", op.nom);*/
 			inst.op[i] = op;
-
 			i++;
 		}
 	}
@@ -443,7 +445,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 		if (strcmp(p_lex->val.lex, "VIR")==0){
 			continue;
 		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
+		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
 			dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 			dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
 			strcpy(dir.symb_op,p_lex->val.lex);
