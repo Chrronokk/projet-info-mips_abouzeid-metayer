@@ -122,11 +122,9 @@ LISTE lex_read_line( char *line, int nline) {
 
 		int length= strlen(token);
 		int ETAT;
-		int t;
-		int c;
 		int i;
 		LEXEME maillon;
-		char commentaire[STRLEN];
+		char* commentaire;
 		char* op_asc;
 
 
@@ -164,33 +162,20 @@ LISTE lex_read_line( char *line, int nline) {
 		case COMMENT:
 				/*printf("passage\n");*/
 				if (com==0){
-					c=0;
+					commentaire=calloc(STRLEN,sizeof(*token));
 				}
 				com=1;
 				if(token[0]!='\n'){
-					for(t=0;t<length;t++){
-						commentaire[c++]=token[t];
-						/*puts("test1");*/
-						}
-					commentaire[c++]=' ';
+					commentaire=strcat(commentaire,token);
+					commentaire=strcat(commentaire," ");
 				}
 				else{
-					/*while(c<STRLEN){
-						commentaire[c++]=' ';
-					}*/
-					commentaire[c] = '\0';
-					/*printf("%s\n", commentaire);*/
 					com=0;
-					/*puts("test2");*/
 					maillon.type="COMMENT";
-					/*puts("test3");*/
 					maillon.lex=calloc(length,sizeof(*commentaire));
 					strcpy(maillon.lex,commentaire);
-					/*printf("%s \n", maillon.lex);*/
 					maillon.line=nline;
 					col=ajout_queue(maillon,col);
-					/*printf("passage2\n");*/
-					/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 				}
 			break;
 
@@ -306,7 +291,6 @@ LISTE lex_read_line( char *line, int nline) {
 			if(token[0]=='"') g+=1;
 			if (g%2!=0){
 				if (asc==0){
-				 c=0;
 				 op_asc=calloc(STRLEN,sizeof(*token));
 			 	}
 				asc=1;
@@ -316,7 +300,6 @@ LISTE lex_read_line( char *line, int nline) {
 			}
 			else{
 				op_asc=strcat(op_asc,token);
-				printf("%s\n",op_asc );
 				asc=0;
 				maillon.type="ASC_OP";
 				maillon.lex=calloc(length,sizeof(*op_asc));
@@ -351,7 +334,7 @@ LISTE lex_read_line( char *line, int nline) {
  * @param out Line of source code in a suitable form for further analysis.
  * @return nothing
  * @brief This function will prepare a line of source code for further analysis.
- */
+*/
 
 /* note that MIPS assembly supports distinctions between lower and upper case*/
 void lex_standardise( char* in, char* out ) {
