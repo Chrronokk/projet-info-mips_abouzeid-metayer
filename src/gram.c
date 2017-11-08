@@ -474,6 +474,7 @@ int decalage_asciiz(LISTE p){
 	return c;
 }
 
+<<<<<<< HEAD
 LISTE pseudo_instr(LISTE col){
 	LISTE c=creer_liste();
 	LISTE p=col;
@@ -649,7 +650,7 @@ LISTE pseudo_instr(LISTE col){
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 		}
-		
+
 		else{
 			maillon.type=calloc(strlen(maillon.type),sizeof(char));
 			strcpy(maillon.type,p->val.type);
@@ -660,4 +661,77 @@ LISTE pseudo_instr(LISTE col){
 		}
 	}
 	return c;
+
+/*Prend le nom du registre en entrée et renvoie son numero, renvoie -1 si le registre n'existe pas*/
+int check_reg(char* registre){
+	char* reg;
+	strcpy(reg,registre);
+	int nreg,x;
+	printf("%s: ", reg);
+
+	if (reg[0]!='$'){
+		puts("Erreur: pas un registre");
+		return -1;
+	}
+
+	if (isalpha(reg[1])){
+		puts("lettre");
+
+		x=atoi(reg+2);
+
+		if (strcmp(reg,"$zero")==0) nreg = 0;
+
+		else if (strlen(reg)==3){
+
+			if(strcmp(reg,"$at")==0) nreg =1;
+
+			else if(strcmp(reg,"$gp")==0) nreg=28;
+
+			else if(strcmp(reg,"$sp")==0) nreg=29;
+
+			else if(strcmp(reg,"$fp")==0) nreg=30;
+
+			else if(strcmp(reg,"$ra")==0) nreg=31;
+
+			else if (reg[1]=='v') nreg=x+2;
+
+			else if (reg[1]=='a') nreg=x+4;
+
+			else if (reg[1]=='t'){
+				if (x<8 && x>-1){
+					nreg=x+8;
+				}
+				else if (atoi(reg+2)==8 || atoi(reg+2)==9){
+					nreg=x+16;
+				}
+			}
+
+			else if (reg[1]=='s') nreg=x+16;
+
+			else if(reg[1]=='k'){
+				nreg=x+26;
+			}
+
+			else{
+				puts("ERREUR REGISTRE INVALIDE");
+				return -1;
+			}
+		}
+		else{
+			puts("ERREUR REGISTRE INVALIDE");
+			return -1;
+		}
+	}
+	else{ /*if reg[1] is a number*/
+
+		nreg=atoi(reg+1);
+		if(nreg<0 || nreg >31){
+			puts("ERREUR: REGISTRE INVALIDE");
+			return -1;
+		}
+		printf("nombre: %d\n",nreg);
+		return nreg;
+	}
+	printf("%d\n",nreg);
+	return nreg;
 }
