@@ -83,7 +83,6 @@ int main ( int argc, char *argv[] ) {
 	analyse_gram(Col,col_text,col_data,col_bss,tab_etiq);
 
 
-
     /* --------------- Free memory and terminate ----------------*/
 
 

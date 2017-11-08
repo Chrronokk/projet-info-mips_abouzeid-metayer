@@ -474,7 +474,6 @@ int decalage_asciiz(LISTE p){
 	return c;
 }
 
-<<<<<<< HEAD
 LISTE pseudo_instr(LISTE col){
 	LISTE c=creer_liste();
 	LISTE p=col;
