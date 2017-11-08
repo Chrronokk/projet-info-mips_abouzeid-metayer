@@ -296,7 +296,7 @@ LISTE lex_read_line( char *line, int nline) {
 				asc=1;
 					op_asc=strcat(op_asc,token);
 					op_asc=strcat(op_asc," ");
-					printf("%s\n",op_asc);
+					/*printf("%s\n",op_asc);*/
 			}
 			else{
 				op_asc=strcat(op_asc,token);
