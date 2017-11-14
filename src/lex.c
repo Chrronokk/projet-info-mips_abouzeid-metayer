@@ -152,7 +152,7 @@ LISTE lex_read_line( char *line, int nline) {
 			ETAT=NBR;}
 		else if (token[0]=='(' || token[0]==')' ){
 			ETAT=PAR;}
-		else if (token[0]=='\n'){
+		else if ((strcmp(token,"\n")==0)&&(strcmp(token,"\0")!=0)){
 			ETAT=NL;}
 		else{
 			ETAT=ERROR;}
@@ -165,7 +165,6 @@ LISTE lex_read_line( char *line, int nline) {
 					commentaire=calloc(STRLEN,sizeof(*token));
 				}
 				com=1;
-				printf("%s\n",token );
 				if(token[0]!='\n'){
 					commentaire=strcat(commentaire,token);
 					commentaire=strcat(commentaire," ");
@@ -176,7 +175,6 @@ LISTE lex_read_line( char *line, int nline) {
 					maillon.lex=calloc(length,sizeof(*commentaire));
 					strcpy(maillon.lex,commentaire);
 					maillon.line=nline;
-					printf("%s \n", maillon.lex);
 					col=ajout_queue(maillon,col);
 				}
 			break;
@@ -250,9 +248,7 @@ LISTE lex_read_line( char *line, int nline) {
 			maillon.lex=calloc(length,sizeof(char*));
 			strcpy(maillon.lex,"\n");
 			maillon.line=nline;
-			/*printf("%s \n", maillon.lex);*/
 			col=ajout_queue(maillon,col);
-			/*printf("%s , %s \n", col->val.type, col->val.lex);*/
 			break;
 
 		case NBR:
@@ -357,8 +353,7 @@ void lex_standardise( char* in, char* out ) {
 
     else if(in[i]=='\n'){
     	out[j++]=' ';
-			out[j]='\n';
-			out[j]='\0';
+			out[j++]='\n';
 		}
 
 

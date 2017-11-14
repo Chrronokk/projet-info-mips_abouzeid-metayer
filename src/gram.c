@@ -196,6 +196,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						while(p->val.line==p->suiv->val.line){
 							p=p->suiv;
 						}
+						p=p->suiv;
 						continu=FALSE;
 					}
 					else ETAT=ERROR;
@@ -210,11 +211,8 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							p=p->suiv->suiv;
 							continu=FALSE;
 						}
-						else{
-							ETAT=ERROR;}
+						else ETAT=ERROR;
 					}
-					else{
-						ETAT=ERROR;}
 				break;
 			}
 		}
@@ -495,6 +493,11 @@ int decalage_asciiz(LISTE p){
 }
 
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 9f80c5dccc87f4787e421048f6e412790505c078
 /*Prend le nom du registre en entrée et renvoie son numero, renvoie -1 si le registre n'existe pas*/
 int check_reg(char* registre){
 	char* reg=calloc(strlen(registre),sizeof(*registre));

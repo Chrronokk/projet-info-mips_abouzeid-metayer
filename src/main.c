@@ -78,13 +78,13 @@ int main ( int argc, char *argv[] ) {
 
 	/* --------------- Analyse grammaticale ---------------------*/
 
-	instLISTE col_text=creer_liste_inst();
+	/*instLISTE col_text=creer_liste_inst();
 	dirLISTE col_data=creer_liste_dir();
 	dirLISTE col_bss=creer_liste_dir();
 	etiqLISTE tab_etiq=creer_liste_etiq();
   LISTE Col_mod;
   Col_mod=pseudo_instr(Col);
-	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq);
+	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq);*/
 
 
     /* --------------- Free memory and terminate ----------------*/
