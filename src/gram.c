@@ -12,10 +12,14 @@
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 
 	puts("Début de l'analyse grammaticale\n\n");
-	int nb_instr,i;
+	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 75fb18266dbd4f1d0a83ef0b31da0ccd68598071
 
 
 	LISTE p=Col;
@@ -32,7 +36,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
-	while (p!=NULL){
+	while (p->suiv!=NULL){
 		/*printf("%s \n",p->val.lex);*/
 		int ETAT=INIT;
 		int continu = TRUE;
@@ -230,12 +234,9 @@ instr_def* lecture_dico(int* p_nb_instr){
 	FILE* f1= fopen("dictionnaire.txt","r");
 	int i,j;
 	instr_def* dico;
+		puts("Affichage du dictionnaire");
 
-	for(j=0;j<3;j++){
-		dico[i].optype_tab[j]=calloc(512,sizeof(char));
-	}
 
-	dico[i].symbole=calloc(512,sizeof(char));
 
 
 	if (f1==NULL) return NULL;
@@ -245,10 +246,12 @@ instr_def* lecture_dico(int* p_nb_instr){
 
 
 	for(i=0;i<*p_nb_instr;i++){
-
-		fscanf(f1,"%s %c %d %s %s %s",&dico[i].symbole,&dico[i].type,&dico[i].nb_op,&dico[i].optype_tab[0],&dico[i].optype_tab[1],&dico[i].optype_tab[2]);
+		for(j=0;j<3;j++){
+			dico[i].optype_tab[j]=calloc(512,sizeof(char));
+		}
+		dico[i].symbole=calloc(512,sizeof(char));
+		fscanf(f1,"%s %c %d %s %s %s",dico[i].symbole, dico[i].type, &dico[i].nb_op, dico[i].optype_tab[0], dico[i].optype_tab[1], dico[i].optype_tab[2]);
 		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
-
 	}
 	fclose(f1);
 	return dico;
