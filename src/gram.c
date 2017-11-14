@@ -500,7 +500,6 @@ int check_reg(char* registre){
 	strcpy(reg,registre);
 	int nreg,x;
 	printf("%s: ", reg);
-
 	if (reg[0]!='$'){
 		puts("Erreur: pas un registre");
 		return -1;
