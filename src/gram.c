@@ -12,14 +12,11 @@
 void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
 
 	puts("Début de l'analyse grammaticale\n\n");
-	int nb_instr,i;
+	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
-	puts("Affichage du dictionnaire");
-	for(i=0; i<*p_nb_instr; i++){
-		printf("Ligne %d: %s, %c, %d, %s, %s, %s\n",i,dictionnaire[i].symbole,dictionnaire[i].type,dictionnaire[i].nb_op,dictionnaire[i].optype1,dictionnaire[i].optype2,dictionnaire[i].optype3);
-	}
+
 
 
 	LISTE p=Col;
@@ -36,7 +33,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
-	while (p!=NULL){
+	while (p->suiv!=NULL){
 		/*printf("%s \n",p->val.lex);*/
 		int ETAT=INIT;
 		int continu = TRUE;
@@ -229,38 +226,32 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 /* Lit le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
 
-instr_def * lecture_dico(int* p_nb_instr){
+instr_def* lecture_dico(int* p_nb_instr){
 	puts("Lecture du dictionnaire");
 	FILE* f1= fopen("dictionnaire.txt","r");
-	int i;
-	char s1[512], op_type1[512], op_type2[512], op_type3[512];
-	instr_def* tab;
+	int i,j;
+	instr_def* dico;
+		puts("Affichage du dictionnaire");
+
+
+
 
 	if (f1==NULL) return NULL;
 	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
-	tab=calloc(*p_nb_instr,sizeof(instr_def));
+	dico=calloc(*p_nb_instr,sizeof(instr_def));
 
 
 	for(i=0;i<*p_nb_instr;i++){
-
-		fscanf(f1,"%s %c %d %s %s %s",s1,&(tab[i].type),&(tab[i].nb_op),op_type1,op_type2,op_type3);
-
-		tab[i].symbole=calloc(1,strlen(s1));
-		tab[i].optype1=calloc(1,strlen(op_type1));
-		tab[i].optype2=calloc(1,strlen(op_type2));
-		tab[i].optype3=calloc(1,strlen(op_type3));
-
-		strcpy(tab[i].symbole,s1);
-		strcpy(tab[i].optype1,op_type1);
-		strcpy(tab[i].optype2,op_type2);
-		strcpy(tab[i].optype3,op_type3);
-
-		printf("%s %c %d %s %s %s\n",tab[i].symbole,tab[i].type,tab[i].nb_op,tab[i].optype1,tab[i].optype2,tab[i].optype3);
-
+		for(j=0;j<3;j++){
+			dico[i].optype_tab[j]=calloc(512,sizeof(char));
+		}
+		dico[i].symbole=calloc(512,sizeof(char));
+		fscanf(f1,"%s %c %d %s %s %s",dico[i].symbole, dico[i].type, &dico[i].nb_op, dico[i].optype_tab[0], dico[i].optype_tab[1], dico[i].optype_tab[2]);
+		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
 	}
 	fclose(f1);
-	return tab;
+	return dico;
 }
 
 /*Retourne la position de l'instuction, ou -1 si l'instruction n'existe pas*/
@@ -394,12 +385,48 @@ int test_nb_op_inst(LISTE p, int nb_op){
 	return FALSE;
 }
 
+
+/*Fonction qui vérifie le type des opérandes des instructions*/
+/*Renvoie 1 si OK, 0 si erreur détectée*/
+/*int test_type_op_inst(instruction inst, instr_def* dictionnaire){
+
+	int i=0;
+
+	while (strcmp(dictionnaire[i].symbole,inst.symbole)!=0) {
+		i++;
+	}
+
+	if (inst.nb_op==1) {
+		if (strcmp(inst.op[0].type,"REG")==0 && strcmp(dictionnaire[i].optype1,"REG") && inst.op[0].offset==0){
+			return 1;
+		}
+		if (strcmp(dictionnaire[i].optype1,"IMM")==0){
+			if (strcmp(inst.op[0].type,"DEC")* strcmp(inst.op[0].type,"HEXA")==0){
+				return 1;
+			}
+		}
+	}
+	if (inst.nb_op==2){
+		if (strcmp(inst.op[0].type,"REG")==0 && strcmp(dictionnaire[i].optype1,"REG") && inst.op[0].offset==0){
+			if (strcmp(inst.op[1].type,"REG")==0 && strcmp(dictionnaire[i].optype2,"REG") && inst.op[1].offset==0){
+				return 1;
+			}
+			if (strcmp(dictionnaire[i].optype2,"IMM")==0){
+				if (strcmp(inst.op[1].type,"DEC")* strcmp(inst.op[1].type,"HEXA")==0){
+				}
+		}
+	}
+	if (inst.nb_op==3){
+
+	}
+
+	printf("ERREUR SUR LE TYPE D'OPERANDE A LA LIGNE %d",inst.ligne);
+	return 0;
+
+}*/
+
 /* Fonction qui recherche si une etiquette est dans la table des symboles
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
-
-/*int test_type_op_inst*/
-
-
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 	int i=0;
 
@@ -493,7 +520,6 @@ int decalage_asciiz(LISTE p){
 	}
 	return c;
 }
-
 
 
 /*Prend le nom du registre en entrée et renvoie son numero, renvoie -1 si le registre n'existe pas*/
