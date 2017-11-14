@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <inttypes.h>
 #include <gram.h>
 #include <pseudo_instr.h>
@@ -26,7 +27,8 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 	int position;
 	int nb_op;
-	char zone[5]=".text";
+	char* zone=calloc(6,sizeof(char));
+	strcpy(zone,".text");
 	int decalage_complet[3];
 	decalage_complet[text]=0;
 	decalage_complet[data]=0;
@@ -34,7 +36,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int decalage=decalage_complet[text];
 
 	ETIQUETTE etiq;
-	while (p->suiv!=NULL){
+	while (p!=NULL){
 		/*printf("%s \n",p->val.lex);*/
 		int ETAT=INIT;
 		int continu = TRUE;
@@ -193,7 +195,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 					if (test_nb_op_inst(p,nb_op)==TRUE){
 						col_text=add_inst(col_text,p,nb_op,decalage);
 						decalage+=4;
-						while(p->val.line==p->suiv->val.line){
+						while(strcmp(p->val.type,"NL")!=0){
 							p=p->suiv;
 						}
 						p=p->suiv;

@@ -152,7 +152,7 @@ LISTE lex_read_line( char *line, int nline) {
 			ETAT=NBR;}
 		else if (token[0]=='(' || token[0]==')' ){
 			ETAT=PAR;}
-		else if ((strcmp(token,"\n")==0)&&(strcmp(token,"\0")!=0)){
+		else if (strcmp(token,"\n")==0){
 			ETAT=NL;}
 		else{
 			ETAT=ERROR;}
@@ -354,6 +354,7 @@ void lex_standardise( char* in, char* out ) {
     else if(in[i]=='\n'){
     	out[j++]=' ';
 			out[j++]='\n';
+			out[j]='\0';
 		}
 
 
@@ -361,5 +362,6 @@ void lex_standardise( char* in, char* out ) {
     else if (isblank((int) in[i])) out[j++]=' ';
     else out[j++]=in[i];
     }
-		out[j]='\0';
+		/*out[j]='\0';*/
+		printf("%s",out );
 }
