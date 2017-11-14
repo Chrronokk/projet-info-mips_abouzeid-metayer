@@ -12,9 +12,14 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 	puts("Entrée dans analyse_gram");
 	puts("Début de l'analyse grammaticale\n\n");
-	int nb_instr;
+	int nb_instr,i;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
+
+	puts("Affichage du dictionnaire");
+	for(i=0; i<*p_nb_instr; i++){
+		printf("Ligne %d: %s, %c, %d, %s, %s, %s\n",i,dictionnaire[i].symbole,dictionnaire[i].type,dictionnaire[i].nb_op,dictionnaire[i].optype1,dictionnaire[i].optype2,dictionnaire[i].optype3);
+	}
 
 
 	LISTE p=Col;
@@ -223,13 +228,13 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 }
 
 
-/* Lis le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
+/* Lit le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
 
 instr_def * lecture_dico(int* p_nb_instr){
-	/*puts("Lecture du dictionnaire");*/
+	puts("Lecture du dictionnaire");
 	FILE* f1= fopen("dictionnaire.txt","r");
 	int i;
-	char s1[512];
+	char s1[512], op_type1[512], op_type2[512], op_type3[512];
 	instr_def* tab;
 
 	if (f1==NULL) return NULL;
@@ -237,11 +242,23 @@ instr_def * lecture_dico(int* p_nb_instr){
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
 	tab=calloc(*p_nb_instr,sizeof(instr_def));
 
+
 	for(i=0;i<*p_nb_instr;i++){
-		fscanf(f1,"%s %c %d",s1,&(tab[i].type),&(tab[i].nb_op));
+
+		fscanf(f1,"%s %c %d %s %s %s",s1,&(tab[i].type),&(tab[i].nb_op),op_type1,op_type2,op_type3);
+
 		tab[i].symbole=calloc(1,strlen(s1));
+		tab[i].optype1=calloc(1,strlen(op_type1));
+		tab[i].optype2=calloc(1,strlen(op_type2));
+		tab[i].optype3=calloc(1,strlen(op_type3));
+
 		strcpy(tab[i].symbole,s1);
-		/*printf("%s %c %d\n",tab[i].symbole,tab[i].type,tab[i].nb_op);*/
+		strcpy(tab[i].optype1,op_type1);
+		strcpy(tab[i].optype2,op_type2);
+		strcpy(tab[i].optype3,op_type3);
+
+		printf("%s %c %d %s %s %s\n",tab[i].symbole,tab[i].type,tab[i].nb_op,tab[i].optype1,tab[i].optype2,tab[i].optype3);
+
 	}
 	fclose(f1);
 	return tab;
@@ -477,6 +494,7 @@ int decalage_asciiz(LISTE p){
 
 
 
+}
 /*Prend le nom du registre en entrée et renvoie son numero, renvoie -1 si le registre n'existe pas*/
 int check_reg(char* registre){
 	char* reg=calloc(strlen(registre),sizeof(*registre));
