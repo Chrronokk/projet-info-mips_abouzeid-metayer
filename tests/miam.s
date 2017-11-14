@@ -9,6 +9,10 @@
 boucle:
 	BEQ $t0 , $t1 , byebye
 	NOP
+	MOVE $3,$4
+	NEG $3,$4
+	LI $3,100
+	BLT $3,$4,boucle
 	ADDI $t1 , $t1 , 1
 	J boucle
 	NOP

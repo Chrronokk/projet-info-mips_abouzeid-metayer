@@ -165,6 +165,7 @@ LISTE lex_read_line( char *line, int nline) {
 					commentaire=calloc(STRLEN,sizeof(*token));
 				}
 				com=1;
+				printf("%s\n",token );
 				if(token[0]!='\n'){
 					commentaire=strcat(commentaire,token);
 					commentaire=strcat(commentaire," ");
@@ -175,6 +176,7 @@ LISTE lex_read_line( char *line, int nline) {
 					maillon.lex=calloc(length,sizeof(*commentaire));
 					strcpy(maillon.lex,commentaire);
 					maillon.line=nline;
+					printf("%s \n", maillon.lex);
 					col=ajout_queue(maillon,col);
 				}
 			break;
@@ -353,15 +355,16 @@ void lex_standardise( char* in, char* out ) {
 			out[j++]=in[i];
 		}
 
-        else if(in[i]=='\n'){
-        	out[j++]=' ';
-        	out[j++]='\n';
-			out[j++]='\0';
+    else if(in[i]=='\n'){
+    	out[j++]=' ';
+			out[j]='\n';
+			out[j]='\0';
 		}
 
 
         /* translate all spaces (i.e., tab) into simple spaces*/
-        else if (isblank((int) in[i])) out[j++]=' ';
-        else out[j++]=in[i];
+    else if (isblank((int) in[i])) out[j++]=' ';
+    else out[j++]=in[i];
     }
+		out[j]='\0';
 }

@@ -13,6 +13,8 @@
 #include <notify.h>
 #include <lex.h>
 #include <gram.h>
+#include <pseudo_instr.h>
+
 /**
  * @param exec Name of executable.
  * @return Nothing.
@@ -80,7 +82,9 @@ int main ( int argc, char *argv[] ) {
 	dirLISTE col_data=creer_liste_dir();
 	dirLISTE col_bss=creer_liste_dir();
 	etiqLISTE tab_etiq=creer_liste_etiq();
-	analyse_gram(Col,col_text,col_data,col_bss,tab_etiq);
+  LISTE Col_mod;
+  Col_mod=pseudo_instr(Col);
+	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq);
 
 
     /* --------------- Free memory and terminate ----------------*/

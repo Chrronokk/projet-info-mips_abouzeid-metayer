@@ -148,7 +148,7 @@ LISTE copie(LISTE l){
     LISTE p = l;
     LISTE copie = NULL;
 
-    if(est_vide(l)){ puts("CCCC");return NULL;}
+    if(est_vide(l)) return NULL;
 
     while(p->suiv != NULL){
 
