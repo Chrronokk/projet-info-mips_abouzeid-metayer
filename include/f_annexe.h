@@ -24,7 +24,7 @@ typedef struct{
 	char* symbole;
 	char type;
 	int nb_op;
-	char** optype_tab[3];
+	char* optype_tab[3];
 } instr_def;
 
 /*Definition de la liste des etiquettes d'arrivée*/

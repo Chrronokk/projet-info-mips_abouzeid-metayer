@@ -216,6 +216,10 @@ LISTE pseudo_instr(LISTE col){
       p=p->suiv;
 		}
 	}
+	maillon.type="NL";
+	maillon.lex="\n";
+	maillon.line=p->val.line;
+	c=ajout_queue(maillon,c);
   affiche_liste(c);
 	return c;
 }
