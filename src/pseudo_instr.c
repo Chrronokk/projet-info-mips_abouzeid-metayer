@@ -19,28 +19,27 @@ LISTE pseudo_instr(LISTE col){
 		if(strcmp(p->val.lex,"NOP")==0){
 			maillon.type="SYM";
 			maillon.lex="SLL";
-			maillon.line=c->val.line;
-			c=ajout_queue(maillon,c);
-			int i;
-			maillon.type="REG";
-			maillon.lex="$0";
-			maillon.line=c->val.line;
-			c=ajout_queue(maillon,c);
-			maillon.type="VIR";
-			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="REG";
 			maillon.lex="$0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
+			c=ajout_queue(maillon,c);
+			maillon.type="REG";
+			maillon.lex="$0";
+			maillon.line=p->val.line;
+			c=ajout_queue(maillon,c);
+			maillon.type="VIR";
+			maillon.lex=",";
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="DEC";
 			maillon.lex="0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 
@@ -48,7 +47,7 @@ LISTE pseudo_instr(LISTE col){
 		else if(strcmp(p->val.lex,"MOVE")==0){
 			maillon.type="SYM";
 			maillon.lex="ADD";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			while(strcmp(p->val.type,"NL")!=0){
@@ -62,11 +61,11 @@ LISTE pseudo_instr(LISTE col){
 			}
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="REG";
 			maillon.lex="$0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 		}
@@ -74,7 +73,7 @@ LISTE pseudo_instr(LISTE col){
 		else if(strcmp(p->val.lex,"NEG")==0){
 			maillon.type="SYM";
 			maillon.lex="SUB";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
@@ -85,15 +84,16 @@ LISTE pseudo_instr(LISTE col){
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
+			p=p->suiv;
 			maillon.type="REG";
 			maillon.lex="$0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
@@ -107,8 +107,9 @@ LISTE pseudo_instr(LISTE col){
 		else if(strcmp(p->val.lex,"LI")==0){
 			maillon.type="SYM";
 			maillon.lex="ADDI";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
+			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
 			strcpy(maillon.type,p->val.type);
 			maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
@@ -117,15 +118,16 @@ LISTE pseudo_instr(LISTE col){
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="REG";
 			maillon.lex="$0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
+			p=p->suiv;
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
@@ -140,16 +142,16 @@ LISTE pseudo_instr(LISTE col){
 		else if(strcmp(p->val.lex,"BLT")==0){
 			maillon.type="SYM";
 			maillon.lex="SLT";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type="REG";
 			maillon.lex="$1";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
 			strcpy(maillon.type,p->val.type);
@@ -160,7 +162,7 @@ LISTE pseudo_instr(LISTE col){
 			maillon.type="VIR";
 			maillon.lex=",";
 			p=p->suiv;
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
@@ -171,28 +173,28 @@ LISTE pseudo_instr(LISTE col){
 			c=ajout_queue(maillon,c);
 			maillon.type="NL";
 			maillon.lex="\n";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="SYM";
 			maillon.lex="BNE";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="REG";
 			maillon.lex="$1";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			p=p->suiv;
 			c=ajout_queue(maillon,c);
 			maillon.type="REG";
 			maillon.lex="$0";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			maillon.type="VIR";
 			maillon.lex=",";
-			maillon.line=c->val.line;
+			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
 			maillon.type=calloc(strlen(p->val.type),sizeof(char));
