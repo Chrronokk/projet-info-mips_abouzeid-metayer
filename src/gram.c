@@ -16,10 +16,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
-	puts("Affichage du dictionnaire");
-	for(i=0; i<*p_nb_instr; i++){
-		printf("Ligne %d: %s, %c, %d, %s, %s, %s\n",i,dictionnaire[i].symbole,dictionnaire[i].type,dictionnaire[i].nb_op,dictionnaire[i].optype1,dictionnaire[i].optype2,dictionnaire[i].optype3);
-	}
 
 
 	LISTE p=Col;
@@ -229,7 +225,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 /* Lit le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
 
-instr_def * lecture_dico(int* p_nb_instr){
+instr_def* lecture_dico(int* p_nb_instr){
 	puts("Lecture du dictionnaire");
 	FILE* f1= fopen("dictionnaire.txt","r");
 	int i,j;
@@ -392,42 +388,34 @@ int test_nb_op_inst(LISTE p, int nb_op){
 
 /*Fonction qui vérifie le type des opérandes des instructions*/
 /*Renvoie 1 si OK, 0 si erreur détectée*/
-/*int test_type_op_inst(instruction inst, instr_def* dictionnaire){
+int test_type_op_inst(instruction inst, instr_def* dico){
 
 	int i=0;
 
-	while (strcmp(dictionnaire[i].symbole,inst.symbole)!=0) {
-		i++;
-	}
+	while(strcmp(inst.symbole,dico[i].symbole)) i++;
+	int err=0;
+	int j;
 
-	if (inst.nb_op==1) {
-		if (strcmp(inst.op[0].type,"REG")==0 && strcmp(dictionnaire[i].optype1,"REG") && inst.op[0].offset==0){
-			return 1;
+	for (j=0;j<dico[i].nb_op;j++){ /* Parcourt chaque opérande de l'instruction*/
+		if (strcmp(dico[i].optype_tab[j],"REG")==0){
+			if (strcmp(inst.op[j].type,"REG")!=0 || inst.op[j].offset!=0 ) err=1;
 		}
-		if (strcmp(dictionnaire[i].optype1,"IMM")==0){
-			if (strcmp(inst.op[0].type,"DEC")* strcmp(inst.op[0].type,"HEXA")==0){
-				return 1;
-			}
+		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
+			if (strcmp(dico[i].optype_tab[j],"DEC")!=0 || strcmp(dico[i].optype_tab[j],"HEXA")!=0) err=1;
 		}
-	}
-	if (inst.nb_op==2){
-		if (strcmp(inst.op[0].type,"REG")==0 && strcmp(dictionnaire[i].optype1,"REG") && inst.op[0].offset==0){
-			if (strcmp(inst.op[1].type,"REG")==0 && strcmp(dictionnaire[i].optype2,"REG") && inst.op[1].offset==0){
-				return 1;
-			}
-			if (strcmp(dictionnaire[i].optype2,"IMM")==0){
-				if (strcmp(inst.op[1].type,"DEC")* strcmp(inst.op[1].type,"HEXA")==0){
-				}
+		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
+			if (strcmp(dico[i].optype_tab[j],"REG")!=0) err=1;
+		}
+
+		if (err==1){
+			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,dico[i].optype_tab[j]);
+			return 0;
 		}
 	}
-	if (inst.nb_op==3){
+	return 1;
+}
 
-	}
 
-	printf("ERREUR SUR LE TYPE D'OPERANDE A LA LIGNE %d",inst.ligne);
-	return 0;
-
-}*/
 
 /* Fonction qui recherche si une etiquette est dans la table des symboles
    Renvoie la position de l'etiquette dans la table, renvoie -1 si l'etiquette n'existe pas encore*/
