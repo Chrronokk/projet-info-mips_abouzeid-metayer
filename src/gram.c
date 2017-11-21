@@ -16,10 +16,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 75fb18266dbd4f1d0a83ef0b31da0ccd68598071
 
 
 	LISTE p=Col;
@@ -411,7 +407,7 @@ int test_type_op_inst(instruction inst, instr_def* dico){
 		}
 
 		if (err==1){
-			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,dico[i].optype_tab[j]);
+			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,*dico[i].optype_tab[j]);
 			return 0;
 		}
 	}
@@ -482,17 +478,31 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	strcpy(dir.dir,p_lex->val.lex);
 	dir.decalage=decalage;
 	dir.ligne=p_lex->val.line;
+	int att_vir=0;
+
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 		p_lex=p_lex->suiv;
-		if (strcmp(p_lex->val.lex, "VIR")==0){
-			continue;
+
+		if (att_vir==0){
+			att_vir=1;
+			if (strcmp(p_lex->val.lex, "VIR")==0){
+				continue;
+			}
+			else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
+				dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+				dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
+				strcpy(dir.symb_op,p_lex->val.lex);
+				strcpy(dir.type_op,p_lex->val.type);
+				col=ajout_queue_dir(dir,col);
+			}
 		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
-			dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
-			dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
-			strcpy(dir.symb_op,p_lex->val.lex);
-			strcpy(dir.type_op,p_lex->val.type);
-			col=ajout_queue_dir(dir,col);
+		if (att_vir==1){
+			att_vir=0;
+			if (strcmp(p_lex->val.lex, "VIR")!=0){
+				printf("ERREUR LIGNE %d: MAUVAISE OPERANDES DE DIRECTIVE", p_lex->val.line);
+				return;
+				}
+			}
 		}
 	}
 	return col;
@@ -577,7 +587,6 @@ int check_reg(char* registre){
 		}
 	}
 	else{ /*if reg[1] is a number*/
-
 		nreg=atoi(reg+1);
 		if(nreg<0 || nreg >31){
 			puts("ERREUR: REGISTRE INVALIDE");
