@@ -16,11 +16,6 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 82bf22276920f51d8cfbb02c59f71017290241a3
 	LISTE p=Col;
 	int debut=0;
 
