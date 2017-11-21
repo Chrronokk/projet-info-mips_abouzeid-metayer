@@ -500,8 +500,8 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 			att_vir=0;
 			if (strcmp(p_lex->val.lex, "VIR")!=0){
 				printf("ERREUR LIGNE %d: MAUVAISE OPERANDES DE DIRECTIVE", p_lex->val.line);
-				return;
-				}
+				return NULL;
+
 			}
 		}
 	}
