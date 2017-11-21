@@ -16,8 +16,14 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 1c4568b8209047eaa4500e55c39ed60e2d7842b5
 
 
+>>>>>>> 82bf22276920f51d8cfbb02c59f71017290241a3
 	LISTE p=Col;
 	int debut=0;
 
@@ -136,16 +142,10 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 
 				case DIR_TYPE2:
-						if((strcmp(zone,".data"))==0){
-							if((strcmp(p->val.lex,".word"))==0){
+							if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
 								if(col_data==NULL) ETAT=ERROR;
-								decalage+=4;
-							}
-							else if((strcmp(p->val.lex,".byte"))==0){
-								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
-								decalage+=1;
+								decalage=decalage+decalage_byte(p);
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
@@ -154,24 +154,19 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 								if(decalage_asciiz(p)==0) ETAT=ERROR;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
-								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
+								col_bss=add_dir(p,decalage,col_bss);
+								if(col_bss==NULL) ETAT=ERROR;
 								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
 								decalage+=atoi(p->suiv->val.lex);
 							}
-							while(p->val.line==p->suiv->val.line) p=p->suiv;
+							else if((strcmp(p->val.lex,".word"))==0){
+								col_data=add_dir(p,decalage,col_data);
+								if(col_data==NULL) ETAT=ERROR;
+								decalage=decalage+decalage_word(p);
+							}
+							else ETAT=ERROR;
+							while(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")!=0) p=p->suiv;
 							if(ETAT!=ERROR) continu=FALSE;
-						}
-						else if((strcmp(zone,".bss "))==0){
-							col_bss=add_dir(p,decalage,col_bss);
-							if(col_bss==NULL) ETAT=ERROR;
-							if(strcmp(p->suiv->val.type,"DEC")*(strcmp(p->suiv->val.type,"HEXA"))!=0) ETAT=ERROR;
-							decalage+=atoi(p->suiv->val.lex);
-							while(p->val.line==p->suiv->val.line) p=p->suiv;
-							if(ETAT!=ERROR) continu=FALSE;
-						}
-						else ETAT=ERROR;
-
 
 				break;
 
@@ -228,25 +223,32 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 instr_def* lecture_dico(int* p_nb_instr){
 	puts("Lecture du dictionnaire");
 	FILE* f1= fopen("dictionnaire.txt","r");
-	int i,j;
+	int i;
 	instr_def* dico;
-		puts("Affichage du dictionnaire");
-
-
-
-
+	char type_instr;
+	char* symbole=calloc(512,sizeof(char));
+	char* op0=calloc(512,sizeof(char));
+	char* op1=calloc(512,sizeof(char));
+	char* op2=calloc(512,sizeof(char));
+	int nb_op;
+	puts("Affichage du dictionnaire");
 	if (f1==NULL) return NULL;
 	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
 	dico=calloc(*p_nb_instr,sizeof(instr_def));
 
-
 	for(i=0;i<*p_nb_instr;i++){
-		for(j=0;j<3;j++){
-			dico[i].optype_tab[j]=calloc(512,sizeof(char));
-		}
-		dico[i].symbole=calloc(512,sizeof(char));
-		fscanf(f1,"%s %c %d %s %s %s",dico[i].symbole, dico[i].type, &dico[i].nb_op, dico[i].optype_tab[0], dico[i].optype_tab[1], dico[i].optype_tab[2]);
+		fscanf(f1,"%s %c %d %s %s %s",symbole,&type_instr,&nb_op,op0,op1,op2);
+		dico[i].symbole=calloc(strlen(symbole),sizeof(char));
+		strcpy(dico[i].symbole,symbole);
+		dico[i].nb_op=nb_op;
+		dico[i].type=type_instr;
+		dico[i].optype_tab[0]=calloc(strlen(op0),sizeof(char));
+		strcpy(dico[i].optype_tab[0],op0);
+		dico[i].optype_tab[1]=calloc(strlen(op1),sizeof(char));
+		strcpy(dico[i].optype_tab[1],op1);
+		dico[i].optype_tab[2]=calloc(strlen(op2),sizeof(char));
+		strcpy(dico[i].optype_tab[2],op2);
 		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
 	}
 	fclose(f1);
@@ -522,6 +524,44 @@ int decalage_asciiz(LISTE p){
 		}
 		else{
 			return 0;}
+	}
+	return c;
+}
+
+int decalage_byte(LISTE p){
+	int c=0;
+	p=p->suiv;
+	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+
+		if (strcmp(p->val.type, "VIR")==0){
+			p=p->suiv;
+		}
+		else if (strcmp(p->val.type,"HEXA")*strcmp(p->val.type,"DEC")==0){
+			c+=1;
+			p=p->suiv;
+		}
+		else{
+			return 0;
+		}
+	}
+	return c;
+}
+
+int decalage_word(LISTE p){
+	int c=0;
+	p=p->suiv;
+	while (strcmp(p->val.type,"NL")*strcmp(p->val.type,"COM") != 0){
+
+		if (strcmp(p->val.type, "VIR")==0){
+			p=p->suiv;
+		}
+		else if (strcmp(p->val.type,"HEXA")*strcmp(p->val.type,"DEC")*strcmp(p->val.type,"SYM")==0){
+			c+=4;
+			p=p->suiv;
+		}
+		else{
+			return 0;
+		}
 	}
 	return c;
 }
