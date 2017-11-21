@@ -401,7 +401,7 @@ int test_type_op_inst(instruction inst, instr_def* dico){
 		}
 
 		if (err==1){
-			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,dico[i].optype_tab[j]);
+			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,*dico[i].optype_tab[j]);
 			return 0;
 		}
 	}
@@ -466,24 +466,50 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq){
 
 
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
-
+	puts("0");
 	DIRECTIVE dir;
 	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(dir.dir,p_lex->val.lex);
 	dir.decalage=decalage;
 	dir.ligne=p_lex->val.line;
+	int att_vir=0;
+	p_lex=p_lex->suiv;
+
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
-		p_lex=p_lex->suiv;
-		if (strcmp(p_lex->val.lex, "VIR")==0){
-			continue;
+
+		puts("1");
+		if (att_vir==0){
+			att_vir=1;
+			puts("2");
+			if (strcmp(p_lex->val.lex, ",")==0){
+				puts("3");
+				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+				return NULL;
+			}
+			else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
+				dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
+				dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
+				strcpy(dir.symb_op,p_lex->val.lex);
+				strcpy(dir.type_op,p_lex->val.type);
+				col=ajout_queue_dir(dir,col);
+				puts("4");
+				p_lex=p_lex->suiv;
+			}
 		}
-		else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
-			dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
-			dir.type_op=calloc(strlen(p_lex->val.type),sizeof(*p_lex->val.type));
-			strcpy(dir.symb_op,p_lex->val.lex);
-			strcpy(dir.type_op,p_lex->val.type);
-			col=ajout_queue_dir(dir,col);
+		else if (att_vir==1){
+			puts("5");
+			att_vir=0;
+			if (strcmp(p_lex->val.lex, ",")!=0){
+				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+				p_lex=p_lex->suiv;
+				return NULL;
+			}
+			p_lex=p_lex->suiv;
 		}
+	}
+	if (att_vir==0){
+		printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+		return NULL;
 	}
 	return col;
 }
@@ -605,7 +631,6 @@ int check_reg(char* registre){
 		}
 	}
 	else{ /*if reg[1] is a number*/
-
 		nreg=atoi(reg+1);
 		if(nreg<0 || nreg >31){
 			puts("ERREUR: REGISTRE INVALIDE");
