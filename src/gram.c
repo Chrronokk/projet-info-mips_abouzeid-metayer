@@ -16,14 +16,8 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
 
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 1c4568b8209047eaa4500e55c39ed60e2d7842b5
 
 
->>>>>>> 82bf22276920f51d8cfbb02c59f71017290241a3
 	LISTE p=Col;
 	int debut=0;
 
@@ -474,21 +468,25 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq){
 
 
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
-
+	puts("0");
 	DIRECTIVE dir;
 	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(dir.dir,p_lex->val.lex);
 	dir.decalage=decalage;
 	dir.ligne=p_lex->val.line;
 	int att_vir=0;
+	p_lex=p_lex->suiv;
 
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
-		p_lex=p_lex->suiv;
 
+		puts("1");
 		if (att_vir==0){
 			att_vir=1;
-			if (strcmp(p_lex->val.lex, "VIR")==0){
-				continue;
+			puts("2");
+			if (strcmp(p_lex->val.lex, ",")==0){
+				puts("3");
+				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+				return NULL;
 			}
 			else if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")*strcmp(p_lex->val.type,"ASC_OP")==0){
 				dir.symb_op=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
@@ -496,16 +494,24 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 				strcpy(dir.symb_op,p_lex->val.lex);
 				strcpy(dir.type_op,p_lex->val.type);
 				col=ajout_queue_dir(dir,col);
+				puts("4");
+				p_lex=p_lex->suiv;
 			}
 		}
-		if (att_vir==1){
+		else if (att_vir==1){
+			puts("5");
 			att_vir=0;
-			if (strcmp(p_lex->val.lex, "VIR")!=0){
-				printf("ERREUR LIGNE %d: MAUVAISE OPERANDES DE DIRECTIVE", p_lex->val.line);
+			if (strcmp(p_lex->val.lex, ",")!=0){
+				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+				p_lex=p_lex->suiv;
 				return NULL;
-
 			}
+			p_lex=p_lex->suiv;
 		}
+	}
+	if (att_vir==0){
+		printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
+		return NULL;
 	}
 	return col;
 }
