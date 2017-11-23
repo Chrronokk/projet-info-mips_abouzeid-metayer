@@ -21,7 +21,7 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
 	while (p->suiv!=NULL){
     int i=0;
   	while(strcmp(p->val.symbole,dico[i].symbole)) i++;
-		for(j=0;j<p->val.nb_op;j++)
+		for(j=0;j<p->val.nb_op;j++){
 			if((strcmp(p->val.op[j].type,"SYM")==0)){
         maillon.nom=calloc(strlen(p->val.op[j].nom),sizeof(char));
         strcpy(maillon.nom,p->val.op[j].nom);
@@ -32,10 +32,12 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
         maillon.depart=e->val.decalage;
         maillon.zone=calloc(strlen(e->val.zone),sizeof(char));
         strcpy(maillon.zone,e->val.zone);
+        printf("%c\n",dico[i].type);
+        printf("%s\n",dico[i].optype_tab[j]);
 				if(dico[i].type=='J'){
           maillon.type="R_MIPS_26";
         }
-        else if(strcmp(dico[i].optype_tab[j],"IMM")){
+        else if(strcmp(dico[i].optype_tab[j],"IMM")*strcmp(dico[i].optype_tab[j],"REGOFF")==0){
           if(strcmp(p->val.symbole,"LW")){
             maillon.type="R_MIPS_HI16 ";
           }
@@ -45,11 +47,13 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
         }
         else{
           printf("L'étiquette %s est utilisé non initialisé\n", maillon.nom);
-          return NULL;
+          /*return NULL;*/
         }
-		   }
-    printf("%s\n",maillon.nom );
-    ajout_queue_reloc(maillon,liste);
+        ajout_queue_reloc(maillon,liste);
+      }
+		}
+
+    p=p->suiv;
   }
   affiche_liste_reloc(liste);
   return(liste);

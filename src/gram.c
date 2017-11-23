@@ -205,7 +205,12 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 			}
 		}
 	}
+<<<<<<< HEAD
 	instLISTE l=col_text;
+=======
+	affiche_liste_etiq(tab_etiq);
+	/*instLISTE l=col_text;
+>>>>>>> c8ef1ac514ea6f5a180bdbca9ae8f0b8fe2dddbb
 	while (l->suiv!=NULL){
 		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
 			return;
@@ -218,7 +223,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 
 
-	affiche_liste_etiq(tab_etiq);
+
 	affiche_liste_inst(col_text);
 	affiche_liste_dir(col_data);
 	affiche_liste_dir(col_bss);
@@ -317,7 +322,7 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 
 		OPERANDE op;
 		if(strcmp(p_lex->val.type,"VIR")!=0){
-			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")==0){
+			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
 				if (strcmp(p_lex->suiv->val.lex,"(")==0){
 					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
 					p_lex=p_lex->suiv->suiv->suiv;
@@ -408,11 +413,13 @@ int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 
 	for (j=0;j<dico[i].nb_op;j++){ /* Parcourt chaque opérande de l'instruction*/
 		if (strcmp(dico[i].optype_tab[j],"REG")==0){
-			if ((strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
+			if (strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) err=1;
 		}
+		printf("etiquette: %d\n",recherche_etiq(inst.op[j].nom,tab_etiq));
 		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
 			if (strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
+		printf("%s\n",inst.op[j].nom );
 		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
 			if (strcmp(inst.op[j].type,"REG")!=0) err=1;
 		}
@@ -444,7 +451,12 @@ int recherche_etiq(char* etiq, etiqLISTE tab_etiq){
 		tab_etiq=tab_etiq->suiv;
 		i++;
 	}
+	if(strcmp(etiq,tab_etiq->val.nom)==0){
+		/*printf("Etiquette trouvée à la %d eme ligne de la table des symboles", i);*/
+		return i;
+	}
 	return -1;
+
 
 }
 
