@@ -88,7 +88,7 @@ int main ( int argc, char *argv[] ) {
   LISTE Col_mod;
   Col_mod=pseudo_instr(Col);
 	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq,reloc_text);
-  
+
 
 
     /* --------------- Free memory and terminate ----------------*/

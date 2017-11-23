@@ -205,7 +205,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 			}
 		}
 	}
-	/*instLISTE l=col_text;
+	instLISTE l=col_text;
 	while (l->suiv!=NULL){
 		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
 			return;
@@ -214,7 +214,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 	}
 	if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
 		return;
-	}*/
+	}
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 
 
@@ -411,14 +411,14 @@ int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 			if ((strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
-			if ((strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 )&& (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
+			if (strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
 			if (strcmp(inst.op[j].type,"REG")!=0) err=1;
 		}
 
 		if (err==1){
-			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",inst.ligne,inst.op[j].nom);
+			printf("ERREUR LIGNE %d: OPERANDE NUMERO %d: %s NON SUPPORTEE",inst.ligne,j,inst.op[j].nom);
 			return 0;
 		}
 	}
