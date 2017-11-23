@@ -16,7 +16,7 @@ boucle:
 	ADDI $t1 , $t1 , 1
 	J boucle
 	NOP
-	byebye: JAL viteviteauru
+	byebye: JAL lunchtime
 .data
 	lunchtime : .word 12
 	.byte  2, 0x4
