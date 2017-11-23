@@ -20,6 +20,10 @@ etiqLISTE creer_liste_etiq(void){
      return NULL;
 }
 
+relocLISTE creer_liste_reloc(void){
+     return NULL;
+}
+
 int est_vide(LISTE l){
     if (l==NULL) return 1;
 	return 0;
@@ -92,19 +96,22 @@ dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste){
     }
 }
 
-/*
-LISTE ajout(void* p_e,LISTE l){
-	LISTE p=calloc(1,sizeof(*p));
-	p->pval=p_e;
+relocLISTE ajout_queue_reloc(relocETIQ etiq, relocLISTE liste){
+  /*puts("Entrée dans ajout_queue");*/
+	relocLISTE p = calloc(1, sizeof(*p));
+  p->suiv = NULL;
+ 	p->val=etiq;
+  	if(liste == NULL){ return p;}
 
-	LISTE q=l;
-	while (q->suiv != NULL) q=q->suiv;
-
-
-	p->suiv=l;
-	return l;
+  	else{
+		relocLISTE q = liste;
+    	while(q->suiv != NULL){
+      		q = q->suiv;
+    	}
+    q->suiv = p;
+    return liste;
+    }
 }
-*/
 
 LISTE ajout_tete (LEXEME lexeme, LISTE Liste){
 	LISTE p;
@@ -251,15 +258,36 @@ void affiche_liste_dir(dirLISTE l){
 
 	while(c->suiv != NULL){
 		/*puts("Bouclage");*/
-    	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
+    printf("[Directive %s] adresse: %d, ligne: %d, opérande: %s de type %s\n",c->val.dir,c->val.decalage,c->val.ligne,c->val.symb_op,c->val.type_op);
 		c=c->suiv;
     }
-	printf("%s,%d,%d,%s,%s\n",c->val.dir, c->val.ligne, c->val.decalage,c->val.symb_op,c->val.type_op);
-   	puts(" ");
+    printf("[Directive %s] adresse: %d, ligne: %d, opérande: %s de type %s\n",c->val.dir,c->val.decalage,c->val.ligne,c->val.symb_op,c->val.type_op);
+    puts(" ");
     return;
 
 
 }
+
+void affiche_liste_reloc(relocLISTE l){
+	puts("Affichage de la table de relocation");
+	relocLISTE c = l	;
+
+	if(l==NULL){
+		printf("Vide \n");
+		return;
+		}
+
+	while(c->suiv != NULL){
+		/*puts("Bouclage");*/
+    	printf("[etiquette %s] decalage:%d ,type: %s déclaré dans la zone %s:%d \n",c->val.nom,c->val.decalage,c->val.type,c->val.zone,c->val.depart);
+		c=c->suiv;
+    }
+    printf("[etiquette %s] decalage:%d ,type: %s déclaré dans la zone %s:%d \n",c->val.nom,c->val.decalage,c->val.type,c->val.zone,c->val.depart);
+    puts("\n");
+    return;
+}
+
+
 
 LISTE concat(LISTE l1, LISTE l2){
     LISTE copie1 = copie(l1);

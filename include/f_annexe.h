@@ -32,6 +32,7 @@ typedef struct{
 typedef struct{
 	char* nom;
 	int arrivee;
+	int decalage;
 	char* zone;
 } ETIQUETTE;
 
@@ -83,12 +84,26 @@ struct dirMAILLON{
 
 typedef struct dirMAILLON* dirLISTE;
 
+typedef struct{
+	char* nom;
+	char* zone;
+	int decalage;
+	int depart;
+	char* type;
+}relocETIQ;
 
+struct relocMAILLON{
+	relocETIQ val;
+	struct relocMAILLON* suiv;
+};
+
+typedef struct relocMAILLON* relocLISTE;
 
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
 dirLISTE creer_liste_dir(void);
 etiqLISTE creer_liste_etiq(void);
+relocLISTE creer_liste_reloc(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
@@ -99,10 +114,13 @@ void affiche_liste(LISTE l);
 void affiche_liste_etiq(etiqLISTE l);
 void affiche_liste_inst(instLISTE l);
 void affiche_liste_dir(dirLISTE l);
+void affiche_liste_reloc(relocLISTE l);
 void nbmaillon(LISTE l);
 LISTE concat(LISTE l1, LISTE l2);
 instLISTE ajout_queue_inst(instruction inst, instLISTE liste);
 dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste);
+relocLISTE ajout_queue_reloc(relocETIQ etiq, relocLISTE liste);
+
 
 
 #endif

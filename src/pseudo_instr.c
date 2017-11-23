@@ -137,8 +137,8 @@ LISTE pseudo_instr(LISTE col){
 			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
-
 		}
+
 		else if(strcmp(p->val.lex,"BLT")==0){
 			maillon.type="SYM";
 			maillon.lex="SLT";
@@ -204,6 +204,81 @@ LISTE pseudo_instr(LISTE col){
 			maillon.line=p->val.line;
 			c=ajout_queue(maillon,c);
 			p=p->suiv;
+		}
+
+		else if(strcmp(p->val.lex,"LW")==0){
+			if((p->suiv->suiv->suiv->val.lex[0]!='$')&&(strcmp(p->suiv->suiv->suiv->val.type,"SYM")==0)){
+				maillon.type="SYM";
+				maillon.lex="LUI";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="REG";
+				maillon.lex="$at";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="VIR";
+				maillon.lex=",";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="SYM";
+				maillon.lex=calloc(strlen(p->suiv->suiv->suiv->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->suiv->suiv->suiv->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="NL";
+				maillon.lex="\n";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type=calloc(strlen(p->val.type),sizeof(char));
+				strcpy(maillon.type,p->val.type);
+				maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				p=p->suiv;
+				maillon.type=calloc(strlen(p->val.type),sizeof(char));
+				strcpy(maillon.type,p->val.type);
+				maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				p=p->suiv;
+				maillon.type=calloc(strlen(p->val.type),sizeof(char));
+				strcpy(maillon.type,p->val.type);
+				maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				p=p->suiv;
+				maillon.type=calloc(strlen(p->val.type),sizeof(char));
+				strcpy(maillon.type,p->val.type);
+				maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="PAR";
+				maillon.lex="(";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="REG";
+				maillon.lex="$at";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				maillon.type="PAR";
+				maillon.lex=")";
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+				p=p->suiv;
+			}
+			else{
+				maillon.type=calloc(strlen(p->val.type),sizeof(char));
+				strcpy(maillon.type,p->val.type);
+				maillon.lex=calloc(strlen(p->val.lex),sizeof(char));
+				strcpy(maillon.lex,p->val.lex);
+				maillon.line=p->val.line;
+				c=ajout_queue(maillon,c);
+	      p=p->suiv;
+			}
 		}
 
 		else{

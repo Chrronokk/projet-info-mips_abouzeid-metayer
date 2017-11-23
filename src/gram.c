@@ -7,9 +7,10 @@
 #include <pseudo_instr.h>
 #include <global.h>
 #include <f_annexe.h>
+#include <relocation.h>
 
 
-void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq){
+void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq,relocLISTE reloc_text){
 
 	puts("Début de l'analyse grammaticale\n\n");
 	int nb_instr;
@@ -46,19 +47,19 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						ETAT=INIT_DEBUT;}
 					else{
 						if(strcmp(p->val.type,"DIR")==0){
-							ETAT=DIR;}
+							ETAT=DIR2;}
 						else if(strcmp(p->val.type,"SYM")==0){
-							ETAT=SYM;}
+							ETAT=SYM2;}
 						else if(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")==0){
 							p=p->suiv;
 							continu=FALSE;}
 						else{
-							ETAT=ERROR;}
+							ETAT=ERROR2;}
 					}
 				break;
 
 
-				case ERROR:
+				case ERROR2:
 					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
 					return;
 				break;
@@ -83,30 +84,30 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 								debut=1;
 							}
 							else{
-								ETAT=ERROR;}
+								ETAT=ERROR2;}
 						}
 						else{
-							ETAT=ERROR;}
+							ETAT=ERROR2;}
 					}
 					else{
-						ETAT=ERROR;}
+						ETAT=ERROR2;}
 				break;
 
 
-				case DIR:
+				case DIR2:
 					if((strcmp(p->val.lex,".text"))*(strcmp(p->val.lex,".data"))*(strcmp(p->val.lex,".bss"))==0){
 						ETAT=DIR_TYPE1;}
 					else if((strcmp(p->val.lex,".word"))*(strcmp(p->val.lex,".byte"))*(strcmp(p->val.lex,".asciiz"))*(strcmp(p->val.lex,".space"))==0){
 						ETAT=DIR_TYPE2;}
-					else ETAT=ERROR;
+					else ETAT=ERROR2;
 
 				break;
 
 
 				case DIR_TYPE1:/* ça marche*/
-				if(strcmp(zone,".text")==0) decalage_complet[text]=decalage;
-				if(strcmp(zone,".data")==0) decalage_complet[data]=decalage;
-				if(strcmp(zone,".bss ")==0) decalage_complet[bss]=decalage;
+					if(strcmp(zone,".text")==0) decalage_complet[text]=decalage;
+					if(strcmp(zone,".data")==0) decalage_complet[data]=decalage;
+					if(strcmp(zone,".bss ")==0) decalage_complet[bss]=decalage;
 
 
 					if(strcmp(p->suiv->val.type,"COMMENT")||strcmp(p->suiv->val.type,"NL")){
@@ -123,47 +124,49 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 							decalage=decalage_complet[bss];
 						}
 						else{
-							ETAT=ERROR;
+							ETAT=ERROR2;
 						}
 						p=p->suiv->suiv;
 						continu=FALSE;
 					}
 					else{
-						ETAT=ERROR;}
+						ETAT=ERROR2;}
 				break;
 
 
 				case DIR_TYPE2:
 							if((strcmp(p->val.lex,".byte"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
+								if(col_data==NULL) ETAT=ERROR2;
 								decalage=decalage+decalage_byte(p);
+								if(decalage_byte(p)==0) ETAT=ERROR2;
 							}
 							else if((strcmp(p->val.lex,".asciiz"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
+								if(col_data==NULL) ETAT=ERROR2;
 								decalage+=decalage_asciiz(p);
-								if(decalage_asciiz(p)==0) ETAT=ERROR;
+								if(decalage_asciiz(p)==0) ETAT=ERROR2;
 							}
 							else if((strcmp(p->val.lex,".space"))==0){
 								col_bss=add_dir(p,decalage,col_bss);
-								if(col_bss==NULL) ETAT=ERROR;
-								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR;
+								if(col_bss==NULL) ETAT=ERROR2;
+								if(strcmp(p->suiv->val.type,"DEC")!=0) ETAT=ERROR2;
 								decalage+=atoi(p->suiv->val.lex);
 							}
 							else if((strcmp(p->val.lex,".word"))==0){
 								col_data=add_dir(p,decalage,col_data);
-								if(col_data==NULL) ETAT=ERROR;
+								if(col_data==NULL) ETAT=ERROR2;
 								decalage=decalage+decalage_word(p);
+								if(decalage_word(p)==0) ETAT=ERROR2;
 							}
-							else ETAT=ERROR;
+							else ETAT=ERROR2;
 							while(strcmp(p->val.type,"NL")*strcmp(p->val.type,"COMMENT")!=0) p=p->suiv;
-							if(ETAT!=ERROR) continu=FALSE;
+							if(ETAT!=ERROR2) continu=FALSE;
 
 				break;
 
 
-				case SYM:
+				case SYM2:
 					position=is_in_dico(p->val.lex,dictionnaire,nb_instr);
 					if(position>=0){
 						ETAT=INSTR;}
@@ -184,36 +187,49 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 						p=p->suiv;
 						continu=FALSE;
 					}
-					else ETAT=ERROR;
+					else ETAT=ERROR2;
 				break;
 
 				case ETIQ:
 
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
-							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq);
+							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq,decalage);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
 						}
-						else ETAT=ERROR;
+						else ETAT=ERROR2;
 					}
 				break;
 			}
 		}
 	}
+	/*instLISTE l=col_text;
+	while (l->suiv!=NULL){
+		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
+			return;
+		}
+		l=l->suiv;
+	}
+	if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
+		return;
+	}*/
+	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
+
+
 	affiche_liste_etiq(tab_etiq);
 	affiche_liste_inst(col_text);
 	affiche_liste_dir(col_data);
 	affiche_liste_dir(col_bss);
-
+	affiche_liste_reloc(reloc_text);
 }
 
 
 /* Lit le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
 
 instr_def* lecture_dico(int* p_nb_instr){
-	puts("Lecture du dictionnaire");
+	/*puts("Lecture du dictionnaire");*/
 	FILE* f1= fopen("dictionnaire.txt","r");
 	int i;
 	instr_def* dico;
@@ -223,7 +239,7 @@ instr_def* lecture_dico(int* p_nb_instr){
 	char* op1=calloc(512,sizeof(char));
 	char* op2=calloc(512,sizeof(char));
 	int nb_op;
-	puts("Affichage du dictionnaire");
+	/*puts("Affichage du dictionnaire");*/
 	if (f1==NULL) return NULL;
 	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
@@ -241,7 +257,8 @@ instr_def* lecture_dico(int* p_nb_instr){
 		strcpy(dico[i].optype_tab[1],op1);
 		dico[i].optype_tab[2]=calloc(strlen(op2),sizeof(char));
 		strcpy(dico[i].optype_tab[2],op2);
-		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
+		/*printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);*/
+		/*puts(" ");*/
 	}
 	fclose(f1);
 	return dico;
@@ -343,7 +360,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 			/*puts("Recherche d'une operande");
 			printf("opération: %s\n",op); */
 
-			if(strcmp(op,"HEXA")*strcmp(op,"DEC")==0){
+			if(strcmp(op,"HEXA")*strcmp(op,"DEC")*strcmp(op,"SYM")==0){
 				i++;
 				/*puts("Opérande trouvée");
 				printf("Lexemes suivants:    %s   %s   %s\n",p->suiv->val.lex, p->suiv->suiv->val.type, p->suiv->suiv->suiv->val.lex);*/
@@ -381,7 +398,7 @@ int test_nb_op_inst(LISTE p, int nb_op){
 
 /*Fonction qui vérifie le type des opérandes des instructions*/
 /*Renvoie 1 si OK, 0 si erreur détectée*/
-int test_type_op_inst(instruction inst, instr_def* dico){
+int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 
 	int i=0;
 
@@ -391,17 +408,17 @@ int test_type_op_inst(instruction inst, instr_def* dico){
 
 	for (j=0;j<dico[i].nb_op;j++){ /* Parcourt chaque opérande de l'instruction*/
 		if (strcmp(dico[i].optype_tab[j],"REG")==0){
-			if (strcmp(inst.op[j].type,"REG")!=0 || inst.op[j].offset!=0 ) err=1;
+			if ((strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
-			if (strcmp(dico[i].optype_tab[j],"DEC")!=0 || strcmp(dico[i].optype_tab[j],"HEXA")!=0) err=1;
+			if ((strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 )&& (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
-			if (strcmp(dico[i].optype_tab[j],"REG")!=0) err=1;
+			if (strcmp(inst.op[j].type,"REG")!=0) err=1;
 		}
 
 		if (err==1){
-			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",j,*dico[i].optype_tab[j]);
+			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",inst.ligne,inst.op[j].nom);
 			return 0;
 		}
 	}
@@ -454,19 +471,19 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 
 
 
-ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq){
+ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage){
 	etiq.nom=calloc(strlen(nom),sizeof(*nom));
 	strcpy(etiq.nom,nom);
 	etiq.zone=calloc(strlen(zone),sizeof(*zone));
 	strcpy(etiq.zone,zone);
 	etiq.arrivee=adresse;
+	etiq.decalage=decalage;
 	return etiq;
 }
 
 
 
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
-	puts("0");
 	DIRECTIVE dir;
 	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
 	strcpy(dir.dir,p_lex->val.lex);
@@ -477,12 +494,9 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 
 	while (strcmp(p_lex->val.type,"NL")*strcmp(p_lex->val.type,"COM") != 0){
 
-		puts("1");
 		if (att_vir==0){
 			att_vir=1;
-			puts("2");
 			if (strcmp(p_lex->val.lex, ",")==0){
-				puts("3");
 				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
 				return NULL;
 			}
@@ -492,12 +506,10 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 				strcpy(dir.symb_op,p_lex->val.lex);
 				strcpy(dir.type_op,p_lex->val.type);
 				col=ajout_queue_dir(dir,col);
-				puts("4");
 				p_lex=p_lex->suiv;
 			}
 		}
 		else if (att_vir==1){
-			puts("5");
 			att_vir=0;
 			if (strcmp(p_lex->val.lex, ",")!=0){
 				printf("ERREUR LIGNE %d: MAUVAISE OPERANDE DE DIRECTIVE\n", p_lex->val.line);
@@ -576,7 +588,7 @@ int check_reg(char* registre){
 	char* reg=calloc(strlen(registre),sizeof(*registre));
 	strcpy(reg,registre);
 	int nreg,x;
-	printf("%s: ", reg);
+	/*printf("%s: ", reg);*/
 	if (reg[0]!='$'){
 		puts("Erreur: pas un registre");
 		return -1;

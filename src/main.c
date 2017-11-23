@@ -14,6 +14,8 @@
 #include <lex.h>
 #include <gram.h>
 #include <pseudo_instr.h>
+#include <relocation.h>
+
 
 /**
  * @param exec Name of executable.
@@ -82,9 +84,11 @@ int main ( int argc, char *argv[] ) {
 	dirLISTE col_data=creer_liste_dir();
 	dirLISTE col_bss=creer_liste_dir();
 	etiqLISTE tab_etiq=creer_liste_etiq();
+  relocLISTE reloc_text=creer_liste_reloc();
   LISTE Col_mod;
   Col_mod=pseudo_instr(Col);
-	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq);
+	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq,reloc_text);
+  
 
 
     /* --------------- Free memory and terminate ----------------*/
