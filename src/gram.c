@@ -411,11 +411,9 @@ int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 		if (strcmp(dico[i].optype_tab[j],"REG")==0){
 			if (strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) err=1;
 		}
-		printf("etiquette: %d\n",recherche_etiq(inst.op[j].nom,tab_etiq));
 		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
 			if (strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 && (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
 		}
-		printf("%s\n",inst.op[j].nom );
 		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
 			if (strcmp(inst.op[j].type,"REG")!=0) err=1;
 		}

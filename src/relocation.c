@@ -27,8 +27,12 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
         strcpy(maillon.nom,p->val.op[j].nom);
         maillon.decalage=p->val.adresse;
         int pos=recherche_etiq(maillon.nom,tab_etiq);
+        if(pos<0){
+          printf("L'étiquette %s est utilisé non initialisé\n", maillon.nom);
+          /*return NULL*/
+        }
         int k;
-        for (k=0;k<pos;k++) e=e->suiv;
+        for (k=0;k<pos-1;k++) e=e->suiv;
         maillon.depart=e->val.decalage;
         maillon.zone=calloc(strlen(e->val.zone),sizeof(char));
         strcpy(maillon.zone,e->val.zone);
@@ -49,6 +53,7 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
           printf("L'étiquette %s est utilisé non initialisé\n", maillon.nom);
           /*return NULL;*/
         }
+        printf("%s,%s,%d,%d,%s\n",maillon.nom,maillon.zone,maillon.decalage,maillon.depart,maillon.type);
         ajout_queue_reloc(maillon,liste);
       }
 		}
