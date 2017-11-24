@@ -1,0 +1,27 @@
+
+
+generation du binaire .obj
+generation de la liste d'assemblage .l
+
+pour printf sur 8 chiffres:
+int x= 0x08000004;
+printf("%8x",x);
+
+
+
+
+
+fichier shell de test:
+
+./simpleUnitTest.sh -e ./as-mips tests/*.s
+
+
+
+Pour génerer une ligne de binaire
+codebinaire=0;
+codebinaire=codebinaire | (opcode<<26);
+codebinaire=codebinaire | (rs<<21);
+codebinaire=codebinaire | (rt<16);
+codebinaire=codebinaire | (rd<<11);
+codebinaire=codebinaire | (sa<<26);
+codebinaire=codebinaire | (function<<0);

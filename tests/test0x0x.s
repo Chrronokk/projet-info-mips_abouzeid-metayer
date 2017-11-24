@@ -19,7 +19,7 @@ boucle:
 	byebye: JAL boucle
 .data
 	lunchtime : .word 12
-	.byte  2, 0x4
+	.byte  2, 0x0x04
 	.space 12
 	.asciiz "blabla","gabuzomeu shadoks"
 .bss

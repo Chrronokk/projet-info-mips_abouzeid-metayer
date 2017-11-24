@@ -205,12 +205,8 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 			}
 		}
 	}
-<<<<<<< HEAD
-	instLISTE l=col_text;
-=======
 	affiche_liste_etiq(tab_etiq);
-	/*instLISTE l=col_text;
->>>>>>> c8ef1ac514ea6f5a180bdbca9ae8f0b8fe2dddbb
+	instLISTE l=col_text;
 	while (l->suiv!=NULL){
 		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
 			return;
