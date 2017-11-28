@@ -320,6 +320,7 @@ LISTE lex_read_line( char *line, int nline) {
 	affiche_liste(col);
 	*/
 	}
+
     return(col);
 }
 

@@ -75,7 +75,6 @@ int main ( int argc, char *argv[] ) {
     /* -------------- do the lexical analysis -------------------*/
 	LISTE Col;
     Col=lex_load_file( file, &nlines);
-
     DEBUG_MSG("source code got %d lines",nlines);
 
 	/* --------------- Analyse grammaticale ---------------------*/
@@ -85,10 +84,12 @@ int main ( int argc, char *argv[] ) {
 	dirLISTE col_bss=creer_liste_dir();
 	etiqLISTE tab_etiq=creer_liste_etiq();
   relocLISTE reloc_text=creer_liste_reloc();
+  relocLISTE reloc_data=creer_liste_reloc();
+
   LISTE Col_mod;
   Col_mod=pseudo_instr(Col);
-	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq,reloc_text);
-  
+	analyse_gram(&Col_mod,&col_text,&col_data,&col_bss,&tab_etiq,&reloc_text,&reloc_data);
+
 
 
     /* --------------- Free memory and terminate ----------------*/

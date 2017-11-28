@@ -10,7 +10,17 @@
 #include <relocation.h>
 
 
-void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bss,etiqLISTE tab_etiq,relocLISTE reloc_text){
+int analyse_gram(LISTE* pCol,instLISTE* pcol_text,dirLISTE* pcol_data,dirLISTE* pcol_bss,etiqLISTE* ptab_etiq,relocLISTE* preloc_text,relocLISTE* preloc_data){
+
+	LISTE Col=*pCol;
+	instLISTE col_text=*pcol_text;
+	dirLISTE col_data=*pcol_data;
+	dirLISTE col_bss=*pcol_bss;
+	etiqLISTE tab_etiq=*ptab_etiq;
+	relocLISTE reloc_text=*preloc_text;
+	relocLISTE reloc_data=*preloc_data;
+
+
 
 	puts("Début de l'analyse grammaticale\n\n");
 	int nb_instr;
@@ -61,7 +71,7 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 
 				case ERROR2:
 					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
-					return;
+					return FAILURE;
 				break;
 
 
@@ -205,25 +215,31 @@ void analyse_gram(LISTE Col,instLISTE col_text,dirLISTE col_data,dirLISTE col_bs
 			}
 		}
 	}
-	affiche_liste_etiq(tab_etiq);
+
 	instLISTE l=col_text;
 	while (l->suiv!=NULL){
 		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
-			return;
+			return FAILURE;
 		}
 		l=l->suiv;
 	}
 	if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
-		return;
+		return FAILURE;
 	}
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
+	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-
-
+	affiche_liste_etiq(tab_etiq);
 	affiche_liste_inst(col_text);
 	affiche_liste_dir(col_data);
 	affiche_liste_dir(col_bss);
 	affiche_liste_reloc(reloc_text);
+	affiche_liste_reloc(reloc_data);
+
+
+	return SUCCESS;
+
+
 }
 
 
@@ -412,7 +428,7 @@ int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 			if (strcmp(inst.op[j].type,"REG")!=0 || strcmp(inst.op[j].offset,"0")!=0) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"IMM")==0){
-			if ((strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 )&& (recherche_etiq(inst.op[j].nom,tab_etiq)<0)) err=1;
+			if ((strcmp(inst.op[j].type,"DEC")!=0 && strcmp(inst.op[j].type,"HEXA")!=0 )&& (strcmp(inst.op[j].type,"SYM")!=0)) err=1;
 		}
 		if (strcmp(dico[i].optype_tab[j],"REGOFF")==0){
 			if (strcmp(inst.op[j].type,"REG")!=0) err=1;
@@ -476,7 +492,7 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 }
 
 
-
+/* créer un aillon étiquette comprenant les informations nécessaires sur l'étiquette en entrée*/
 ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage){
 	etiq.nom=calloc(strlen(nom),sizeof(*nom));
 	strcpy(etiq.nom,nom);
@@ -488,7 +504,7 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int 
 }
 
 
-
+/*Fonction qui va lire la liste p_lex afin d'ajouter à la colection data ou bss une directive et ses opérandes*/
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	DIRECTIVE dir;
 	dir.dir=calloc(strlen(p_lex->val.lex),sizeof(*p_lex->val.lex));
@@ -532,6 +548,7 @@ dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col){
 	return col;
 }
 
+/*Calcul le décalage généré par une directive asciiiz*/
 int decalage_asciiz(LISTE p){
 	int c=0;
 	p=p->suiv;
@@ -550,6 +567,7 @@ int decalage_asciiz(LISTE p){
 	return c;
 }
 
+/*Calcul le décalage généré par une directive bytes*/
 int decalage_byte(LISTE p){
 	int c=0;
 	p=p->suiv;
@@ -569,6 +587,7 @@ int decalage_byte(LISTE p){
 	return c;
 }
 
+/*Calcul le décalage généré par une directive word*/
 int decalage_word(LISTE p){
 	int c=0;
 	p=p->suiv;

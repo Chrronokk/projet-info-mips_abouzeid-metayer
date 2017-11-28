@@ -90,7 +90,7 @@ typedef struct{
 	int decalage;
 	int depart;
 	char* type;
-}relocETIQ;
+} relocETIQ;
 
 struct relocMAILLON{
 	relocETIQ val;
@@ -106,6 +106,7 @@ etiqLISTE creer_liste_etiq(void);
 relocLISTE creer_liste_reloc(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
+void supprimer_liste(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
 LISTE ajout_tete (LEXEME, LISTE );
 LISTE supprimen(int n, LISTE l);

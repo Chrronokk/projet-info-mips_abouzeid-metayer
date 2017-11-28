@@ -9,6 +9,9 @@
 #include <relocation.h>
 
 
+/*Fonction qui va générer une liste de relocation des étiquettes présents dans les oérandes des instructions
+  présentes dans la liste col à l"aide du tableau des symboles tab_etiq*/
+
 relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
   if (col==NULL) return NULL;
   int nb_instr;
@@ -22,23 +25,32 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
     int i=0;
   	while(strcmp(p->val.symbole,dico[i].symbole)) i++;
 		for(j=0;j<p->val.nb_op;j++){
-			if((strcmp(p->val.op[j].type,"SYM")==0)){
-        maillon.nom=calloc(strlen(p->val.op[j].nom),sizeof(char));
-        strcpy(maillon.nom,p->val.op[j].nom);
+			if((strcmp(p->val.op[j].type,"SYM")*strcmp(p->val.op[j].offset,"SYM")==0)){
+        if(strcmp(p->val.op[j].type,"SYM")==0){
+          maillon.nom=calloc(strlen(p->val.op[j].nom),sizeof(char));
+          strcpy(maillon.nom,p->val.op[j].nom);
+        }
+        else {
+          maillon.nom=calloc(strlen(p->val.op[j].offset),sizeof(char));
+          strcpy(maillon.nom,p->val.op[j].offset);
+        }
         maillon.decalage=p->val.adresse;
         int pos=recherche_etiq(maillon.nom,tab_etiq);
         if(pos<0){
-          printf("L'étiquette %s est utilisé non initialisé\n", maillon.nom);
+          maillon.depart=-1;
+          maillon.zone="unknown";
           /*return NULL*/
         }
-        int k;
-        for (k=0;k<pos-1;k++) e=e->suiv;
-        maillon.depart=e->val.decalage;
-        maillon.zone=calloc(strlen(e->val.zone),sizeof(char));
-        strcpy(maillon.zone,e->val.zone);
-        printf("%c\n",dico[i].type);
-        printf("%s\n",dico[i].optype_tab[j]);
-				if(dico[i].type=='J'){
+        else {
+          int k;
+          for (k=0;k<pos-1;k++) e=e->suiv;
+          maillon.depart=e->val.decalage;
+          maillon.zone=calloc(strlen(e->val.zone),sizeof(char));
+          strcpy(maillon.zone,e->val.zone);
+          /*printf("%c\n",dico[i].type);
+          printf("%s\n",dico[i].optype_tab[j]);*/
+        }
+        if(dico[i].type=='J'){
           maillon.type="R_MIPS_26";
         }
         else if(strcmp(dico[i].optype_tab[j],"IMM")*strcmp(dico[i].optype_tab[j],"REGOFF")==0){
@@ -50,25 +62,46 @@ relocLISTE reloc_etiq_text(instLISTE col,etiqLISTE tab_etiq,relocLISTE liste){
           }
         }
         else{
-          printf("L'étiquette %s est utilisé non initialisé\n", maillon.nom);
+          printf("Erreur sur le mot %s à la ligne %d\n", maillon.nom,p->val.ligne);
           /*return NULL;*/
         }
-        printf("%s,%s,%d,%d,%s\n",maillon.nom,maillon.zone,maillon.decalage,maillon.depart,maillon.type);
-        ajout_queue_reloc(maillon,liste);
+        liste=ajout_queue_reloc(maillon,liste);
+
       }
 		}
 
     p=p->suiv;
   }
-  affiche_liste_reloc(liste);
   return(liste);
 }
 
 
-/*relocLISTE placement_etiq_data(dirLISTE col,etiqLISTE tab_etiq, relocLISTE liste){
+relocLISTE reloc_etiq_data(dirLISTE col,etiqLISTE tab_etiq, relocLISTE liste){
   etiqLISTE e=tab_etiq;
   dirLISTE p=col;
   relocETIQ maillon;
   while (p->suiv!=NULL){
-    if(strcmp(p->))
-  */
+    if(strcmp(p->val.type_op,"SYM")==0){
+      maillon.nom=calloc(strlen(p->val.symb_op),sizeof(char));
+      strcpy(maillon.nom,p->val.symb_op);
+      maillon.decalage=p->val.decalage;
+      int pos=recherche_etiq(maillon.nom,tab_etiq);
+      if(pos<0){
+        maillon.depart=-1;
+        maillon.zone="unknown";
+        /*return NULL*/
+      }
+      else {
+        int k;
+        for (k=0;k<pos-1;k++) e=e->suiv;
+        maillon.depart=e->val.decalage;
+        maillon.zone=calloc(strlen(e->val.zone),sizeof(char));
+        strcpy(maillon.zone,e->val.zone);
+      }
+      maillon.type="R_MIPS_32 ";
+      liste=ajout_queue_reloc(maillon,liste);
+    }
+    p=p->suiv;
+  }
+  return(liste);
+}
