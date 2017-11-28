@@ -435,7 +435,7 @@ int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq){
 		}
 
 		if (err==1){
-			printf("ERREUR LIGNE %d: OPERANDE %s NON SUPPORTEE",inst.ligne,inst.op[j].nom);
+			printf("ERREUR LIGNE %d: OPERANDE NUMERO %d: %s NON SUPPORTEE",inst.ligne,j,inst.op[j].nom);
 			return 0;
 		}
 	}
