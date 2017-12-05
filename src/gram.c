@@ -10,19 +10,26 @@
 #include <relocation.h>
 
 
-int analyse_gram(LISTE* pCol,instLISTE* pcol_text,dirLISTE* pcol_data,dirLISTE* pcol_bss,etiqLISTE* ptab_etiq,relocLISTE* preloc_text,relocLISTE* preloc_data){
+Gram analyse_gram(LISTE Col){
 
-	LISTE Col=*pCol;
-	instLISTE col_text=*pcol_text;
-	dirLISTE col_data=*pcol_data;
-	dirLISTE col_bss=*pcol_bss;
-	etiqLISTE tab_etiq=*ptab_etiq;
-	relocLISTE reloc_text=*preloc_text;
-	relocLISTE reloc_data=*preloc_data;
+	instLISTE col_text=creer_liste_inst();
+	dirLISTE col_data=creer_liste_dir();
+	dirLISTE col_bss=creer_liste_dir();
+	etiqLISTE tab_etiq=creer_liste_etiq();
+	relocLISTE reloc_text=creer_liste_reloc();
+	relocLISTE reloc_data=creer_liste_reloc();
 
+	Gram gram_error;
 
+	gram_error.col_text=creer_liste_inst();
+	gram_error.col_data=creer_liste_dir();
+	gram_error.col_bss=creer_liste_dir();
+	gram_error.tab_etiq=creer_liste_etiq();
+	gram_error.reloc_text=creer_liste_reloc();
+	gram_error.reloc_data=creer_liste_reloc();
 
 	puts("Début de l'analyse grammaticale\n\n");
+
 	int nb_instr;
 	int* p_nb_instr=&nb_instr;
 	instr_def* dictionnaire=lecture_dico(p_nb_instr);
@@ -71,7 +78,7 @@ int analyse_gram(LISTE* pCol,instLISTE* pcol_text,dirLISTE* pcol_data,dirLISTE* 
 
 				case ERROR2:
 					printf("Erreur sur le mot %s à la ligne %d \n",p->val.lex,p->val.line);
-					return FAILURE;
+					return gram_error;
 				break;
 
 
@@ -219,25 +226,34 @@ int analyse_gram(LISTE* pCol,instLISTE* pcol_text,dirLISTE* pcol_data,dirLISTE* 
 	instLISTE l=col_text;
 	while (l->suiv!=NULL){
 		if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
-			return FAILURE;
+			return gram_error;
 		}
 		l=l->suiv;
 	}
 	if(test_type_op_inst(l->val,dictionnaire,tab_etiq)==0){
-		return FAILURE;
+		return gram_error;
 	}
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-	affiche_liste_etiq(tab_etiq);
-	affiche_liste_inst(col_text);
-	affiche_liste_dir(col_data);
-	affiche_liste_dir(col_bss);
-	affiche_liste_reloc(reloc_text);
-	affiche_liste_reloc(reloc_data);
+	Gram gram;
 
+	gram.col_text=col_text;
+	gram.col_data=col_data;
+	gram.col_bss=col_bss;
+	gram.tab_etiq=tab_etiq;
+	gram.reloc_text=reloc_text;
+	gram.reloc_data=reloc_data;
 
-	return SUCCESS;
+	/*affiche_liste_etiq(gram.tab_etiq);
+	affiche_liste_inst(gram.col_text);
+	affiche_liste_dir(gram.col_data);
+	affiche_liste_dir(gram.col_bss);
+	affiche_liste_reloc(gram.reloc_text);
+	affiche_liste_reloc(gram.reloc_data);
+	*/
+
+	return gram;
 
 
 }

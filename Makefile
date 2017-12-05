@@ -39,6 +39,7 @@ all :
 debug   : $(OBJ_DBG)
 	$(LD) $^ $(LFLAGS) -o $(TARGET) -g
 
+
 release : $(OBJ_RLS)
 	$(LD) $^ $(LFLAGS) -o $(TARGET)
 

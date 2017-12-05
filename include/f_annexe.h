@@ -99,6 +99,15 @@ struct relocMAILLON{
 
 typedef struct relocMAILLON* relocLISTE;
 
+typedef struct {
+	instLISTE col_text;
+	dirLISTE col_data;
+	dirLISTE col_bss;
+	etiqLISTE tab_etiq;
+	relocLISTE reloc_text;
+	relocLISTE reloc_data;
+} Gram;
+
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
 dirLISTE creer_liste_dir(void);
