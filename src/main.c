@@ -15,6 +15,7 @@
 #include <gram.h>
 #include <pseudo_instr.h>
 #include <relocation.h>
+#include <ass.h>
 
 
 /**
@@ -102,6 +103,8 @@ int main ( int argc, char *argv[] ) {
 	affiche_liste_reloc(gram.reloc_text);
 	affiche_liste_reloc(gram.reloc_data);
 
+
+    writeAss();
 
     /* --------------- Free memory and terminate ----------------*/
 
