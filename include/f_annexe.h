@@ -90,7 +90,7 @@ typedef struct{
 	int decalage;
 	int depart;
 	char* type;
-}relocETIQ;
+} relocETIQ;
 
 struct relocMAILLON{
 	relocETIQ val;
@@ -99,6 +99,15 @@ struct relocMAILLON{
 
 typedef struct relocMAILLON* relocLISTE;
 
+typedef struct {
+	instLISTE col_text;
+	dirLISTE col_data;
+	dirLISTE col_bss;
+	etiqLISTE tab_etiq;
+	relocLISTE reloc_text;
+	relocLISTE reloc_data;
+} Gram;
+
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
 dirLISTE creer_liste_dir(void);
@@ -106,6 +115,7 @@ etiqLISTE creer_liste_etiq(void);
 relocLISTE creer_liste_reloc(void);
 int est_vide(LISTE l);
 LISTE supprimer_tete(LISTE l);
+void supprimer_liste(LISTE l);
 LISTE ajout_queue(LEXEME , LISTE );
 LISTE ajout_tete (LEXEME, LISTE );
 LISTE supprimen(int n, LISTE l);

@@ -72,23 +72,35 @@ int main ( int argc, char *argv[] ) {
 
 
 
-    /* -------------- do the lexical analysis -------------------*/
-	LISTE Col;
-    Col=lex_load_file( file, &nlines);
+  /* -------------- do the lexical analysis -------------------*/
 
-    DEBUG_MSG("source code got %d lines",nlines);
+  LISTE Col;
+  Col=lex_load_file( file, &nlines);
+  DEBUG_MSG("source code got %d lines",nlines);
+
+  LISTE Col_mod;
+  Col_mod=pseudo_instr(Col);
+
 
 	/* --------------- Analyse grammaticale ---------------------*/
 
-	instLISTE col_text=creer_liste_inst();
-	dirLISTE col_data=creer_liste_dir();
-	dirLISTE col_bss=creer_liste_dir();
-	etiqLISTE tab_etiq=creer_liste_etiq();
-  relocLISTE reloc_text=creer_liste_reloc();
-  LISTE Col_mod;
-  Col_mod=pseudo_instr(Col);
-	analyse_gram(Col_mod,col_text,col_data,col_bss,tab_etiq,reloc_text);
+  Gram gram;
 
+	gram.col_text=creer_liste_inst();
+	gram.col_data=creer_liste_dir();
+	gram.col_bss=creer_liste_dir();
+	gram.tab_etiq=creer_liste_etiq();
+  gram.reloc_text=creer_liste_reloc();
+  gram.reloc_data=creer_liste_reloc();
+
+  gram=analyse_gram(Col_mod);
+
+  affiche_liste_etiq(gram.tab_etiq);
+	affiche_liste_inst(gram.col_text);
+	affiche_liste_dir(gram.col_data);
+	affiche_liste_dir(gram.col_bss);
+	affiche_liste_reloc(gram.reloc_text);
+	affiche_liste_reloc(gram.reloc_data);
 
 
     /* --------------- Free memory and terminate ----------------*/

@@ -40,26 +40,48 @@ LISTE supprimer_tete(LISTE l){
         free(l);
         return p;
     }
+}
 
+
+LISTE effacerListe(LISTE liste)
+{
+    if(liste == NULL)
+    {
+        /* Si la liste est vide, il n'y a rien à effacer, on retourne
+        une liste vide i.e. NULL */
+        return NULL;
+    }
+    else{
+        LISTE p = liste->suiv;
+        free(liste);
+        return effacerListe(p);
+    }
+}
+
+
+
+void supprimer_liste(LISTE l){
+  while (est_vide(l)==0){
+    supprimer_tete(l);
+  }
+  supprimer_tete(l);
 }
 
 
 LISTE ajout_queue(LEXEME lexeme, LISTE liste){
 	/*puts("Entrée dans ajout_queue");*/
 	LISTE p = calloc(1, sizeof(*p));
-    p->suiv = NULL;
+  p->suiv = NULL;
 	p->val=lexeme;
-    if(liste == NULL){ return p;}
-
-    else{
-        LISTE q = liste;
-        while(q->suiv != NULL){
-            q = q->suiv;
-        }
-        q->suiv = p;
-        return liste;
+  if(liste == NULL){ return p;}
+  else{
+    LISTE q = liste;
+    while(q->suiv != NULL){
+        q = q->suiv;
     }
-
+    q->suiv = p;
+    return liste;
+  }
 }
 
 instLISTE ajout_queue_inst(instruction inst, instLISTE liste){
@@ -96,22 +118,24 @@ dirLISTE ajout_queue_dir(DIRECTIVE dir, dirLISTE liste){
     }
 }
 
-relocLISTE ajout_queue_reloc(relocETIQ etiq, relocLISTE liste){
+relocLISTE ajout_queue_reloc(relocETIQ maillon, relocLISTE liste){
   /*puts("Entrée dans ajout_queue");*/
 	relocLISTE p = calloc(1, sizeof(*p));
   p->suiv = NULL;
- 	p->val=etiq;
-  	if(liste == NULL){ return p;}
-
-  	else{
-		relocLISTE q = liste;
-    	while(q->suiv != NULL){
-      		q = q->suiv;
-    	}
+ 	p->val=maillon;
+  if(liste == NULL){return p;}
+  else{
+	   relocLISTE q = liste;
+     while(q->suiv != NULL){
+       q = q->suiv;
+     }
     q->suiv = p;
     return liste;
-    }
+  }
 }
+
+
+
 
 LISTE ajout_tete (LEXEME lexeme, LISTE Liste){
 	LISTE p;
@@ -229,6 +253,7 @@ void affiche_liste_inst(instLISTE l){
 
 	if(l==NULL){
 		printf("Vide \n");
+    return;
 	}
 
 	while(c->suiv != NULL){
