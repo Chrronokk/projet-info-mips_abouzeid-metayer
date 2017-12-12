@@ -1,42 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <f_annexe.h>
 #include "ass.h"
 
+/*TODO
+gestion du nombre de lignes
+Placer des lignes vides en mettant des adresses négatives
 
+*/
 
-void* writeAss(){
+void* writeAss(etiqLISTE tab_etiq){
     FILE* file = NULL;
     FILE* source = NULL;
     file= fopen("list.l","w+");
     source= fopen("tests/miam.s","r");
     int i;
-    
+
     if (file==NULL || source==NULL){
         puts("ERREUR PENDANT LA CREATION DE LA LISTE D'ASSEMBLAGE");
         return NULL;
     }
 
 
-    /*while (du text){*/
+
 
     for(i=0;i<33;i++){
-        writeLineAssText(file,source,i,123,456);
+        writeLineAss(file,source,i,123,456);
     }
 
-    /*while (du data){
-        writeLineAssData();
-    }
+    writeSymtab(file,tab_etiq);
 
-    while (du bss){
-        writeLineAssBss();
-    }
-
-    writeSymtab();
+    /*
     writeReltext();
     writeRelData();
-
-
     */
+
 
     fclose(file);
     fclose(source);
@@ -45,16 +43,15 @@ void* writeAss(){
 
 
 
-void writeLineAssText(FILE* file,FILE* source,int line,int address,int code){
+void writeLineAss(FILE* file,FILE* source,int line,int address,int code){
     char l[255] ="";
 
     /* Print le numero de ligne*/
-    if (line<10) fprintf(file,"   ");
-    else if (line<100) fprintf(file,"  ");
-    else if (line<1000) fprintf(file," ");
+    if (line<10) fprintf(file,"  ");
+    else if (line<100) fprintf(file," ");
     fprintf(file,"%d ",line);
 
-    if (address==-1){
+    if (address<0){
         fprintf(file,"                  ");
     }
     else{
@@ -64,5 +61,23 @@ void writeLineAssText(FILE* file,FILE* source,int line,int address,int code){
     }
     /*Ecriture de la ligne assembleur*/
     fgets(l,255,source);
-    fprintf(file,"%s",l);
+    if (l[0]==(char)9){
+        fprintf(file,"    %s",l+1);
+    }
+    else{
+        fprintf(file,"%s",l);
+    }
+}
+
+void writeSymtab(FILE* file,etiqLISTE tab){
+
+    fprintf(file,"\n\n.symtab\n");
+
+    etiqLISTE p=tab;
+
+    while (p->suiv !=NULL){
+        fprintf(file,"%4d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
+	p=p->suiv;
+    }
+    fprintf(file,"%4d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
 }

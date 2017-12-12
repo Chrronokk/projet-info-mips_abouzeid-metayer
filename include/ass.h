@@ -4,9 +4,9 @@
 
 #include <stdlib.h>
 
-void writeLineAssText(FILE* file, FILE* source, int line, int address, int code);
+void writeLineAss(FILE* file, FILE* source, int line, int address, int code);
 
-void* writeAss();
+void* writeAss(tab_etiq);
 
 
 
