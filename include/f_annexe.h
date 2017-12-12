@@ -108,6 +108,48 @@ typedef struct {
 	relocLISTE reloc_data;
 } Gram;
 
+union element{
+	char* rg;
+	int bin;
+};
+
+typedef struct{
+	union element rr1;
+	union element rr2;
+	union element rr3;
+	union element rsa;
+	int function;
+} instr_bin_R;
+
+typedef struct{
+	union element ir1;
+	union element ir2;
+	char* imm;
+} instr_bin_I;
+
+typedef struct{
+	char* ind;
+} instr_bin_J;
+
+
+
+union arg{
+	instr_bin_R R;
+	instr_bin_I I;
+	instr_bin_J J;
+};
+
+typedef struct{
+		char* nom;
+		int opcode;
+		char type;
+		union arg arg;
+} instr_def_bin;
+
+
+
+
+
 LISTE creer_liste(void);
 instLISTE creer_liste_inst(void);
 dirLISTE creer_liste_dir(void);

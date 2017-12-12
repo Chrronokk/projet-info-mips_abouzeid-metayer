@@ -15,6 +15,7 @@
 #include <gram.h>
 #include <pseudo_instr.h>
 #include <relocation.h>
+#include <bin.h>
 #include <ass.h>
 
 
@@ -67,7 +68,7 @@ int main ( int argc, char *argv[] ) {
 
 
     if ( NULL == file ) {
-        fprintf( stderr, "Missing ASM source file, aborting.\n" );
+        fprintf( stderr, "Missing ASM source file,00000024 aborting.\n" );
         exit( EXIT_FAILURE );
     }
 
@@ -104,7 +105,7 @@ int main ( int argc, char *argv[] ) {
 	affiche_liste_reloc(gram.reloc_data);
 
 
-    writeAss(gram.tab_etiq);
+    writeAss(gram.tab_etiq,nlines);
 
     /* --------------- Free memory and terminate ----------------*/
 

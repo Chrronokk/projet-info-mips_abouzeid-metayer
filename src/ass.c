@@ -9,7 +9,7 @@ Placer des lignes vides en mettant des adresses négatives
 
 */
 
-void* writeAss(etiqLISTE tab_etiq){
+void* writeAss(etiqLISTE tab_etiq,int nlines){
     FILE* file = NULL;
     FILE* source = NULL;
     file= fopen("list.l","w+");
@@ -24,7 +24,7 @@ void* writeAss(etiqLISTE tab_etiq){
 
 
 
-    for(i=0;i<33;i++){
+    for(i=0;i<nlines;i++){
         writeLineAss(file,source,i,123,456);
     }
 
