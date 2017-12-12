@@ -6,7 +6,7 @@
 
 void writeLineAss(FILE* file, FILE* source, int line, int address, int code);
 
-void* writeAss(tab_etiq);
+void* writeAss(etiqLISTE);
 
 
 
