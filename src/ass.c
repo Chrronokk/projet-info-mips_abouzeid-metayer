@@ -9,7 +9,7 @@ Placer des lignes vides en mettant des adresses négatives
 
 */
 
-void writeAss(FILE* source, etiqLISTE tab_etiq,int nlines){
+void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines){
     FILE* file = NULL;
     file= fopen("list.l","w+");
     int i;
@@ -19,13 +19,11 @@ void writeAss(FILE* source, etiqLISTE tab_etiq,int nlines){
         return;
     }
 
-
-    printf("nlines= %d\n",nlines);
-
-    for(i=0;i<nlines;i++){
+    for(i=0;i<nblines;i++){
         writeLineAss(file,source,i,123,456);
     }
-    if (tab_etiq != NULL) writeSymtab(file,tab_etiq);
+
+    writeSymtab(file,tab_etiq);
 
     /*
     writeReltext();
@@ -43,10 +41,7 @@ void writeAss(FILE* source, etiqLISTE tab_etiq,int nlines){
 void writeLineAss(FILE* file,FILE* source,int line,int address,int code){
     char l[255] ="";
 
-    /* Print le numero de ligne*/
-    if (line<10) fprintf(file,"  ");
-    else if (line<100) fprintf(file," ");
-    fprintf(file,"%d ",line);
+    fprintf(file,"%3d ",line);
 
     if (address<0){
         fprintf(file,"                  ");
@@ -68,13 +63,22 @@ void writeLineAss(FILE* file,FILE* source,int line,int address,int code){
 
 void writeSymtab(FILE* file,etiqLISTE tab){
 
-    fprintf(file,"\n\n.symtab\n");
+    fprintf(file,"\n.symtab\n");
 
     etiqLISTE p=tab;
 
     while (p->suiv !=NULL){
-        fprintf(file,"%4d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
+        fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
 	p=p->suiv;
     }
-    fprintf(file,"%4d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
+
+
+
+
+
+
+
+
+
+
 }

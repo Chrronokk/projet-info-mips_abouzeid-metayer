@@ -59,6 +59,7 @@ typedef struct{
 	int nb_op;
 	OPERANDE op[3];
 	int ligne;
+	int bin;
 } instruction;
 
 struct instMAILLON{
