@@ -11,7 +11,7 @@
 #include "relocation.h"
 #include "bin.h"
 
-/*instr_def_bin* lecture_dico_bin(int* p_nb_instr){
+instr_def_bin* lecture_dico_bin(int* p_nb_instr){
   FILE* f1= fopen("dico_bin.txt","r");
   if (f1==NULL) return NULL;
   int i;
@@ -118,4 +118,4 @@
   }
   return dico_bin;
 
-}*/
+}

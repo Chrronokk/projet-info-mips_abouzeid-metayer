@@ -1,0 +1,33 @@
+   0 0000007b 000001c8 # allons au mandela
+   1 0000007b 000001c8 # allons au ru
+   2 0000007b 000001c8 .set noreorder
+   3 0000007b 000001c8 .text
+   4 0000007b 000001c8 	LW $t0, boucle
+   5 0000007b 000001c8 	LW $6, -0x200($7)
+   6 0000007b 000001c8 	LW $8, 0xaa0($9)
+   7 0000007b 000001c8 	ADDI $t1,$zero,8
+   8 0000007b 000001c8 boucle:
+   9 0000007b 000001c8 	BEQ $t0 , $t1 , byebye
+  10 0000007b 000001c8 	NOP
+  11 0000007b 000001c8 	MOVE $3,$4
+  12 0000007b 000001c8 	NEG $3,$4
+  13 0000007b 000001c8 	LI $3,100
+  14 0000007b 000001c8 	BLT $3,$4,boucle
+  15 0000007b 000001c8 	ADDI $t1 , $t1 , 1
+  16 0000007b 000001c8 	J boucle
+  17 0000007b 000001c8 	NOP
+  18 0000007b 000001c8 	byebye: JAL viteviteauru
+  19 0000007b 000001c8 .data
+  20 0000007b 000001c8 	lunchtime : .word 12
+  21 0000007b 000001c8 	.word byebye
+  22 0000007b 000001c8 	.byte  2, 0x4
+  23 0000007b 000001c8 	.space 12
+  24 0000007b 000001c8 	.asciiz "blabla","gabuzomeu shadoks"
+  25 0000007b 000001c8 .bss
+  26 0000007b 000001c8 .space 12
+  27 0000007b 000001c8 .space 12
+  28 0000007b 000001c8 .data
+  29 0000007b 000001c8 .text
+  30 0000007b 000001c8 	LW $8, 0xaa0($9)
+  31 0000007b 000001c8 	ADDI $t1,$zero,8
+  32 0000007b 000001c8 
