@@ -8,6 +8,7 @@
 #include <global.h>
 #include <f_annexe.h>
 #include <relocation.h>
+#include <bin.h>
 
 
 Gram analyse_gram(LISTE Col){
@@ -208,7 +209,6 @@ Gram analyse_gram(LISTE Col){
 				break;
 
 				case ETIQ:
-
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
 							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq,decalage);
@@ -235,6 +235,11 @@ Gram analyse_gram(LISTE Col){
 	}
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
+
+	instr_def_bin* dico_bin;
+	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
+  dico_bin=lecture_dico_bin(p_nb_instr);
+  affiche_dico_bin(dico_bin,*p_nb_instr);
 
 	Gram gram;
 
@@ -263,7 +268,7 @@ Gram analyse_gram(LISTE Col){
 
 instr_def* lecture_dico(int* p_nb_instr){
 	/*puts("Lecture du dictionnaire");*/
-	FILE* f1= fopen("dictionnaire.txt","r");
+	FILE* f1= fopen("Dicos/dictionnaire.txt","r");
 	int i;
 	instr_def* dico;
 	char type_instr;
@@ -274,7 +279,7 @@ instr_def* lecture_dico(int* p_nb_instr){
 	int nb_op;
 	/*puts("Affichage du dictionnaire");*/
 	if (f1==NULL) return NULL;
-	if (fscanf(f1, "%d", p_nb_instr) != 1) return NULL;
+	if(fscanf(f1, "%d", p_nb_instr)!=1) return NULL;
 	/*printf("Il y a %d instructions dans le dictionnaire \n",*p_nb_instr);*/
 	dico=calloc(*p_nb_instr,sizeof(instr_def));
 
@@ -290,8 +295,8 @@ instr_def* lecture_dico(int* p_nb_instr){
 		strcpy(dico[i].optype_tab[1],op1);
 		dico[i].optype_tab[2]=calloc(strlen(op2),sizeof(char));
 		strcpy(dico[i].optype_tab[2],op2);
-		/*printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);*/
-		/*puts(" ");*/
+		/*printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
+		puts(" ");*/
 	}
 	fclose(f1);
 	return dico;

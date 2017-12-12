@@ -96,7 +96,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
         }
       }
       else{
-        dico_bin[i].arg.I.ir1=calloc(4,sizeof(char));
+        dico_bin[i].arg.I.ir1.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.I.ir1.rg,r1);
       }
       if(isdigit(r2[1])){
@@ -112,10 +112,27 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
     }
     else if(type=='J'){
       fscanf(f1,"%s",ind);
-      dico_bin[i].arg.ind=calloc(4,sizeof(char));
-      strcpy(dico_bin[i].arg.ind,ind);
+      dico_bin[i].arg.J.ind=calloc(4,sizeof(char));
+      strcpy(dico_bin[i].arg.J.ind,ind);
     }
   }
   return dico_bin;
+}
 
+
+void affiche_dico_bin(instr_def_bin* dico_bin,int n){
+  int i;
+  puts("Affichage du dictionnaire du binaire");
+  for(i=0;i<n;i++){
+    printf("%s %d %c ",dico_bin[i].nom,dico_bin[i].opcode,dico_bin[i].type);
+    if(dico_bin[i].type=='R'){
+      printf("%s %s %s %s %d \n",dico_bin[i].arg.R.rr1.rg,dico_bin[i].arg.R.rr2.rg,dico_bin[i].arg.R.rr3.rg,dico_bin[i].arg.R.rsa.rg,dico_bin[i].arg.R.function);
+    }
+    if(dico_bin[i].type=='I'){
+      printf("%s %s %s \n",dico_bin[i].arg.I.ir1.rg,dico_bin[i].arg.I.ir2.rg,dico_bin[i].arg.I.imm);
+    }
+    if(dico_bin[i].type=='J'){
+      printf("%s \n",dico_bin[i].arg.J.ind);
+    }
+  }
 }
