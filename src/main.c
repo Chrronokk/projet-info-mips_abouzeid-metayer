@@ -105,7 +105,7 @@ int main ( int argc, char *argv[] ) {
 	affiche_liste_reloc(gram.reloc_data);
 
 
-    writeAss(gram.tab_etiq,nlines);
+    writeAss(file,gram.tab_etiq,nlines);
 
     /* --------------- Free memory and terminate ----------------*/
 

@@ -7,7 +7,7 @@
 void writeLineAss(FILE* file, FILE* source, int line, int address, int code);
 
 
-void* writeAss(etiqLISTE tab_etiq, int nlines);
+void writeAss(FILE* source, etiqLISTE tab_etiq, int nlines);
 
 void writeSymtab(FILE* file,etiqLISTE tab);
 

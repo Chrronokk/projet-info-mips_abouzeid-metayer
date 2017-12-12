@@ -9,26 +9,23 @@ Placer des lignes vides en mettant des adresses négatives
 
 */
 
-void* writeAss(etiqLISTE tab_etiq,int nlines){
+void writeAss(FILE* source, etiqLISTE tab_etiq,int nlines){
     FILE* file = NULL;
-    FILE* source = NULL;
     file= fopen("list.l","w+");
-    source= fopen("tests/miam.s","r");
     int i;
 
     if (file==NULL || source==NULL){
         puts("ERREUR PENDANT LA CREATION DE LA LISTE D'ASSEMBLAGE");
-        return NULL;
+        return;
     }
 
 
-
+    printf("nlines= %d\n",nlines);
 
     for(i=0;i<nlines;i++){
         writeLineAss(file,source,i,123,456);
     }
-
-    writeSymtab(file,tab_etiq);
+    if (tab_etiq != NULL) writeSymtab(file,tab_etiq);
 
     /*
     writeReltext();
@@ -38,7 +35,7 @@ void* writeAss(etiqLISTE tab_etiq,int nlines){
 
     fclose(file);
     fclose(source);
-    return NULL;
+    return;
 }
 
 
