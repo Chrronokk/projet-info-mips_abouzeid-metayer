@@ -66,7 +66,7 @@ int main ( int argc, char *argv[] ) {
 
 
     if ( NULL == file ) {
-        fprintf( stderr, "Missing ASM source file, aborting.\n" );
+        fprintf( stderr, "Missing ASM source file,00000024 aborting.\n" );
         exit( EXIT_FAILURE );
     }
 
