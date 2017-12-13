@@ -97,7 +97,7 @@ int main ( int argc, char *argv[] ) {
   gram.reloc_data=creer_liste_reloc();
 
   gram=analyse_gram(Col_mod);
-
+  puts("Fin de l'analyse_gram");
   affiche_liste_etiq(gram.tab_etiq);
 	affiche_liste_inst(gram.col_text);
 	affiche_liste_dir(gram.col_data);
@@ -109,7 +109,7 @@ int main ( int argc, char *argv[] ) {
     fichier=fopen(file,"r");
 
 
-    writeAss(fichier,gram.tab_etiq,nlines);
+    writeAss(fichier,gram.tab_etiq,nlines,gram.col_text);
 
     /* --------------- Free memory and terminate ----------------*/
 

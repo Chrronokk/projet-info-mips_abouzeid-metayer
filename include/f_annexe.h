@@ -60,6 +60,7 @@ typedef struct{
 	OPERANDE op[3];
 	int ligne;
 	int bin;
+	int hidden; 
 } instruction;
 
 struct instMAILLON{
