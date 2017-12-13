@@ -19,6 +19,7 @@
 #include <ass.h>
 
 
+
 /**
  * @param exec Name of executable.
  * @return Nothing.
@@ -104,8 +105,11 @@ int main ( int argc, char *argv[] ) {
 	affiche_liste_reloc(gram.reloc_text);
 	affiche_liste_reloc(gram.reloc_data);
 
+    FILE *fichier = NULL;
+    fichier=fopen(file,"r");
 
-    writeAss(gram.tab_etiq,nlines);
+
+    writeAss(fichier,gram.tab_etiq,nlines);
 
     /* --------------- Free memory and terminate ----------------*/
 

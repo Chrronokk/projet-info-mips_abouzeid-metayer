@@ -24,9 +24,7 @@
  23 0000007b 000001c8 .bss
  24 0000007b 000001c8 menu:.space 24
 
-
 .symtab
-  16	.text:00000010	boucle
-  36	.text:00000024	byebye
-   0	.data:00000000	lunchtime
-   0	.bss :00000000	menu
+ 16	.text:00000010	boucle
+ 36	.text:00000024	byebye
+  0	.data:00000000	lunchtime
