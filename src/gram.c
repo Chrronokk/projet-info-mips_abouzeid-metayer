@@ -237,11 +237,11 @@ Gram analyse_gram(LISTE Col){
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-	/*instr_def_bin* dico_bin;
+	instr_def_bin* dico_bin;
 	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
   dico_bin=lecture_dico_bin(p_nb_instr);
   affiche_dico_bin(dico_bin,*p_nb_instr);
-	*/
+
 	Gram gram;
 
 	gram.col_text=col_text;
