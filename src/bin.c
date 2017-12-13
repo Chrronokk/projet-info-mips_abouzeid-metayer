@@ -141,3 +141,59 @@ void affiche_dico_bin(instr_def_bin* dico_bin,int n){
   }
   puts(" ");
 }
+
+
+int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
+  int i;
+  i=is_in_dico_bin(inst.symbole,dico,nb_instr)
+  if(i<0) return -1;
+  int opcode;
+  int r1;
+  int r2;
+  char type;
+  opcode=dico[i].opcode;
+  type=dico[i].type;
+  int r1;
+  int r2;
+  int r3;
+  int sa;
+  int function;
+  int imm;
+  
+  char * ind=calloc(4,sizeof(char));
+  if(type=='R'){
+    if(isalpha(dico[i].arg.R.rr1.rg)!=0){
+      if(strcmp(inst.op[1].type,"REG")){
+
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int is_in_dico_bin(char* symbole,instr_def_bin* dictionnaire,int nb_instr){
+	int i=0;
+	for(i=0;i<nb_instr;i++){
+		/*printf("Comparaison: %s avec %s \n", symbole, dictionnaire[i].symbole);*/
+		if(strcmp(symbole,dictionnaire[i].nom)==0){
+			/*printf("Symbole ' %s ' trouvé à la ligne %d du dico\n",symbole,i);*/
+			return i;
+		}
+	}
+	/*puts("Instruction non trouvée");*/
+
+	return -1;
+}

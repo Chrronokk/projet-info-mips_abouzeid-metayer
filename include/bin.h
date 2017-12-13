@@ -7,7 +7,7 @@
 
 instr_def_bin* lecture_dico_bin(int* p_nbr_instr);
 void affiche_dico_bin(instr_def_bin* dico_bin,int n);
-
+int is_in_dico_bin(char* symbole,instr_def_bin* dictionnaire,int nb_instr);
 
 
 #endif

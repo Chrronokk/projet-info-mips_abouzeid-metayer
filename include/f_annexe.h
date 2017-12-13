@@ -50,6 +50,7 @@ typedef struct{
 	char* nom;
 	char* type;
 	char* offset;
+	char* type_off;
 } OPERANDE;
 
 
