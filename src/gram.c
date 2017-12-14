@@ -238,7 +238,7 @@ Gram analyse_gram(LISTE Col){
 
 	instr_def_bin* dico_bin;
 	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
-  dico_bin=lecture_dico_bin(p_nb_instr);
+  /*dico_bin=lecture_dico_bin(p_nb_instr);
   affiche_dico_bin(dico_bin,*p_nb_instr);
 	int bin;
 	instLISTE ll=col_text;
@@ -246,7 +246,7 @@ Gram analyse_gram(LISTE Col){
 		bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
 		printf("binaire: %x\n",bin);
 		ll=ll->suiv;
-	}
+	}*/
 
 	Gram gram;
 
@@ -306,7 +306,6 @@ instr_def* lecture_dico(int* p_nb_instr){
 		puts(" ");*/
 	}
 	fclose(f1);
-	puts("ABCD");
 	return dico;
 }
 
@@ -532,6 +531,7 @@ ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int 
 	etiq.arrivee=adresse;
 	etiq.decalage=decalage;
 	etiq.ligne=ligne;
+	printf(" __________etiq.ligne=%d_______________\n",etiq.ligne);
 	return etiq;
 }
 

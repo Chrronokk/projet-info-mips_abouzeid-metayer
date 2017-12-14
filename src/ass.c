@@ -11,8 +11,8 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
 
     file= fopen("list.l","w+");
     int i, write;
-    int fintext=FALSE;
-    int findata=FALSE;
+    int fintext=0;
+    int findata=0;
     int finbss=FALSE;
 
     if (file==NULL || source==NULL){
@@ -24,8 +24,9 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
     for(i=0;i<nblines;i++){
         printf("On compare %d et %d\n",i+1,ptext->val.ligne);
 
-        if (ptext->val.ligne==i+1 && fintext ==FALSE){
+        if (ptext->val.ligne==i+1 && fintext<2){
             puts("ecriture de l'instruction");
+            if (fintext==1) fintext++;
             /*printf("Instruction trouvée ligne %d\n", i);*/
             write=TRUE;
             while (ptext->val.ligne==i+1){
@@ -33,26 +34,26 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
                 printf("Boucle while pour la ligne %d\n",ptext->val.ligne);
                 writeLineAssTxt(file,source,i+1,ptext->val.adresse,456,write);
                 write=FALSE;
-                ptext=ptext->suiv;
+                if (fintext<2) ptext=ptext->suiv;
+                if (fintext==2) break;
             }
-            if (ptext->suiv == NULL){
-                writeLineAssTxt(file,source,i+1,ptext->val.adresse,456,write);
+            if (ptext->suiv == NULL && fintext ==0){
                 write=FALSE;
-                fintext =TRUE;
+                fintext ++;
             }
 
 
         }
-        else if(findata == FALSE && pdata->val.ligne==i+1){
+        else if(findata == 0 && pdata->val.ligne==i+1){
             if (pdata->val.ligne==i+1){
                 puts("Ecriture data");
                 fprintf(file,"%3d %08X %08X ",pdata->val.ligne,pdata->val.decalage,999);
                 copyLine(file, source,i+1,FALSE);
                 if (pdata->suiv==NULL){
-                    findata = TRUE;
+                    findata =1;
                     puts("Fin du data");
                 }
-                pdata=pdata->suiv;
+                if (findata==0) pdata=pdata->suiv;
             }
         }
         else if(pbss->val.ligne==i+1 && finbss ==FALSE){
@@ -62,7 +63,7 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
             if (pbss->suiv==NULL){
                 finbss = TRUE;
             }
-            pbss=pbss->suiv;
+            if (finbss==FALSE) pbss=pbss->suiv;
         }
         else {
             puts("Copie de la ligne");
@@ -71,8 +72,7 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
     }
     writeSymtab(file,tab_etiq);
     /*
-    writeReltext();
-    writeRelData();
+    writeReloc()
     */
 
 
@@ -168,5 +168,14 @@ void writeSymtab(FILE* file,etiqLISTE tab){
         fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.ligne,p->val.zone,p->val.arrivee,p->val.nom);
         p=p->suiv;
     }
+    puts("Ecriture d'un symbole");
     fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.ligne,p->val.zone,p->val.arrivee,p->val.nom);
+}
+
+
+
+
+
+void writeReloc(){
+
 }

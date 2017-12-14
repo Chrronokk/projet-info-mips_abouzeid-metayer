@@ -98,7 +98,7 @@ int main ( int argc, char *argv[] ) {
 
   gram=analyse_gram(Col_mod);
   puts("Fin de l'analyse_gram");
-  /*affiche_liste_etiq(gram.tab_etiq);
+    affiche_liste_etiq(gram.tab_etiq);
 	affiche_liste_inst(gram.col_text);
 	affiche_liste_dir(gram.col_data);
 	affiche_liste_dir(gram.col_bss);
