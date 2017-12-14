@@ -244,9 +244,15 @@ Gram analyse_gram(LISTE Col){
 	instLISTE ll=col_text;
 	while(ll->suiv!=NULL){
 		bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
-		printf("binaire: %x\n",bin);
+		printf("binaire: %08X\n",bin);
 		ll=ll->suiv;
+<<<<<<< HEAD
 	}*/
+=======
+	}
+	bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
+	printf("binaire: %08X\n",bin);
+>>>>>>> 54948eaa6704dc9ffb6b652c5fd7696430f3fa38
 
 	Gram gram;
 
@@ -257,9 +263,9 @@ Gram analyse_gram(LISTE Col){
 	gram.reloc_text=reloc_text;
 	gram.reloc_data=reloc_data;
 
-	/*affiche_liste_etiq(gram.tab_etiq);
+	/*affiche_liste_etiq(gram.tab_etiq);*/
 	affiche_liste_inst(gram.col_text);
-	affiche_liste_dir(gram.col_data);
+	/*affiche_liste_dir(gram.col_data);
 	affiche_liste_dir(gram.col_bss);
 	affiche_liste_reloc(gram.reloc_text);
 	affiche_liste_reloc(gram.reloc_data);

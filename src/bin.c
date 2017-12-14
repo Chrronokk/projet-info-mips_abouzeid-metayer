@@ -210,11 +210,13 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
   int off;
   int ind;
   int codeBinaire;
+  int r;
   if(type=='R'){
     function=dico[i].arg.R.function;
     if(dico[i].arg.R.rr1.bin<0){
-      if(strcmp(inst.op[0].type,"REG")){
-        r1=check_reg(inst.op[0].nom);
+      r=quel_op(dico[i].arg.R.rr1.rg);
+      if(strcmp(inst.op[r].type,"REG")==0){
+        r1=check_reg(inst.op[r].nom);
       }
       else{
         return -1;
@@ -223,9 +225,10 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r1=dico[i].arg.R.rr1.bin;
     }
-    if(isalpha(dico[i].arg.R.rr2.rg[0])!=0){
-      if(strcmp(inst.op[1].type,"REG")==0){
-        r2=check_reg(inst.op[1].nom);
+    if(dico[i].arg.R.rr2.bin<0){
+      r=quel_op(dico[i].arg.R.rr2.rg);
+      if(strcmp(inst.op[r].type,"REG")==0){
+        r2=check_reg(inst.op[r].nom);
       }
       else{
         return -1;
@@ -234,11 +237,13 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r2=dico[i].arg.R.rr2.bin;
     }
-    if(isalpha(dico[i].arg.R.rr3.rg[0])!=0){
-      if(strcmp(inst.op[2].type,"REG")==0){
-        r3=check_reg(inst.op[2].nom);
+    if(dico[i].arg.R.rr3.bin<0){
+      r=quel_op(dico[i].arg.R.rr3.rg);
+      if(strcmp(inst.op[r].type,"REG")==0){
+        r3=check_reg(inst.op[r].nom);
       }
       else{
+        puts("----------------------------------");
         return -1;
       }
     }
@@ -269,8 +274,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
   }
   else if(type=='I'){
     if(dico[i].arg.I.ir1.bin<0){
-      if(strcmp(inst.op[0].type,"REG")==0){
-        r1=check_reg(inst.op[0].nom);
+      r=quel_op(dico[i].arg.I.ir1.rg);
+      if(strcmp(inst.op[r].type,"REG")==0){
+        r1=check_reg(inst.op[r].nom);
       }
       else{
         return -1;
@@ -281,8 +287,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     }
 
     if(dico[i].arg.I.ir2.bin<0){
-      if(strcmp(inst.op[1].type,"REG")==0){
-        r2=check_reg(inst.op[1].nom);
+      r=quel_op(dico[i].arg.I.ir2.rg);
+      if(strcmp(inst.op[r].type,"REG")==0){
+        r2=check_reg(inst.op[r].nom);
       }
       else{
         return -1;
@@ -294,22 +301,25 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
 
     if(dico[i].arg.I.off.bin<0){
       if(strcmp(dico[i].arg.I.off.rg,"imm")==0){
-        if(strcmp(inst.op[2].type,"DEC")==0){
-          off=strtol(inst.op[2].nom,NULL,10);
+        if(strcmp(inst.op[r+1].type,"DEC")==0){
+          off=strtol(inst.op[r+1].nom,NULL,10);
         }
-        else if(strcmp(inst.op[2].type,"HEXA")==0){
-          off=strtol(inst.op[2].nom,NULL,16);
+        else if(strcmp(inst.op[r+1].type,"HEXA")==0){
+          off=strtol(inst.op[r+1].nom,NULL,16);
         }
         else return -1;
       }
       else if(strcmp(dico[i].arg.I.off.rg,"off")==0){
-        if(strcmp(inst.op[2].type_off,"DEC")==0){
-          off=strtol(inst.op[2].offset,NULL,10);
+        if(strcmp(inst.op[1].type_off,"DEC")==0){
+          off=strtol(inst.op[1].offset,NULL,10);
         }
-        else if(strcmp(inst.op[2].type_off,"HEXA")==0){
-          off=strtol(inst.op[2].offset,NULL,16);
+        else if(strcmp(inst.op[1].type_off,"HEXA")==0){
+          off=strtol(inst.op[1].offset,NULL,16);
         }
-        else return -1;
+        else{
+          puts("---------------------------------------------------------");
+          return -1;
+        }
       }
     }
     else{
@@ -345,7 +355,12 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
 }
 
 
-
+int quel_op(char* reg){
+  if(strcmp(reg,"r1")==0) return 0;
+  if(strcmp(reg,"r2")==0) return 1;
+  if(strcmp(reg,"r3")==0) return 2;
+  else return -1;
+}
 
 
 
