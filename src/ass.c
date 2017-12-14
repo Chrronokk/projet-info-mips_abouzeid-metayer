@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <f_annexe.h>
 #include <global.h>
+#include <string.h>
 #include "ass.h"
-
 
 void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     FILE* file = NULL;
@@ -19,30 +19,30 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     /* Ecriture du .text */
 
     for(i=0;i<nblines;i++){
-        puts("123");
-        if (p->val.ligne==i){
-            printf("Instruction trouvée ligne %d", i);
+        /*printf("On compare %d et %d\n",i,p->val.ligne);*/
+        if (p->val.ligne==i+1){
+            /*printf("Instruction trouvée ligne %d\n", i);*/
             write=TRUE;
-            while (p->val.ligne==i){
-                printf("%s\n",p->suiv->val.symbole);
-                writeLineAssTxt(file,source,i,p->val.adresse,456,write);
+            while (p->val.ligne==i+1){
+
+                printf("Boucle while pour la ligne %d\n",p->val.ligne);
+                writeLineAssTxt(file,source,i+1,p->val.adresse,456,write);
                 write=FALSE;
-                puts("while");
                 p=p->suiv;
-                puts("while2");
+
+
             }
             if (p->suiv == NULL){
-                writeLineAssTxt(file,source,i,p->val.adresse,456,write);
+                writeLineAssTxt(file,source,i+1,p->val.adresse,456,write);
                 write=FALSE;
+
             }
         }
         else {
-            copyLine(file,source,i);
+            copyLine(file,source,i+1);
         }
     }
-    /*
     writeSymtab(file,tab_etiq);
-    */
     /*
     writeReltext();
     writeRelData();
@@ -53,8 +53,6 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     fclose(source);
     return;
 }
-
-
 
 void copyLine(FILE* file,FILE* source,int line){
     char l[255] ="";
@@ -76,19 +74,25 @@ void writeLineAssTxt(FILE* file,FILE* source,int line,int address,int code, int 
 
     /* Ecriture de la ligne et du code */
 
-    fprintf(file,"%3d %08X %08X",line, address, code);
+    fprintf(file,"%3d %08X %08X ",line, address, code);
 
     if (write==TRUE){
+        puts("Writing");
         fgets(l,255,source);
         if (l[0]==(char)9){
             fprintf(file,"    %s",l+1);
         }
-    else{
-        fprintf(file,"%s",l);
+        else{
+            fprintf(file,"%s",l);
         }
     }
+    if (write==FALSE){
+        puts("Not Writing");
+        fprintf(file,"%s\n",l);
+    }
 
-    fprintf(file,"\n");
+
+    /*fprintf(file,"\n");*/
 
 }
 
@@ -125,7 +129,7 @@ void writeLineAssTxt(FILE* file,FILE* source,int line,int address,int code, int 
 */
 
 void writeSymtab(FILE* file,etiqLISTE tab){
-
+    puts("--------------------");
     fprintf(file,"\n.symtab\n");
 
     etiqLISTE p=tab;
