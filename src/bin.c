@@ -48,6 +48,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.R.rr1.rg=calloc(strlen(r1),sizeof(char));
         strcpy(dico_bin[i].arg.R.rr1.rg,r1);
+        dico_bin[i].arg.R.rr1.bin=-1;
       }
       if(isdigit(r2[0])){
         if(r2[1]=='0'){
@@ -60,6 +61,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.R.rr2.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.R.rr2.rg,r2);
+        dico_bin[i].arg.R.rr2.bin=-1;
       }
       if(isdigit(r3[0])){
         if(r3[1]=='0'){
@@ -72,11 +74,12 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.R.rr3.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.R.rr3.rg,r3);
+        dico_bin[i].arg.R.rr3.bin=-1;
       }
       if(isdigit(sa[0])){
         if(sa[0]=='0'){
           dico_bin[i].arg.R.rsa.bin=0;
-        }
+      }
         else{
           dico_bin[i].arg.R.rsa.bin=atoi(sa);
         }
@@ -84,7 +87,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.R.rsa.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.R.rsa.rg,sa);
-        printf("%s\n",dico_bin[i].arg.R.rsa.rg);
+        dico_bin[i].arg.R.rsa.bin=-1;
       }
     }
     else if(type=='I'){
@@ -100,6 +103,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.I.ir1.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.I.ir1.rg,r1);
+        dico_bin[i].arg.I.ir1.bin=-1;
       }
       if(isdigit(r2[0])){
         if(r2[0]=='0'){
@@ -112,6 +116,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.I.ir2.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.I.ir2.rg,r2);
+        dico_bin[i].arg.I.ir2.bin=-1;
       }
       if(isdigit(r3[0])){
         if(r3[0]=='0'){
@@ -124,6 +129,7 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.I.off.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.I.off.rg,r3);
+        dico_bin[i].arg.I.off.bin=-1;
       }
     }
     else if(type=='J'){
@@ -139,27 +145,49 @@ instr_def_bin* lecture_dico_bin(int* p_nb_instr){
       else{
         dico_bin[i].arg.J.ind.rg=calloc(4,sizeof(char));
         strcpy(dico_bin[i].arg.J.ind.rg,ind);
+        dico_bin[i].arg.J.ind.bin=-1;
       }
     }
 
   }
+
   return dico_bin;
 }
 
 
-void affiche_dico_bin(instr_def_bin* dico_bin,int n){
+void affiche_dico_bin(instr_def_bin* dico,int n){
   int i;
   puts("Affichage du dictionnaire du binaire");
   for(i=0;i<n;i++){
-    printf("%s %c %d ",dico_bin[i].nom,dico_bin[i].type,dico_bin[i].opcode);
-    if(dico_bin[i].type=='R'){
-      printf("%s %s %s %s %d \n",dico_bin[i].arg.R.rr1.rg, dico_bin[i].arg.R.rr2.rg, dico_bin[i].arg.R.rr3.rg,dico_bin[i].arg.R.rsa.rg, dico_bin[i].arg.R.function);
+    printf("%s %c %d ",dico[i].nom,dico[i].type,dico[i].opcode);
+    if(dico[i].type=='R'){
+      if(dico[i].arg.R.rr1.bin<0) printf("%s ",dico[i].arg.R.rr1.rg);
+      else printf("%d ",dico[i].arg.R.rr1.bin);
+
+      if(dico[i].arg.R.rr2.bin<0) printf("%s ",dico[i].arg.R.rr2.rg);
+      else printf("%d ",dico[i].arg.R.rr2.bin);
+
+      if(dico[i].arg.R.rr3.bin<0) printf("%s ",dico[i].arg.R.rr3.rg);
+      else printf("%d ",dico[i].arg.R.rr3.bin);
+
+      if(dico[i].arg.R.rsa.bin<0) printf("%s ",dico[i].arg.R.rsa.rg);
+      else printf("%d ",dico[i].arg.R.rsa.bin);
+
+      printf("%d\n",dico[i].arg.R.function);
     }
-    if(dico_bin[i].type=='I'){
-      printf("%s %s %s \n",dico_bin[i].arg.I.ir1.rg,dico_bin[i].arg.I.ir2.rg,dico_bin[i].arg.I.off.rg);
+    if(dico[i].type=='I'){
+      if(dico[i].arg.I.ir1.bin<0) printf("%s ",dico[i].arg.I.ir1.rg);
+      else printf("%d ",dico[i].arg.I.ir1.bin);
+
+      if(dico[i].arg.I.ir2.bin<0) printf("%s ",dico[i].arg.I.ir2.rg);
+      else printf("%d ",dico[i].arg.I.ir2.bin);
+
+      if(dico[i].arg.I.off.bin<0) printf("%s \n",dico[i].arg.I.off.rg);
+      else printf("%d\n ",dico[i].arg.I.off.bin);
     }
-    if(dico_bin[i].type=='J'){
-      printf("%s \n",dico_bin[i].arg.J.ind.rg);
+    if(dico[i].type=='J'){
+      if(dico[i].arg.J.ind.bin<0) printf("%s\n",dico[i].arg.J.ind.rg);
+      else printf("%d \n",dico[i].arg.J.ind.bin);
     }
   }
   puts("Fin de l'affichage du ditionnaire binaire\n ");
@@ -184,7 +212,7 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
   int codeBinaire;
   if(type=='R'){
     function=dico[i].arg.R.function;
-    if(isalpha(dico[i].arg.R.rr1.rg)!=0){
+    if(dico[i].arg.R.rr1.bin<0){
       if(strcmp(inst.op[0].type,"REG")){
         r1=check_reg(inst.op[0].nom);
       }
@@ -195,8 +223,8 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r1=dico[i].arg.R.rr1.bin;
     }
-    if(isalpha(dico[i].arg.R.rr2.rg)!=0){
-      if(strcmp(inst.op[1].type,"REG")){
+    if(isalpha(dico[i].arg.R.rr2.rg[0])!=0){
+      if(strcmp(inst.op[1].type,"REG")==0){
         r2=check_reg(inst.op[1].nom);
       }
       else{
@@ -206,8 +234,8 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r2=dico[i].arg.R.rr2.bin;
     }
-    if(isalpha(dico[i].arg.R.rr3.rg)!=0){
-      if(strcmp(inst.op[2].type,"REG")){
+    if(isalpha(dico[i].arg.R.rr3.rg[0])!=0){
+      if(strcmp(inst.op[2].type,"REG")==0){
         r3=check_reg(inst.op[2].nom);
       }
       else{
@@ -217,7 +245,7 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r3=dico[i].arg.R.rr3.bin;
     }
-    if(isalpha(dico[i].arg.R.rsa.rg)!=0){
+    if(dico[i].arg.R.rsa.bin<0){
       if(strcmp(inst.op[2].type,"DEC")==0){
         sa=strtol(inst.op[2].nom,NULL,10);
       }
@@ -229,6 +257,7 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       sa=dico[i].arg.R.rsa.bin;
     }
+    printf("%d %d %d %d %d %d\n",opcode,r1,r2,r3,sa,function);
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
     codeBinaire = codeBinaire | (r1 << 21);
@@ -239,8 +268,8 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     return codeBinaire;
   }
   else if(type=='I'){
-    if(isalpha(dico[i].arg.I.ir1.rg)!=0){
-      if(strcmp(inst.op[0].type,"REG")){
+    if(dico[i].arg.I.ir1.bin<0){
+      if(strcmp(inst.op[0].type,"REG")==0){
         r1=check_reg(inst.op[0].nom);
       }
       else{
@@ -250,8 +279,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r1=dico[i].arg.I.ir1.bin;
     }
-    if(isalpha(dico[i].arg.I.ir2.rg)!=0){
-      if(strcmp(inst.op[1].type,"REG")){
+
+    if(dico[i].arg.I.ir2.bin<0){
+      if(strcmp(inst.op[1].type,"REG")==0){
         r2=check_reg(inst.op[1].nom);
       }
       else{
@@ -261,18 +291,31 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r2=dico[i].arg.I.ir2.bin;
     }
-    if(isalpha(dico[i].arg.I.off.rg)!=0){
-      if(strcmp(inst.op[2].type,"DEC")==0){
-        off=strtol(inst.op[2].nom,NULL,10);
+
+    if(dico[i].arg.I.off.bin<0){
+      if(strcmp(dico[i].arg.I.off.rg,"imm")==0){
+        if(strcmp(inst.op[2].type,"DEC")==0){
+          off=strtol(inst.op[2].nom,NULL,10);
+        }
+        else if(strcmp(inst.op[2].type,"HEXA")==0){
+          off=strtol(inst.op[2].nom,NULL,16);
+        }
+        else return -1;
       }
-      else if(strcmp(inst.op[2].type,"HEXA")==0){
-        off=strtol(inst.op[2].nom,NULL,16);
+      else if(strcmp(dico[i].arg.I.off.rg,"off")==0){
+        if(strcmp(inst.op[2].type_off,"DEC")==0){
+          off=strtol(inst.op[2].offset,NULL,10);
+        }
+        else if(strcmp(inst.op[2].type_off,"HEXA")==0){
+          off=strtol(inst.op[2].offset,NULL,16);
+        }
+        else return -1;
       }
-      else return -1;
     }
     else{
       off=dico[i].arg.I.off.bin;
     }
+    printf("%d %d %d %d\n",opcode,r1,r2,off);
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
     codeBinaire = codeBinaire | (r1 << 21);
@@ -281,7 +324,7 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     return codeBinaire;
   }
   else if(type=='J'){
-    if(isalpha(dico[i].arg.J.ind.rg)!=0){
+    if(dico[i].arg.J.ind.bin<0){
       if(strcmp(inst.op[0].type,"DEC")==0){
         ind=strtol(inst.op[0].nom,NULL,10);
       }
@@ -298,6 +341,7 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     codeBinaire = codeBinaire | (ind << 0);
     return codeBinaire;
   }
+  else return -1;
 }
 
 

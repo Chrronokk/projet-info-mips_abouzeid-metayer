@@ -112,27 +112,27 @@ typedef struct {
 	relocLISTE reloc_data;
 } Gram;
 
-union element{
+typedef struct {
 	char* rg;
 	int bin;
-};
+} element;
 
 typedef struct{
-	union element rr1;
-	union element rr2;
-	union element rr3;
-	union element rsa;
+	element rr1;
+	element rr2;
+	element rr3;
+	element rsa;
 	int function;
 } instr_bin_R;
 
 typedef struct{
-	union element ir1;
-	union element ir2;
-	union element off;
+	element ir1;
+	element ir2;
+	element off;
 } instr_bin_I;
 
 typedef struct{
-	union element ind;
+	element ind;
 } instr_bin_J;
 
 
