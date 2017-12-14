@@ -260,15 +260,15 @@ void affiche_liste_inst(instLISTE l){
     nb_op=c->val.nb_op;
 		printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
     for(i=0;i<nb_op;i++){
-      printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
-    	}
+      printf("[Operande %d] nom:%s, type:%s, offset:%s de type %s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset,c->val.op[i].type_off );
+    }
     puts("\n");
 		c=c->suiv;
   }
   nb_op=c->val.nb_op;
   printf("[Instruction %s] adresse: %d, nombre d'op: %d, ligne: %d\n",c->val.symbole,c->val.adresse,c->val.nb_op,c->val.ligne);
   for(i=0;i<nb_op;i++){
-    printf("[Operande %d] nom:%s, type:%s, offset:%s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset );
+    printf("[Operande %d] nom:%s, type:%s, offset:%s de type %s\n",i,c->val.op[i].nom,c->val.op[i].type,c->val.op[i].offset,c->val.op[i].type_off );
     }
   puts("\n");
 }
