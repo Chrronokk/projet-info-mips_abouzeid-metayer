@@ -2,8 +2,6 @@
 # allons au ru
 .set noreorder
 .text
-	LW $6, -0x200($7)
-	LW $8, 0xaa0($9)
 	ADDI $t1,$zero,8
 boucle:
 	NOP

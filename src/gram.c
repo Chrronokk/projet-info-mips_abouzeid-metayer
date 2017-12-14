@@ -50,7 +50,6 @@ Gram analyse_gram(LISTE Col){
 
 	ETIQUETTE etiq;
 	while (p->suiv!=NULL){
-		/*printf("%s \n",p->val.lex);*/
 		int ETAT=INIT;
 		int continu = TRUE;
 		while (continu == TRUE){
@@ -237,14 +236,18 @@ Gram analyse_gram(LISTE Col){
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-	/*instr_def_bin* dico_bin;
+	instr_def_bin* dico_bin;
 	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
   dico_bin=lecture_dico_bin(p_nb_instr);
   affiche_dico_bin(dico_bin,*p_nb_instr);
 	int bin;
-	bin=creation_binaire(col_text->val,dico_bin,*p_nb_instr);
-	printf("%x\n",bin);
-	*/
+	instLISTE ll=col_text;
+	while(ll->suiv!=NULL){
+		bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
+		printf("binaire: %x\n",bin);
+		ll=ll->suiv;
+	}
+
 	Gram gram;
 
 	gram.col_text=col_text;
@@ -271,7 +274,7 @@ Gram analyse_gram(LISTE Col){
 /* Lit le fichier contenant le dictionnaire d'instructions et renvoi un tableau contenant le dictionnaire*/
 
 instr_def* lecture_dico(int* p_nb_instr){
-	puts("Lecture du dictionnaire");
+	/*puts("Lecture du dictionnaire");*/
 	FILE* f1= fopen("Dicos/dictionnaire.txt","r");
 	int i;
 	instr_def* dico;
@@ -299,8 +302,8 @@ instr_def* lecture_dico(int* p_nb_instr){
 		strcpy(dico[i].optype_tab[1],op1);
 		dico[i].optype_tab[2]=calloc(strlen(op2),sizeof(char));
 		strcpy(dico[i].optype_tab[2],op2);
-		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
-		puts(" ");
+		/*printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
+		puts(" ");*/
 	}
 	fclose(f1);
 	return dico;
@@ -647,7 +650,7 @@ int check_reg(char* registre){
 	}
 
 	if (isalpha(reg[1])){
-		puts("lettre");
+		/*puts("lettre");*/
 
 		x=atoi(reg+2);
 
@@ -700,7 +703,7 @@ int check_reg(char* registre){
 			puts("ERREUR: REGISTRE INVALIDE");
 			return -1;
 		}
-		printf("nombre: %d\n",nreg);
+		/*printf("nombre: %d\n",nreg);*/
 		return nreg;
 	}
 	printf("%d\n",nreg);
