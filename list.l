@@ -17,4 +17,17 @@
  16 00000020 000001C8     NOP
  16 00000024 000001C8 
  17                   byebye:
- 18 00000024 000001C8     JAL viteviteauru
+ 18                       JAL viteviteauru
+ 19                   
+ 20                   .data
+ 21 00000000 000003E7 lunchtime: .word 12
+ 22 00000004 000003E7 .word menu
+ 23                   
+ 24                   .bss
+ 25 00000000 000003E7 menu:.space 24
+
+.symtab
+ 11	.text:00000010	boucle
+ 17	.text:00000024	byebye
+ 21	.data:00000000	lunchtime
+ 25	.bss :00000000	menu

@@ -5,41 +5,68 @@
 #include <string.h>
 #include "ass.h"
 
-void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
+void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,dirLISTE pdata, dirLISTE pbss){
     FILE* file = NULL;
+
+
     file= fopen("list.l","w+");
     int i, write;
-    affiche_liste_inst(p);
+    int fintext=FALSE;
+    int findata=FALSE;
+    int finbss=FALSE;
 
     if (file==NULL || source==NULL){
         puts("ERREUR PENDANT LA CREATION DE LA LISTE D'ASSEMBLAGE");
         return;
     }
 
-    /* Ecriture du .text */
 
     for(i=0;i<nblines;i++){
-        /*printf("On compare %d et %d\n",i,p->val.ligne);*/
-        if (p->val.ligne==i+1){
+        printf("On compare %d et %d\n",i+1,ptext->val.ligne);
+
+        if (ptext->val.ligne==i+1 && fintext ==FALSE){
+            puts("ecriture de l'instruction");
             /*printf("Instruction trouvée ligne %d\n", i);*/
             write=TRUE;
-            while (p->val.ligne==i+1){
+            while (ptext->val.ligne==i+1){
 
-                printf("Boucle while pour la ligne %d\n",p->val.ligne);
-                writeLineAssTxt(file,source,i+1,p->val.adresse,456,write);
+                printf("Boucle while pour la ligne %d\n",ptext->val.ligne);
+                writeLineAssTxt(file,source,i+1,ptext->val.adresse,456,write);
                 write=FALSE;
-                p=p->suiv;
-
-
+                ptext=ptext->suiv;
             }
-            if (p->suiv == NULL){
-                writeLineAssTxt(file,source,i+1,p->val.adresse,456,write);
+            if (ptext->suiv == NULL){
+                writeLineAssTxt(file,source,i+1,ptext->val.adresse,456,write);
                 write=FALSE;
+                fintext =TRUE;
+            }
 
+
+        }
+        else if(findata == FALSE && pdata->val.ligne==i+1){
+            if (pdata->val.ligne==i+1){
+                puts("Ecriture data");
+                fprintf(file,"%3d %08X %08X ",pdata->val.ligne,pdata->val.decalage,999);
+                copyLine(file, source,i+1,FALSE);
+                if (pdata->suiv==NULL){
+                    findata = TRUE;
+                    puts("Fin du data");
+                }
+                pdata=pdata->suiv;
             }
         }
+        else if(pbss->val.ligne==i+1 && finbss ==FALSE){
+            puts("ecriture bss");
+            fprintf(file,"%3d %08X %08X ",pbss->val.ligne,pbss->val.decalage,999);
+            copyLine(file, source,i+1,FALSE);
+            if (pbss->suiv==NULL){
+                finbss = TRUE;
+            }
+            pbss=pbss->suiv;
+        }
         else {
-            copyLine(file,source,i+1);
+            puts("Copie de la ligne");
+            copyLine(file,source,i+1,TRUE);
         }
     }
     writeSymtab(file,tab_etiq);
@@ -54,12 +81,16 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     return;
 }
 
-void copyLine(FILE* file,FILE* source,int line){
+void copyLine(FILE* file,FILE* source,int line,int full){
     char l[255] ="";
-    printf("line %d copied\n",line);
-    fprintf(file,"%3d                   ",line);
+
+    if (full==TRUE){
+        printf("line %d copied\n",line);
+        fprintf(file,"%3d                   ",line);
+    }
 
     fgets(l,255,source);
+
     if (l[0]==(char)9){
         fprintf(file,"    %s",l+1);
     }
@@ -129,14 +160,13 @@ void writeLineAssTxt(FILE* file,FILE* source,int line,int address,int code, int 
 */
 
 void writeSymtab(FILE* file,etiqLISTE tab){
-    puts("--------------------");
     fprintf(file,"\n.symtab\n");
 
     etiqLISTE p=tab;
 
     while (p->suiv !=NULL){
-        fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
+        fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.ligne,p->val.zone,p->val.arrivee,p->val.nom);
         p=p->suiv;
     }
-    fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.decalage,p->val.zone,p->val.arrivee,p->val.nom);
+    fprintf(file,"%3d\t%-4s:%08X\t%s\n",p->val.ligne,p->val.zone,p->val.arrivee,p->val.nom);
 }

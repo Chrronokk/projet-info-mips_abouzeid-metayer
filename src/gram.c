@@ -210,7 +210,7 @@ Gram analyse_gram(LISTE Col){
 				case ETIQ:
 					if(strcmp(p->suiv->val.type,"DP")==0){
 						if(recherche_etiq(p->val.lex,tab_etiq)<0){
-							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq,decalage);
+							etiq=creer_etiquette(p->val.lex,decalage,zone,etiq,decalage,p->val.line);
 							tab_etiq=ajout_etiq(etiq,tab_etiq);
 							p=p->suiv->suiv;
 							continu=FALSE;
@@ -526,13 +526,14 @@ etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq){
 
 
 /* créer un aillon étiquette comprenant les informations nécessaires sur l'étiquette en entrée*/
-ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage){
+ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage, int ligne){
 	etiq.nom=calloc(strlen(nom),sizeof(*nom));
 	strcpy(etiq.nom,nom);
 	etiq.zone=calloc(strlen(zone),sizeof(*zone));
 	strcpy(etiq.zone,zone);
 	etiq.arrivee=adresse;
 	etiq.decalage=decalage;
+	etiq.ligne=ligne;
 	return etiq;
 }
 

@@ -107,7 +107,7 @@ int main ( int argc, char *argv[] ) {
 
     FILE *fichier = NULL;
     fichier=fopen(file,"r");
-    writeAss(fichier,gram.tab_etiq,nlines,gram.col_text);*/
+    writeAss(fichier,gram.tab_etiq,nlines,gram.col_text,gram.col_data,gram.col_bss);
 
     /* --------------- Free memory and terminate ----------------*/
 

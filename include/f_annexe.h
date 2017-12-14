@@ -34,6 +34,7 @@ typedef struct{
 	int arrivee;
 	int decalage;
 	char* zone;
+	int ligne;
 } ETIQUETTE;
 
 
