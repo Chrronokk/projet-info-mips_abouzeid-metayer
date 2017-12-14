@@ -50,6 +50,7 @@ typedef struct{
 	char* nom;
 	char* type;
 	char* offset;
+
 } OPERANDE;
 
 
@@ -60,7 +61,7 @@ typedef struct{
 	OPERANDE op[3];
 	int ligne;
 	int bin;
-	int hidden; 
+	int hidden;
 } instruction;
 
 struct instMAILLON{

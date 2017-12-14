@@ -1,4 +1,4 @@
-  0                   # blabla
+  0                   # TEST_RETURN_CODE=PASS
   1                   # allons au ru
   2                   
   3                   

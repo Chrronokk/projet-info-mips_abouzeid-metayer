@@ -297,9 +297,9 @@ instr_def* lecture_dico(int* p_nb_instr){
 		dico[i].optype_tab[2]=calloc(strlen(op2),sizeof(char));
 		strcpy(dico[i].optype_tab[2],op2);
 		printf("%s %c %d %s %s %s\n",dico[i].symbole,dico[i].type,dico[i].nb_op,dico[i].optype_tab[0],dico[i].optype_tab[1],dico[i].optype_tab[2]);
-		puts(" ");
 	}
 	fclose(f1);
+	puts("ABCD");
 	return dico;
 }
 

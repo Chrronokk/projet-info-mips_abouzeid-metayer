@@ -9,7 +9,6 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     FILE* file = NULL;
     file= fopen("list.l","w+");
     int i, write;
-
     affiche_liste_inst(p);
 
     if (file==NULL || source==NULL){
@@ -20,10 +19,11 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE p){
     /* Ecriture du .text */
 
     for(i=0;i<nblines;i++){
+        puts("123");
         if (p->val.ligne==i){
             printf("Instruction trouvée ligne %d", i);
             write=TRUE;
-            while (p->val.ligne==i ){
+            while (p->val.ligne==i){
                 printf("%s\n",p->suiv->val.symbole);
                 writeLineAssTxt(file,source,i,p->val.adresse,456,write);
                 write=FALSE;
