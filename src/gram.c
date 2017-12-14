@@ -237,11 +237,14 @@ Gram analyse_gram(LISTE Col){
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-	instr_def_bin* dico_bin;
+	/*instr_def_bin* dico_bin;
 	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
   dico_bin=lecture_dico_bin(p_nb_instr);
   affiche_dico_bin(dico_bin,*p_nb_instr);
-
+	int bin;
+	bin=creation_binaire(col_text->val,dico_bin,*p_nb_instr);
+	printf("%x\n",bin);
+	*/
 	Gram gram;
 
 	gram.col_text=col_text;
@@ -328,7 +331,7 @@ OPERANDE creer_op(char* name, char* ty, char* off,char* type_off){
 	op.nom=calloc(strlen(name),sizeof(char));
 	op.type=calloc(strlen(ty),sizeof(char));
 	op.offset=calloc(strlen(off),sizeof(char));
-	op.type_off=calloc(strlen(type_off)),sizeof(char));
+	op.type_off=calloc(strlen(type_off),sizeof(char));
 
 	strcpy(op.nom,name);
 	strcpy(op.type,ty);

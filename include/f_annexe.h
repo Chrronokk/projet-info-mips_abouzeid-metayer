@@ -61,7 +61,7 @@ typedef struct{
 	OPERANDE op[3];
 	int ligne;
 	int bin;
-	int hidden; 
+	int hidden;
 } instruction;
 
 struct instMAILLON{
@@ -127,11 +127,11 @@ typedef struct{
 typedef struct{
 	union element ir1;
 	union element ir2;
-	char* imm;
+	union element off;
 } instr_bin_I;
 
 typedef struct{
-	char* ind;
+	union element ind;
 } instr_bin_J;
 
 
