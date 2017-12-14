@@ -20,7 +20,7 @@ int test_nb_op_inst(LISTE p, int nb_op);
 int test_type_op_inst(instruction inst, instr_def* dico, etiqLISTE tab_etiq);
 int recherche_etiq(char* etiq, etiqLISTE tab_etiq);
 etiqLISTE ajout_etiq(ETIQUETTE etiq, etiqLISTE tab_etiq);
-ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage);
+ETIQUETTE creer_etiquette(char* nom, int adresse,	char* zone,ETIQUETTE etiq,int decalage, int);
 dirLISTE add_dir(LISTE p_lex,int decalage, dirLISTE col);
 int decalage_asciiz(LISTE p);
 int decalage_byte(LISTE p);
