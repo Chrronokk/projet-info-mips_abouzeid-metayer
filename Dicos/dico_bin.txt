@@ -1,6 +1,6 @@
 24
 ADD  R 0 r1 r2 r3 0 64
-ADDI I 8 r1  r2  imm
+ADDI I 8 r1  r2  off
 AND  R 0 r1  r2  r3  0 36
 BEQ  I 4 r1  r2  off
 BGTZ I 7 r1  0 off
@@ -10,7 +10,7 @@ DIV  R 0 r1  r2  0 0 26
 J    J 2 ind
 JAL  J 3 ind
 JR   R 0 r1 0 0 0 8
-LUI  I 15 0 r1  imm
+LUI  I 15 0 r1  off
 LW   I 35 r2  r1  off
 MFHI R 0 0 0 r1  0 16
 MFLO R 0 0 0 r1  0 18

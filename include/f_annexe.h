@@ -50,7 +50,7 @@ typedef struct{
 	char* nom;
 	char* type;
 	char* offset;
-
+	char* type_off;
 } OPERANDE;
 
 
@@ -127,11 +127,11 @@ typedef struct{
 typedef struct{
 	union element ir1;
 	union element ir2;
-	char* imm;
+	union element off;
 } instr_bin_I;
 
 typedef struct{
-	char* ind;
+	union element ind;
 } instr_bin_J;
 
 

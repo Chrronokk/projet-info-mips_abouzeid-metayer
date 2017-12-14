@@ -237,11 +237,14 @@ Gram analyse_gram(LISTE Col){
 	reloc_text=reloc_etiq_text(col_text,tab_etiq,reloc_text);
 	reloc_data=reloc_etiq_data(col_data,tab_etiq,reloc_data);
 
-	instr_def_bin* dico_bin;
+	/*instr_def_bin* dico_bin;
 	dico_bin=calloc(*p_nb_instr,sizeof(instr_def_bin));
   dico_bin=lecture_dico_bin(p_nb_instr);
   affiche_dico_bin(dico_bin,*p_nb_instr);
-
+	int bin;
+	bin=creation_binaire(col_text->val,dico_bin,*p_nb_instr);
+	printf("%x\n",bin);
+	*/
 	Gram gram;
 
 	gram.col_text=col_text;
@@ -321,17 +324,19 @@ int is_in_dico(char* symbole,instr_def* dictionnaire,int nb_instr){
 
 
 /*cree et renvoie une structure operande contenant les 3 string données*/
-OPERANDE creer_op(char* name, char* ty, char* off){
+OPERANDE creer_op(char* name, char* ty, char* off,char* type_off){
 
 	OPERANDE op;
 
 	op.nom=calloc(strlen(name),sizeof(char));
 	op.type=calloc(strlen(ty),sizeof(char));
 	op.offset=calloc(strlen(off),sizeof(char));
+	op.type_off=calloc(strlen(type_off),sizeof(char));
 
 	strcpy(op.nom,name);
 	strcpy(op.type,ty);
 	strcpy(op.offset,off);
+	strcpy(op.type_off,type_off);
 
 	return op;
 }
@@ -358,16 +363,16 @@ instLISTE add_inst(instLISTE insts, LISTE p_lex, int nb_op, int adresse){
 		if(strcmp(p_lex->val.type,"VIR")!=0){
 			if (strcmp(p_lex->val.type,"HEXA")*strcmp(p_lex->val.type,"DEC")*strcmp(p_lex->val.type,"SYM")==0){
 				if (strcmp(p_lex->suiv->val.lex,"(")==0){
-					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex);
+					op=creer_op(p_lex->suiv->suiv->val.lex,"REG",p_lex->val.lex,p_lex->val.type);
 					p_lex=p_lex->suiv->suiv->suiv;
 				}
 				else{
-					op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+					op=creer_op(p_lex->val.lex,p_lex->val.type,"0","null");
 				}
 			}
 
 			else if(strcmp(p_lex->val.type,"REG")*strcmp(p_lex->val.type,"SYM")==0){
-				op=creer_op(p_lex->val.lex,p_lex->val.type,"0");
+				op=creer_op(p_lex->val.lex,p_lex->val.type,"0","null");
 				/*printf("%s\n", op.nom);*/
 			}
 			/*printf("%s\n", op.nom);*/
