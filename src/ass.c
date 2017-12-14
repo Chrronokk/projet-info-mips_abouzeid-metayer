@@ -5,7 +5,7 @@
 #include <string.h>
 #include "ass.h"
 
-void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,dirLISTE pdata, dirLISTE pbss){
+void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,dirLISTE pdata, dirLISTE pbss, relocLISTE relocText, relocLISTE relocData){
     FILE* file = NULL;
 
 
@@ -19,6 +19,7 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
         puts("ERREUR PENDANT LA CREATION DE LA LISTE D'ASSEMBLAGE");
         return;
     }
+
 
 
     for(i=0;i<nblines;i++){
@@ -71,9 +72,9 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
         }
     }
     writeSymtab(file,tab_etiq);
-    /*
-    writeReloc()
-    */
+
+    writeReloc(file, relocText, relocData);
+
 
 
     fclose(file);
@@ -176,6 +177,27 @@ void writeSymtab(FILE* file,etiqLISTE tab){
 
 
 
-void writeReloc(){
+void writeReloc(FILE* file,relocLISTE relocText, relocLISTE relocData){
+
+    relocLISTE ptext = relocText;
+    relocLISTE pdata = relocData;
+
+    if(relocText !=NULL){
+        fprintf(file,"\nrel.text\n");
+        while(ptext->suiv !=NULL){
+            fprintf(file,"%08x    %-11s  %-4s:%08x  %s\n",ptext->val.decalage,ptext->val.type,ptext->val.zone,1234,ptext->val.nom);
+            ptext=ptext->suiv;
+        }
+        fprintf(file,"%08x    %-11s  %-4s:%08x  %s\n",ptext->val.decalage,ptext->val.type,ptext->val.zone,1234,ptext->val.nom);
+    }
+
+    if(relocData !=NULL){
+        fprintf(file,"\nrel.data\n");
+        while(pdata->suiv !=NULL){
+            fprintf(file,"%08x    %-11s  %-4s:%08x  %s\n",pdata->val.decalage,pdata->val.type,pdata->val.zone,1234,pdata->val.nom);
+            pdata=pdata->suiv;
+        }
+        fprintf(file,"%08x    %-11s  %-4s:%08x  %s\n",pdata->val.decalage,pdata->val.type,pdata->val.zone,1234,pdata->val.nom);
+    }
 
 }
