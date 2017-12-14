@@ -104,12 +104,10 @@ int main ( int argc, char *argv[] ) {
 	affiche_liste_dir(gram.col_bss);
 	affiche_liste_reloc(gram.reloc_text);
 	affiche_liste_reloc(gram.reloc_data);
-*/
-    /*FILE *fichier = NULL;
-    fichier=fopen(file,"r");*/
 
-
-  /*  writeAss(fichier,gram.tab_etiq,nlines,gram.col_text);*/
+    FILE *fichier = NULL;
+    fichier=fopen(file,"r");
+    writeAss(fichier,gram.tab_etiq,nlines,gram.col_text);
 
     /* --------------- Free memory and terminate ----------------*/
 

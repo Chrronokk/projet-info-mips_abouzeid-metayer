@@ -306,6 +306,7 @@ instr_def* lecture_dico(int* p_nb_instr){
 		puts(" ");*/
 	}
 	fclose(f1);
+	puts("ABCD");
 	return dico;
 }
 
