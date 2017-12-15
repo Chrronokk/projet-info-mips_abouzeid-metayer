@@ -471,7 +471,7 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr,etiqLISTE tab_etiq){
       op=strtol(dir.symb_op,NULL,16);
     }
     else if(strcmp(dir.type_op,"SYM")==0){
-        /*etiq=recherche_etiq(dir.symb_op,tab_etiq);
+        etiq=recherche_etiq(dir.symb_op,tab_etiq);
         if(etiq<0){
           op=0;
         }
@@ -484,8 +484,8 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr,etiqLISTE tab_etiq){
           }
           decalage=l->val.decalage;
           op=decalage;
-        }*/
-        op=0;
+        }
+
     }
     else return -1;
     codeBinaire=op;
@@ -499,7 +499,7 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr,etiqLISTE tab_etiq){
       op=strtol(dir.symb_op,NULL,16);
     }
     else if(strcmp(dir.type_op,"SYM")==0){
-      /*etiq=recherche_etiq(dir.symb_op,tab_etiq);
+      etiq=recherche_etiq(dir.symb_op,tab_etiq);
       if(etiq<0){
         op=0;
       }
@@ -516,10 +516,9 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr,etiqLISTE tab_etiq){
     }
     else return -1;
     codeBinaire=0;
-    codeBinaire=(op<<16)%modulo;*/
-    op=0;
-    }
+    codeBinaire=(op<<16)%modulo;
   }
+  
   else if(strcmp(dir.dir,".asciiz")==0){
   /*  if(strcmp(dir.type_op,"ASC_OP")==0){
       op=0;
