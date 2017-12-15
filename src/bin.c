@@ -344,6 +344,7 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         }
         else if(strcmp(inst.op[1].type_off,"SYM")==0){
           off=0;
+          puts("---------------------------------------------");
         }
         else{
           return -1;
@@ -352,6 +353,11 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
     }
     else{
       off=dico[i].arg.I.off.bin;
+    }
+
+    int neg=0xFFFF0000; /*recupération des 2 octets utiles*/
+    if(off<0){
+      off=off-neg;
     }
 
     printf("%d %d %d %x\n",opcode,r1,r2,off);
@@ -376,12 +382,9 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
       else return -1;
     }
     else{
-      off=dico[i].arg.I.off.bin;
+      off=dico[i].arg.J.ind.bin;
     }
-    int neg=0xFFFF0000; /*recupération des 2 octets utiles*/
-    if(ind<0){
-      ind=off-neg;
-    }
+
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
     codeBinaire = codeBinaire | (ind << 0);
