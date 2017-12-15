@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   1                   # TEST_RETURN_CODE=PASS
   2                   # allons au ru
   3                   
@@ -35,3 +36,5 @@ rel.text
 00000000    R_MIPS_HI16   .text:000004d2  lunchtime
 00000010    R_MIPS_HI16   .text:000004d2  byebye
 0000001c    R_MIPS_26    .text:000004d2  boucle
+=======
+>>>>>>> 1ee1ddf4b700b97dd43e81a235a89178a78057e7

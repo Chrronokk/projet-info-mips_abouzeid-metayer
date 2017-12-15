@@ -162,7 +162,7 @@ LISTE lex_read_line( char *line, int nline) {
 		case COMMENT:
 				/*printf("passage\n");*/
 				if (com==0){
-					commentaire=calloc(512,sizeof(char));
+					commentaire=calloc(1000,sizeof(char));
 				}
 				com=1;
 				if(token[0]!='\n'){
@@ -170,6 +170,7 @@ LISTE lex_read_line( char *line, int nline) {
 					commentaire=strcat(commentaire," ");
 				}
 				else{
+					commentaire=strcat(commentaire,"\0");
 					com=0;
 					maillon.type="COMMENT";
 					maillon.lex=calloc(length,sizeof(*commentaire));

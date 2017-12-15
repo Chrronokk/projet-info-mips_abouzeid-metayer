@@ -253,6 +253,7 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         r3=0;
       }
       else{
+        puts("---------------------------------------------");
         return -1;
       }
     }
@@ -269,7 +270,9 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
       else if(strcmp(inst.op[r].type,"SYM")==0){
         sa=0;
       }
-      else return -1;
+      else{
+        return -1;
+      }
     }
     else{
       sa=dico[i].arg.R.rsa.bin;
@@ -322,11 +325,11 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
 
     if(dico[i].arg.I.off.bin<0){
       if(strcmp(dico[i].arg.I.off.rg,"imm")==0){
-        if(strcmp(inst.op[r+1].type,"DEC")==0){
-          off=strtol(inst.op[r+1].nom,NULL,10);
+        if(strcmp(inst.op[inst.nb_op-1].type,"DEC")==0){
+          off=strtol(inst.op[inst.nb_op-1].nom,NULL,10);
         }
-        else if(strcmp(inst.op[r+1].type,"HEXA")==0){
-          off=strtol(inst.op[r+1].nom,NULL,16);
+        else if(strcmp(inst.op[inst.nb_op-1].type,"HEXA")==0){
+          off=strtol(inst.op[inst.nb_op-1].nom,NULL,16);
         }
         else if(strcmp(inst.op[r+1].type,"SYM")==0){
           off=0;
@@ -344,7 +347,6 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         }
         else if(strcmp(inst.op[1].type_off,"SYM")==0){
           off=0;
-          puts("---------------------------------------------");
         }
         else{
           return -1;
