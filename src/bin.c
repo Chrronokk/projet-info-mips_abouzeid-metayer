@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
+#include <math.h>
 #include "f_annexe.h"
 #include "global.h"
 #include "notify.h"
@@ -194,7 +195,7 @@ void affiche_dico_bin(instr_def_bin* dico,int n){
 }
 
 
-int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
+int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
   int i;
   i=is_in_dico_bin(inst.symbole,dico,nb_instr);
   if(i<0) return -1;
@@ -218,6 +219,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       if(strcmp(inst.op[r].type,"REG")==0){
         r1=check_reg(inst.op[r].nom);
       }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        r1=0;
+      }
       else{
         return -1;
       }
@@ -229,6 +233,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       r=quel_op(dico[i].arg.R.rr2.rg);
       if(strcmp(inst.op[r].type,"REG")==0){
         r2=check_reg(inst.op[r].nom);
+      }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        r2=0;
       }
       else{
         return -1;
@@ -242,8 +249,10 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       if(strcmp(inst.op[r].type,"REG")==0){
         r3=check_reg(inst.op[r].nom);
       }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        r3=0;
+      }
       else{
-        puts("----------------------------------");
         return -1;
       }
     }
@@ -257,12 +266,19 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       else if(strcmp(inst.op[2].type,"HEXA")==0){
         sa=strtol(inst.op[2].nom,NULL,16);
       }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        sa=0;
+      }
       else return -1;
     }
     else{
       sa=dico[i].arg.R.rsa.bin;
     }
-    printf("%d %d %d %d %d %d\n",opcode,r1,r2,r3,sa,function);
+    int neg=0xFFFFFFE0; /*recupération des 2 octets utiles*/
+    if(sa<0){
+      sa=sa-neg;
+    }
+    /*printf("%d %d %d %d %d %d\n",opcode,r1,r2,r3,sa,function);*/
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
     codeBinaire = codeBinaire | (r1 << 21);
@@ -278,6 +294,9 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       if(strcmp(inst.op[r].type,"REG")==0){
         r1=check_reg(inst.op[r].nom);
       }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        r1=0;
+      }
       else{
         return -1;
       }
@@ -285,11 +304,13 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r1=dico[i].arg.I.ir1.bin;
     }
-
     if(dico[i].arg.I.ir2.bin<0){
       r=quel_op(dico[i].arg.I.ir2.rg);
       if(strcmp(inst.op[r].type,"REG")==0){
         r2=check_reg(inst.op[r].nom);
+      }
+      else if(strcmp(inst.op[r].type,"SYM")==0){
+        r2=0;
       }
       else{
         return -1;
@@ -307,7 +328,12 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
         else if(strcmp(inst.op[r+1].type,"HEXA")==0){
           off=strtol(inst.op[r+1].nom,NULL,16);
         }
-        else return -1;
+        else if(strcmp(inst.op[r+1].type,"SYM")==0){
+          off=0;
+        }
+        else{
+          return -1;
+        }
       }
       else if(strcmp(dico[i].arg.I.off.rg,"off")==0){
         if(strcmp(inst.op[1].type_off,"DEC")==0){
@@ -316,8 +342,10 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
         else if(strcmp(inst.op[1].type_off,"HEXA")==0){
           off=strtol(inst.op[1].offset,NULL,16);
         }
+        else if(strcmp(inst.op[1].type_off,"SYM")==0){
+          off=0;
+        }
         else{
-          puts("---------------------------------------------------------");
           return -1;
         }
       }
@@ -325,7 +353,8 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       off=dico[i].arg.I.off.bin;
     }
-    printf("%d %d %d %d\n",opcode,r1,r2,off);
+
+    printf("%d %d %d %x\n",opcode,r1,r2,off);
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
     codeBinaire = codeBinaire | (r1 << 21);
@@ -341,10 +370,17 @@ int creation_binaire(instruction inst,instr_def_bin* dico,int nb_instr){
       else if(strcmp(inst.op[0].type,"HEXA")==0){
         ind=strtol(inst.op[0].nom,NULL,16);
       }
+      else if(strcmp(inst.op[0].type,"SYM")==0){
+        ind=0;
+      }
       else return -1;
     }
     else{
       off=dico[i].arg.I.off.bin;
+    }
+    int neg=0xFFFF0000; /*recupération des 2 octets utiles*/
+    if(ind<0){
+      ind=off-neg;
     }
     codeBinaire = 0;
     codeBinaire = codeBinaire | (opcode << 26);
@@ -362,17 +398,6 @@ int quel_op(char* reg){
   else return -1;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 int is_in_dico_bin(char* symbole,instr_def_bin* dictionnaire,int nb_instr){
 	int i=0;
 	for(i=0;i<nb_instr;i++){
@@ -385,4 +410,49 @@ int is_in_dico_bin(char* symbole,instr_def_bin* dictionnaire,int nb_instr){
 	/*puts("Instruction non trouvée");*/
 
 	return -1;
+}
+
+int creation_binaire_dir(DIRECTIVE dir,int nb_instr){
+  int modulo=pow(2,16);
+  int op;
+  int codeBinaire;
+  int i;
+  if(strcmp(dir.dir,".word")==0){
+    if(strcmp(dir.type_op,"DEC")==0){
+      op=strtol(dir.symb_op,NULL,10);
+    }
+    else if(strcmp(dir.type_op,"HEXA")==0){
+      op=strtol(dir.symb_op,NULL,16);
+    }
+    else if(strcmp(dir.type_op,"SYM")==0){
+      op=0;
+    }
+    else return -1;
+    codeBinaire=0;
+    codeBinaire=op;
+  }
+  else if(strcmp(dir.dir,".byte")==0){
+    if(strcmp(dir.type_op,"DEC")==0){
+      op=strtol(dir.symb_op,NULL,10);
+    }
+    else if(strcmp(dir.type_op,"HEXA")==0){
+      op=strtol(dir.symb_op,NULL,16);
+    }
+    else if(strcmp(dir.type_op,"SYM")==0){
+      op=0;
+    }
+    else return -1;
+    codeBinaire=0;
+    codeBinaire=(op<<16)%modulo;
+  }
+  /*else if(strcmmp(dir.dir,".asciiz")==0){
+    if(strcmp(dir.type_op,"ASC_OP")==0){
+      op=0;
+      for(i=0;i<strlen(dir.symb_op);i++){
+        op=(op<<8)+dir.symb_op[i]
+      }
+    }
+  }*/
+  else return -1;
+  return codeBinaire;
 }
