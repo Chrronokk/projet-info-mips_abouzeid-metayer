@@ -33,7 +33,7 @@ void writeAss(FILE* source, etiqLISTE tab_etiq, int nblines, instLISTE ptext ,di
             while (ptext->val.ligne==i+1){
 
                 printf("Boucle while pour la ligne %d\n",ptext->val.ligne);
-                writeLineAssTxt(file,source,i+1,ptext->val.adresse,456,write);
+                writeLineAssTxt(file,source,i+1,ptext->val.adresse,ptext->val.bin,write);
                 write=FALSE;
                 if (fintext<2) ptext=ptext->suiv;
                 if (fintext==2) break;
