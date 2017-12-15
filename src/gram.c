@@ -255,19 +255,25 @@ Gram analyse_gram(LISTE Col){
 
 	dirLISTE ld=col_data;
 	while(ld->suiv!=NULL){
-		puts("aaa");
 		bin=creation_binaire_dir(ld->val,*p_nb_instr,tab_etiq);
 		ld->val.bin=bin;
-		printf("%08X\n",bin);
 		ld=ld->suiv;
 		printf("%s\n",ld->val.dir );
-		puts("bbb");
 
 	}
 	bin=creation_binaire_dir(ld->val,*p_nb_instr,tab_etiq);
 	printf("%08X\n",bin);
-	/*lll->val.bin=bin;*/
+	lb->val.bin=bin;
 
+	dirLISTE lb=col_bss;
+	while(ld->suiv!=NULL){
+		bin=creation_binaire_dir(lb->val,*p_nb_instr,tab_etiq);
+		lb->val.bin=bin;
+		lb=lb->suiv;
+
+	}
+	bin=creation_binaire_dir(lb->val,*p_nb_instr,tab_etiq);
+	lb->val.bin=bin;
 
 	Gram gram;
 
