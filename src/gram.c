@@ -243,14 +243,25 @@ Gram analyse_gram(LISTE Col){
 	int bin;
 	instLISTE ll=col_text;
 	while(ll->suiv!=NULL){
-		bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr);
+		bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr,tab_etiq);
 		ll->val.bin=bin;
-		printf("binaire: %08X\n",bin);
 		ll=ll->suiv;
 	}
-	bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr);
+	bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr,tab_etiq);
 	ll->val.bin=bin;
-	printf("binaire: %08X\n",bin);
+
+	dirLISTE lll=col_data;
+	while(lll->suiv!=NULL){
+		puts("aaa");
+		bin=creation_binaire_dir(lll->val,*p_nb_instr,tab_etiq);
+		lll->val.bin=bin;
+		printf("%08X\n",bin);
+		lll=lll->suiv;
+	}
+	bin=creation_binaire_dir(lll->val,*p_nb_instr,tab_etiq);
+	printf("%08X\n",bin);
+	/*lll->val.bin=bin;*/
+
 
 	Gram gram;
 

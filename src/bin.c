@@ -195,7 +195,7 @@ void affiche_dico_bin(instr_def_bin* dico,int n){
 }
 
 
-int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
+int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr,etiqLISTE tab_etiq){
   int i;
   i=is_in_dico_bin(inst.symbole,dico,nb_instr);
   if(i<0) return -1;
@@ -212,15 +212,15 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
   int ind;
   int codeBinaire;
   int r;
+  int etiq;
+  int j;
+  int decalage;
   if(type=='R'){
     function=dico[i].arg.R.function;
     if(dico[i].arg.R.rr1.bin<0){
       r=quel_op(dico[i].arg.R.rr1.rg);
       if(strcmp(inst.op[r].type,"REG")==0){
         r1=check_reg(inst.op[r].nom);
-      }
-      else if(strcmp(inst.op[r].type,"SYM")==0){
-        r1=0;
       }
       else{
         return -1;
@@ -234,9 +234,6 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
       if(strcmp(inst.op[r].type,"REG")==0){
         r2=check_reg(inst.op[r].nom);
       }
-      else if(strcmp(inst.op[r].type,"SYM")==0){
-        r2=0;
-      }
       else{
         return -1;
       }
@@ -249,9 +246,7 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
       if(strcmp(inst.op[r].type,"REG")==0){
         r3=check_reg(inst.op[r].nom);
       }
-      else if(strcmp(inst.op[r].type,"SYM")==0){
-        r3=0;
-      }
+
       else{
         puts("---------------------------------------------");
         return -1;
@@ -260,6 +255,7 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
     else{
       r3=dico[i].arg.R.rr3.bin;
     }
+
     if(dico[i].arg.R.rsa.bin<0){
       if(strcmp(inst.op[2].type,"DEC")==0){
         sa=strtol(inst.op[2].nom,NULL,10);
@@ -268,7 +264,19 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         sa=strtol(inst.op[2].nom,NULL,16);
       }
       else if(strcmp(inst.op[r].type,"SYM")==0){
-        sa=0;
+        etiq=recherche_etiq(inst.op[r].type,tab_etiq);
+        if(etiq<0){
+          sa=0;
+        }
+        else{
+          etiqLISTE l=tab_etiq;
+          j=0;
+          while(j<etiq){
+            l=l->suiv;
+            j++;
+          }
+          sa=l->val.decalage;
+        }
       }
       else{
         return -1;
@@ -331,8 +339,26 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         else if(strcmp(inst.op[inst.nb_op-1].type,"HEXA")==0){
           off=strtol(inst.op[inst.nb_op-1].nom,NULL,16);
         }
-        else if(strcmp(inst.op[r+1].type,"SYM")==0){
-          off=0;
+        else if(strcmp(inst.op[inst.nb_op-1].type,"SYM")==0){
+          etiq=recherche_etiq(inst.op[inst.nb_op-1].nom,tab_etiq);
+          if(etiq<0){
+            off=0;
+          }
+          else{
+            etiqLISTE l=tab_etiq;
+            j=0;
+            while(j<etiq){
+              l=l->suiv;
+              j++;
+            }
+            decalage=l->val.decalage;
+          }
+          if(strcmp(inst.symbole,"BEQ")*strcmp(inst.symbole,"BGTZ")*strcmp(inst.symbole,"BLEZ")*strcmp(inst.symbole,"BNE")==0){
+            off=decalage>>2;
+          }
+          else{
+            off=decalage;
+          }
         }
         else{
           return -1;
@@ -379,12 +405,25 @@ int creation_binaire_inst(instruction inst,instr_def_bin* dico,int nb_instr){
         ind=strtol(inst.op[0].nom,NULL,16);
       }
       else if(strcmp(inst.op[0].type,"SYM")==0){
-        ind=0;
+        etiq=recherche_etiq(inst.op[0].nom,tab_etiq);
+        if(etiq<0){
+          ind=0;
+        }
+        else{
+          etiqLISTE l=tab_etiq;
+          j=0;
+          while(j<etiq){
+            l=l->suiv;
+            j++;
+          }
+          decalage=l->val.decalage;
+          ind=decalage>>2;
+        }
       }
       else return -1;
     }
     else{
-      off=dico[i].arg.J.ind.bin;
+      ind=dico[i].arg.J.ind.bin;
     }
 
     codeBinaire = 0;
@@ -417,11 +456,13 @@ int is_in_dico_bin(char* symbole,instr_def_bin* dictionnaire,int nb_instr){
 	return -1;
 }
 
-int creation_binaire_dir(DIRECTIVE dir,int nb_instr){
+int creation_binaire_dir(DIRECTIVE dir,int nb_instr,etiqLISTE tab_etiq){
   int modulo=pow(2,16);
   int op;
   int codeBinaire;
-  int i;
+  int etiq;
+  int j;
+  int decalage;
   if(strcmp(dir.dir,".word")==0){
     if(strcmp(dir.type_op,"DEC")==0){
       op=strtol(dir.symb_op,NULL,10);
@@ -430,12 +471,26 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr){
       op=strtol(dir.symb_op,NULL,16);
     }
     else if(strcmp(dir.type_op,"SYM")==0){
-      op=0;
+        /*etiq=recherche_etiq(dir.symb_op,tab_etiq);
+        if(etiq<0){
+          op=0;
+        }
+        else{
+          etiqLISTE l=tab_etiq;
+          j=0;
+          while(j<etiq){
+            l=l->suiv;
+            j++;
+          }
+          decalage=l->val.decalage;
+          op=decalage;
+        }*/
+        op=0;
     }
     else return -1;
-    codeBinaire=0;
     codeBinaire=op;
   }
+
   else if(strcmp(dir.dir,".byte")==0){
     if(strcmp(dir.type_op,"DEC")==0){
       op=strtol(dir.symb_op,NULL,10);
@@ -444,20 +499,36 @@ int creation_binaire_dir(DIRECTIVE dir,int nb_instr){
       op=strtol(dir.symb_op,NULL,16);
     }
     else if(strcmp(dir.type_op,"SYM")==0){
-      op=0;
+      /*etiq=recherche_etiq(dir.symb_op,tab_etiq);
+      if(etiq<0){
+        op=0;
+      }
+      else{
+        etiqLISTE l=tab_etiq;
+        j=0;
+        while(j<etiq){
+          l=l->suiv;
+          j++;
+        }
+        decalage=l->val.decalage;
+        op=decalage;
+      }
     }
     else return -1;
     codeBinaire=0;
-    codeBinaire=(op<<16)%modulo;
+    codeBinaire=(op<<16)%modulo;*/
+    op=0;
+    }
   }
-  /*else if(strcmmp(dir.dir,".asciiz")==0){
-    if(strcmp(dir.type_op,"ASC_OP")==0){
+  else if(strcmp(dir.dir,".asciiz")==0){
+  /*  if(strcmp(dir.type_op,"ASC_OP")==0){
       op=0;
       for(i=0;i<strlen(dir.symb_op);i++){
         op=(op<<8)+dir.symb_op[i]
       }
-    }
-  }*/
+    }*/
+    codeBinaire=0;
+  }
   else return -1;
   return codeBinaire;
 }

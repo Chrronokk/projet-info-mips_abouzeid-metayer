@@ -78,6 +78,7 @@ typedef struct{
 	int decalage;
 	char* symb_op;
 	char* type_op;
+	int bin;
 } DIRECTIVE;
 
 

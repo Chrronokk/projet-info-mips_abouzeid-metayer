@@ -126,6 +126,7 @@ LISTE lex_read_line( char *line, int nline) {
 		LEXEME maillon;
 		char* commentaire;
 		char* op_asc;
+		size_t len=STRLEN;
 
 
 		/*printf("%s\n", token);*/
@@ -162,7 +163,7 @@ LISTE lex_read_line( char *line, int nline) {
 		case COMMENT:
 				/*printf("passage\n");*/
 				if (com==0){
-					commentaire=calloc(1000,sizeof(char));
+					commentaire=calloc(len,sizeof(char));
 				}
 				com=1;
 				if(token[0]!='\n'){
