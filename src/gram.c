@@ -243,11 +243,13 @@ Gram analyse_gram(LISTE Col){
 	int bin;
 	instLISTE ll=col_text;
 	while(ll->suiv!=NULL){
-		bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
+		bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr);
+		ll->val.bin=bin;
 		printf("binaire: %08X\n",bin);
 		ll=ll->suiv;
 	}
-	bin=creation_binaire(ll->val,dico_bin,*p_nb_instr);
+	bin=creation_binaire_inst(ll->val,dico_bin,*p_nb_instr);
+	ll->val.bin=bin;
 	printf("binaire: %08X\n",bin);
 
 	Gram gram;
@@ -710,6 +712,6 @@ int check_reg(char* registre){
 		/*printf("nombre: %d\n",nreg);*/
 		return nreg;
 	}
-	printf("%d\n",nreg);
+	/*printf("%d\n",nreg);*/
 	return nreg;
 }

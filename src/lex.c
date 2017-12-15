@@ -162,7 +162,7 @@ LISTE lex_read_line( char *line, int nline) {
 		case COMMENT:
 				/*printf("passage\n");*/
 				if (com==0){
-					commentaire=calloc(STRLEN,sizeof(*token));
+					commentaire=calloc(512,sizeof(char));
 				}
 				com=1;
 				if(token[0]!='\n'){
@@ -289,7 +289,7 @@ LISTE lex_read_line( char *line, int nline) {
 			if(token[0]=='"') g+=1;
 			if (g%2!=0){
 				if (asc==0){
-				 op_asc=calloc(STRLEN,sizeof(*token));
+				 op_asc=calloc(512,sizeof(char));
 			 	}
 				asc=1;
 					op_asc=strcat(op_asc,token);
@@ -341,7 +341,7 @@ void lex_standardise( char* in, char* out ) {
 
     for ( i= 0, j= 0; i< strlen(in); i++ ) {
         /* rajoute des espaces autour des symboles de ponctuation*/
-		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'||in[i]=='"'){
+		if ( in[i] == ',' || in[i] == ';' || in[i] == '(' || in[i] == ')' || in[i] == ':' || in[i] == '#'){
 			out[j++]=' ';
 			out[j++]=in[i];
 			out[j++]=' ';
@@ -350,6 +350,14 @@ void lex_standardise( char* in, char* out ) {
 		else if (in[i]=='-'){
 			out[j++]=' ';
 			out[j++]=in[i];
+		}
+
+		else if(i>0 && in[i]=='"'){
+			if(in[i-1]!='\\'){
+				out[j++]=' ';
+				out[j++]=in[i];
+				out[j++]=' ';
+			}
 		}
 
     else if(in[i]=='\n'){
