@@ -1,7 +1,7 @@
 24
-ADD  R 0 r1 r2 r3 0 64
-ADDI I 8 r1  r2  imm
-AND  R 0 r1  r2  r3  0 36
+ADD  R 0 r2 r3 r1 0 64
+ADDI I 8 r2  r1  imm
+AND  R 0 r2  r3  r1  0 36
 BEQ  I 4 r1  r2  imm
 BGTZ I 7 r1  0 imm
 BLEZ I 6 r1  0 imm
