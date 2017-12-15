@@ -1,4 +1,4 @@
-24
+cd 24
 ADD  R 0 r2 r3 r1 0 64
 ADDI I 8 r2  r1  imm
 AND  R 0 r2  r3  r1  0 36
@@ -15,11 +15,11 @@ LW   I 35 r2  r1  off
 MFHI R 0 0 0 r1  0 16
 MFLO R 0 0 0 r1  0 18
 MULT R 0 r1  r2  0 0 24
-OR   R 0 r1  r2  r3  0 37
-ROTR R 0 1 r1  r2  sa  2
-SLL  R 0 0 r1  r2  sa   0
-SLT  R 0 r1  r2  r3  0 42
-SRL  R 0 0 r1  r2  sa  2
-SUB  R 0 r1  r2  r3  0 34
+OR   R 0 r2  r3  r1  0 37
+ROTR R 0 1 r2  r1  sa  2
+SLL  R 0 0 r2  r3  sa   0
+SLT  R 0 r2  r3  r1  0 42
+SRL  R 0 0 r2  r1  sa  2
+SUB  R 0 r2  r3  r1  0 34
 SW   I 43 r2  r1  off
-XOR  R 0 r1  r2  r3  0 38
+XOR  R 0 r2  r3  r1  0 38
