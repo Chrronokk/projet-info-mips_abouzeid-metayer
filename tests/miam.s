@@ -20,6 +20,7 @@ byebye:
 .data
 lunchtime: .word 12
 .word menu
+.word 12
 
 .bss
 menu:.space 24

@@ -21,17 +21,21 @@
  20                   .data
  21 00000000 000003E7 lunchtime: .word 12
  22 00000004 000003E7 .word menu
- 23                   
- 24                   .bss
- 25 00000000 000003E7 menu:.space 24
+ 23 00000008 000003E7 .word 12
+ 24                   
+ 25                   .bss
+ 26 00000000 000003E7 menu:.space 24
 
 .symtab
  11	.text:00000010	boucle
  17	.text:00000024	byebye
  21	.data:00000000	lunchtime
- 25	.bss :00000000	menu
+ 26	.bss :00000000	menu
 
 rel.text
 00000000    R_MIPS_HI16   .text:000004d2  lunchtime
 00000010    R_MIPS_HI16   .text:000004d2  byebye
 0000001c    R_MIPS_26    .text:000004d2  boucle
+
+rel.data
+00000004    R_MIPS_32    .data:000004d2  menu
